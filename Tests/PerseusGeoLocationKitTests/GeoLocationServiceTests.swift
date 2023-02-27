@@ -1,6 +1,6 @@
 //
 //  GeoLocationServiceTests.swift
-//  XcodeTemplateProjectTests
+//  PerseusGeoLocationKitTests
 //
 //  Created by Mikhail Zhigulin in 7531.
 //
