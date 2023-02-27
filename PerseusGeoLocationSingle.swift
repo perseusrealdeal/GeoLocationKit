@@ -1,6 +1,6 @@
 //
-//  XcodeTemplateProjectSingle.swift
-//  XcodeTemplateProject
+//  PerseusGeoLocationSingle.swift
+//  PerseusGeoLocationKit
 //
 //  Created by Mikhail Zhigulin in 7531.
 //
@@ -10,6 +10,6 @@
 //  All rights reserved.
 //
 
-struct XcodeTemplateProject {
+struct GeoLocationService {
     var text = "Hello, World!"
 }
