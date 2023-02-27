@@ -1,5 +1,5 @@
 //
-//  XcodeTemplateProjectTests.swift
+//  GeoLocationServiceTests.swift
 //  XcodeTemplateProjectTests
 //
 //  Created by Mikhail Zhigulin in 7531.
@@ -11,9 +11,9 @@
 //
 
 import XCTest
-@testable import XcodeTemplateProject
+@testable import PerseusGeoLocationKit
 
-final class XcodeTemplateProjectTests: XCTestCase {
+final class GeoLocationServiceTests: XCTestCase {
 
     // func test_zero() { XCTFail("Tests not yet implemented in \(type(of: self)).") }
 
@@ -22,6 +22,6 @@ final class XcodeTemplateProjectTests: XCTestCase {
     func testExample() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests.
-        XCTAssertEqual(XcodeTemplateProject().text, "Hello, World!")
+        XCTAssertEqual(GeoLocationService().text, "Hello, World!")
     }
 }

@@ -17,11 +17,11 @@
 import PackageDescription
 
 let package = Package(
-    name: "XcodeTemplateProject",
+    name: "PerseusGeoLocationKit",
     products: [
         .library(
-            name: "XcodeTemplateProject",
-            targets: ["XcodeTemplateProject"])
+            name: "PerseusGeoLocationKit",
+            targets: ["PerseusGeoLocationKit"])
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -29,10 +29,10 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "XcodeTemplateProject",
+            name: "PerseusGeoLocationKit",
             dependencies: []),
         .testTarget(
-            name: "XcodeTemplateProjectTests",
-            dependencies: ["XcodeTemplateProject"])
+            name: "PerseusGeoLocationKitTests",
+            dependencies: ["PerseusGeoLocationKit"])
     ]
 )
