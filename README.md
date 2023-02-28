@@ -48,7 +48,7 @@ Podfile should contain:
 ```ruby
 target "ProjectTarget" do
   use_frameworks!
-  pod 'OpenWeatherFreeClient', '0.0.1'
+  pod 'PerseusGeoLocationKit', '0.0.1'
 end
 ```
 
