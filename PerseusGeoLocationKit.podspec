@@ -1,7 +1,7 @@
 Pod::Spec.new do |p|
 
 p.name           = "PerseusGeoLocationKit"
-p.version        = "0.0.1"
+p.version        = "0.1.0"
 p.summary        = "Summary."
 p.description    = "Description."
 p.homepage       = "https://github.com/perseusrealdeal/PerseusGeoLocationKit"

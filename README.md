@@ -3,8 +3,8 @@
 > Collection of tools for dealing with native geo location services.
 
 [![Actions Status](https://github.com/perseusrealdeal/PerseusGeoLocationKit/actions/workflows/main.yml/badge.svg)](https://github.com/perseusrealdeal/PerseusGeoLocationKit/actions)
-![Version](https://img.shields.io/badge/Version-0.0.2-green.svg)
-[![Pod](https://img.shields.io/badge/Pod-0.0.1-informational.svg)](/PerseusGeoLocationKit.podspec)
+![Version](https://img.shields.io/badge/Version-0.1.0-green.svg)
+[![Pod](https://img.shields.io/badge/Pod-0.1.0-informational.svg)](/PerseusGeoLocationKit.podspec)
 [![Platforms](https://img.shields.io/badge/Platforms-iOS%209.3+_|_macOS%2010.9+-orange.svg)](https://en.wikipedia.org/wiki/IOS_9)
 [![Xcode 10.1](https://img.shields.io/badge/Xcode-10.1+-red.svg)](https://en.wikipedia.org/wiki/Xcode)
 [![Swift 4.2](https://img.shields.io/badge/Swift-4.2-red.svg)](https://docs.swift.org/swift-book/RevisionHistory/RevisionHistory.html)
@@ -19,8 +19,7 @@
 
 # Requirements
 
-- [macOS 10.13.6+](https://apps.apple.com/us/app/macos-high-sierra/id1246284741?ls=1)
-- [Xcode 10.1+](https://stackoverflow.com/questions/10335747/how-to-download-xcode-dmg-or-xip-file)
+- Xcode 10.1+
 - Swift 4.2+
 - iOS: 9.3+, UIKit SDK
 - macOS: 10.9+, AppKit SDK
@@ -36,7 +35,7 @@ Make a copy of the file [`PerseusGeoLocationSingle.swift`](/PerseusGeoLocationSi
 Cartfile should contain:
 
 ```carthage
-github "perseusrealdeal/PerseusGeoLocationKit" == 0.0.2
+github "perseusrealdeal/PerseusGeoLocationKit" == 0.1.0
 ```
 
 Some Carthage usage tips placed [here](https://gist.github.com/perseusrealdeal/8951b10f4330325df6347aaaa79d3cf2).
@@ -48,7 +47,7 @@ Podfile should contain:
 ```ruby
 target "ProjectTarget" do
   use_frameworks!
-  pod 'PerseusGeoLocationKit', '0.0.1'
+  pod 'PerseusGeoLocationKit', '0.1.0'
 end
 ```
 
@@ -59,7 +58,7 @@ end
 ```swift
 dependencies: [
         .package(url: "https://github.com/perseusrealdeal/PerseusGeoLocationKit.git",
-            .exact("0.0.2"))
+            .exact("0.1.0"))
     ],
 ```
 
