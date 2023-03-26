@@ -15,6 +15,19 @@ import XCTest
 
 final class GeoLocationServiceTests: XCTestCase {
 
+    private var sut: PerseusLocationDealer!
+    private var mock: MockLocationManager!
+
+    override func setUp() {
+        super.setUp()
+
+        sut = PerseusLocationDealer.shared
+        mock = MockLocationManager()
+
+        mock.delegate = sut
+        sut.locationManager = mock
+    }
+
     // func test_zero() { XCTFail("Tests not yet implemented in \(type(of: self)).") }
 
     func test_the_first_success() { XCTAssertTrue(true, "It's done!") }

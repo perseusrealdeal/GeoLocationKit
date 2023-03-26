@@ -12,13 +12,13 @@
 
 import CoreLocation
 
+let APPROPRIATE_ACCURACY = LocationAccuracy.threeKilometers
+
 extension Notification.Name {
     static let locationDealerNotification = Notification.Name("locationDealerNotification")
 }
 
 class PerseusLocationDealer: NSObject, CLLocationManagerDelegate {
-
-    var appropriateAccuracy = LocationAccuracy.threeKilometers
 
     #if DEBUG
     var locationManager: LocationManagerProtocol
@@ -26,13 +26,15 @@ class PerseusLocationDealer: NSObject, CLLocationManagerDelegate {
     private var locationManager: CLLocationManager
     #endif
 
-    var authorizationStatus: AuthorizationStatus {
-
-        let _ = type(of: locationManager).authorizationStatus()
-        let _ = type(of: locationManager).locationServicesEnabled()
-
-        return .notDetermined
+    var authorizationStatus: CLAuthorizationStatus {
+        return type(of: locationManager).authorizationStatus()
     }
+
+    var locationServicesEnabled: Bool {
+        return type(of: locationManager).locationServicesEnabled()
+    }
+
+    private(set) var currentLocationDealOnly: Bool = true
 
     // MARK: - Singletone constructor
 
@@ -47,24 +49,26 @@ class PerseusLocationDealer: NSObject, CLLocationManagerDelegate {
 
         super.init()
 
-        locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers
+        locationManager.desiredAccuracy = APPROPRIATE_ACCURACY.rawValue
         locationManager.delegate = self
     }
 
     // MARK: - Contract
 
-    func askForCurrentLocation(_ actionIfNotAllowed:
-        ((_ status: AuthorizationStatus) -> Void)? = nil) {
+    func askForCurrentLocation(accuracy:LocationAccuracy = APPROPRIATE_ACCURACY,
+        _ actionIfNotAllowed: ((_ reason: ReasonNotAllowed) -> Void)? = nil) {
         #if DEBUG
         print(">> [\(type(of: self))]." + #function)
         #endif
     }
 
+    #if os(iOS)
     func askForAuthorization(_ authorization: LocationAuthorization) {
         #if DEBUG
         print(">> [\(type(of: self))]." + #function)
         #endif
     }
+    #endif
 
     // MARK: - CLLocationManagerDelegate contract
 
@@ -89,16 +93,3 @@ class PerseusLocationDealer: NSObject, CLLocationManagerDelegate {
         #endif
     }
 }
-
-protocol LocationManagerProtocol {
-    var delegate: CLLocationManagerDelegate? { get set }
-    var desiredAccuracy: CLLocationAccuracy { get set }
-
-    func stopUpdatingLocation()
-    func startUpdatingLocation()
-
-    static func authorizationStatus() -> CLAuthorizationStatus
-    static func locationServicesEnabled() -> Bool
-}
-
-extension CLLocationManager: LocationManagerProtocol { }

@@ -48,10 +48,13 @@ extension CLAuthorizationStatus: CustomStringConvertible {
             return "denied"
         case .authorizedAlways:
             return "authorizedAlways"
+        case .authorizedWhenInUse: // iOS
+            return "authorizedWhenInUse"
         }
     }
 }
 
+#if os(iOS)
 enum LocationAuthorization: CustomStringConvertible {
 
     case whenInUse
@@ -66,8 +69,9 @@ enum LocationAuthorization: CustomStringConvertible {
         }
     }
 }
+#endif
 
-enum AuthorizationStatus: CustomStringConvertible {
+enum ReasonNotAllowed: CustomStringConvertible {
     /// Location service is neither restricted nor the app denided
     case notDetermined
 
