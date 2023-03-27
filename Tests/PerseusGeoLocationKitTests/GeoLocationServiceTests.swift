@@ -13,16 +13,16 @@
 import XCTest
 @testable import PerseusGeoLocationKit
 
-final class GeoLocationServiceTests: XCTestCase {
+final class PerseusLocationDealerTests: XCTestCase {
 
-    private var sut: PerseusLocationDealer!
+    private var sut = PerseusLocationDealer.shared
+
     private var mockLM: MockLocationManager!
     private var mockNC: MockNotificationCenter!
 
     override func setUp() {
         super.setUp()
 
-        sut = PerseusLocationDealer.shared
         mockLM = MockLocationManager()
         mockNC = MockNotificationCenter()
 
@@ -31,7 +31,54 @@ final class GeoLocationServiceTests: XCTestCase {
         sut.notificationCenter = mockNC
     }
 
-    // func test_zero() { XCTFail("Tests not yet implemented in \(type(of: self)).") }
+    override func tearDown() {
+        mockLM = nil
+        mockNC = nil
 
-    func test_the_first_success() { XCTAssertTrue(true, "It's done!") }
+        sut.locationManager = nil
+        sut.notificationCenter = nil
+    }
+
+    // func test_zero() { XCTFail("Tests not yet implemented in \(type(of: self)).") }
+    // func test_the_first_success() { XCTAssertTrue(true, "It's done!") }
+
+    func test_PerseusLocationDealerInit() {
+
+        // arrange, act, assert
+
+        XCTAssertNotNil(sut.locationManager)
+        XCTAssertNotNil(sut.notificationCenter)
+        XCTAssertTrue(sut.currentLocationDealOnly)
+        XCTAssertEqual(sut.locationManager.desiredAccuracy, APPROPRIATE_ACCURACY.rawValue)
+    }
+
+    func test_authorizationStatus() {
+
+        // arrange
+
+        MockLocationManager.status = .restricted
+
+        // act
+
+        let result = sut.authorizationStatus
+
+        // assert
+
+        XCTAssertEqual(result, .restricted)
+    }
+
+    func test_locationServicesEnabled() {
+
+        // arrange
+
+        MockLocationManager.isLocationServiceEnabled = false
+
+        // act
+
+        let result = sut.locationServicesEnabled
+
+        // assert
+
+        XCTAssertFalse(result)
+    }
 }

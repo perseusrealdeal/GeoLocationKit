@@ -21,11 +21,11 @@ extension Notification.Name {
 class PerseusLocationDealer: NSObject, CLLocationManagerDelegate {
 
     #if DEBUG
-    var locationManager: LocationManagerProtocol
-    var notificationCenter: NotificationCenterProtocol
+    var locationManager: LocationManagerProtocol!
+    var notificationCenter: NotificationCenterProtocol!
     #else
-    private var locationManager: CLLocationManager
-    private var notificationCenter: NotificationCenter
+    private(set) var locationManager: CLLocationManager
+    private(set) var notificationCenter: NotificationCenter
     #endif
 
     var authorizationStatus: CLAuthorizationStatus {
