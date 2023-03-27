@@ -95,3 +95,7 @@ class MockLocationManager: LocationManagerProtocol {
 
     #endif
 }
+
+class MockNotificationCenter: NotificationCenterProtocol {
+    func post(name aName: NSNotification.Name, object anObject: Any?) { }
+}

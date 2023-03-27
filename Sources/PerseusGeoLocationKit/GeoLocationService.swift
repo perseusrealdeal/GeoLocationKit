@@ -22,8 +22,10 @@ class PerseusLocationDealer: NSObject, CLLocationManagerDelegate {
 
     #if DEBUG
     var locationManager: LocationManagerProtocol
+    var notificationCenter: NotificationCenterProtocol
     #else
     private var locationManager: CLLocationManager
+    private var notificationCenter: NotificationCenter
     #endif
 
     var authorizationStatus: CLAuthorizationStatus {
@@ -46,6 +48,7 @@ class PerseusLocationDealer: NSObject, CLLocationManagerDelegate {
         #endif
 
         self.locationManager = CLLocationManager()
+        self.notificationCenter = NotificationCenter.default
 
         super.init()
 

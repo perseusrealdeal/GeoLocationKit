@@ -13,6 +13,7 @@
 import CoreLocation
 
 extension CLLocationManager: LocationManagerProtocol { }
+extension NotificationCenter: NotificationCenterProtocol { }
 
 protocol LocationManagerProtocol {
     var delegate: CLLocationManagerDelegate? { get set }
@@ -28,4 +29,8 @@ protocol LocationManagerProtocol {
     func requestWhenInUseAuthorization()
     func requestAlwaysAuthorization()
     #endif
+}
+
+protocol NotificationCenterProtocol {
+    func post(name aName: NSNotification.Name, object anObject: Any?)
 }
