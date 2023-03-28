@@ -29,6 +29,9 @@ final class PerseusLocationDealerTests: XCTestCase {
         mockLM.delegate = sut
         sut.locationManager = mockLM
         sut.notificationCenter = mockNC
+        #if DEBUG
+        print(">> [\(type(of: self))]." + #function)
+        #endif
     }
 
     override func tearDown() {
@@ -37,6 +40,9 @@ final class PerseusLocationDealerTests: XCTestCase {
 
         sut.locationManager = nil
         sut.notificationCenter = nil
+        #if DEBUG
+        print(">> [\(type(of: self))]." + #function)
+        #endif
     }
 
     // func test_zero() { XCTFail("Tests not yet implemented in \(type(of: self)).") }
@@ -65,6 +71,9 @@ final class PerseusLocationDealerTests: XCTestCase {
         // assert
 
         XCTAssertEqual(result, .restricted)
+        #if DEBUG
+        print(">> [\(type(of: self))]." + #function)
+        #endif
     }
 
     func test_locationServicesEnabled() {
@@ -80,5 +89,35 @@ final class PerseusLocationDealerTests: XCTestCase {
         // assert
 
         XCTAssertFalse(result)
+        #if DEBUG
+        print(">> [\(type(of: self))]." + #function)
+        #endif
     }
 }
+
+#if os(iOS)
+extension PerseusLocationDealerTests {
+
+    func test_requestWhenInUseAuthorization() {
+
+        // arrange, act
+
+        sut.askForAuthorization(.whenInUse)
+
+        // assert
+
+        mockLM.verify_requestWhenInUseAuthorization_CalledOnce()
+    }
+
+    func test_requestAlwaysAuthorization() {
+
+        // arrange, act
+
+        sut.askForAuthorization(.always)
+
+        // assert
+
+        mockLM.verify_requestAlwaysAuthorization_CalledOnce()
+    }
+}
+#endif

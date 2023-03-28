@@ -38,7 +38,7 @@ class PerseusLocationDealer: NSObject, CLLocationManagerDelegate {
 
     private(set) var currentLocationDealOnly: Bool = true
 
-    // MARK: - Singletone constructor
+    // MARK: - Singleton constructor
 
     static let shared: PerseusLocationDealer = { return PerseusLocationDealer() }()
 
@@ -67,9 +67,12 @@ class PerseusLocationDealer: NSObject, CLLocationManagerDelegate {
 
     #if os(iOS)
     func askForAuthorization(_ authorization: LocationAuthorization) {
-        #if DEBUG
-        print(">> [\(type(of: self))]." + #function)
-        #endif
+        switch authorization {
+        case .whenInUse:
+            locationManager.requestWhenInUseAuthorization()
+        case .always:
+            locationManager.requestAlwaysAuthorization()
+        }
     }
     #endif
 
