@@ -28,6 +28,10 @@ class PerseusLocationDealer: NSObject, CLLocationManagerDelegate {
     private(set) var notificationCenter: NotificationCenter
     #endif
 
+    var desiredAccuracy: CLLocationAccuracy {
+        return locationManager.desiredAccuracy
+    }
+
     var authorizationStatus: CLAuthorizationStatus {
         return type(of: locationManager).authorizationStatus()
     }

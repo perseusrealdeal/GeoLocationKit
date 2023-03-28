@@ -24,7 +24,7 @@ class MockLocationManager: LocationManagerProtocol {
     static func locationServicesEnabled() -> Bool { return isLocationServiceEnabled }
 
     weak var delegate: CLLocationManagerDelegate?
-    var desiredAccuracy: CLLocationAccuracy = kCLLocationAccuracyThreeKilometers
+    var desiredAccuracy: CLLocationAccuracy = APPROPRIATE_ACCURACY.rawValue
 
     var startUpdatingLocationCallCount: Int = 0
     var stopUpdatingLocationCallCount: Int = 0
