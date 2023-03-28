@@ -28,28 +28,31 @@ class PerseusLocationDealer: NSObject, CLLocationManagerDelegate {
     private(set) var notificationCenter: NotificationCenter
     #endif
 
-    var desiredAccuracy: CLLocationAccuracy {
-        return locationManager.desiredAccuracy
-    }
+    var desiredAccuracy: CLLocationAccuracy { return locationManager.desiredAccuracy }
 
-    var authorizationStatus: CLAuthorizationStatus {
+    var authorizationStatus: CLAuthorizationStatus { return authorizationStatusHidden }
+    private var authorizationStatusHidden: CLAuthorizationStatus {
         return type(of: locationManager).authorizationStatus()
     }
 
-    var locationServicesEnabled: Bool {
+    var locationServicesEnabled: Bool { return locationServicesEnabledHidden }
+    private var locationServicesEnabledHidden: Bool {
         return type(of: locationManager).locationServicesEnabled()
     }
 
-    private(set) var currentLocationDealOnly: Bool = true
+    var locationPermit: LocationDealerPermit { return locationPermitHidden }
+    private var locationPermitHidden: LocationDealerPermit {
+        return getPermit(serviceEnabled: locationServicesEnabledHidden,
+                         status: authorizationStatusHidden)
+    }
+
+    private(set) var currentLocationDealOnly: Bool = false
 
     // MARK: - Singleton constructor
 
     static let shared: PerseusLocationDealer = { return PerseusLocationDealer() }()
 
     private override init() {
-        #if DEBUG
-        print(">> [\(type(of: self))]." + #function)
-        #endif
 
         self.locationManager = CLLocationManager()
         self.notificationCenter = NotificationCenter.default
@@ -62,11 +65,22 @@ class PerseusLocationDealer: NSObject, CLLocationManagerDelegate {
 
     // MARK: - Contract
 
-    func askForCurrentLocation(accuracy:LocationAccuracy = APPROPRIATE_ACCURACY,
-        _ actionIfNotAllowed: ((_ reason: ReasonNotAllowed) -> Void)? = nil) {
-        #if DEBUG
-        print(">> [\(type(of: self))]." + #function)
-        #endif
+    func askForCurrentLocation(accuracy: LocationAccuracy = APPROPRIATE_ACCURACY,
+        _ actionIfNotAllowed: ((_ permit: LocationDealerPermit) -> Void)? = nil) {
+
+        let permit = locationPermitHidden
+
+        guard permit == .allowed else {
+            actionIfNotAllowed?(permit)
+            return
+        }
+
+        locationManager.stopUpdatingLocation()
+
+        currentLocationDealOnly = true
+        locationManager.desiredAccuracy = accuracy.rawValue
+
+        locationManager.startUpdatingLocation()
     }
 
     #if os(iOS)
@@ -101,5 +115,7 @@ class PerseusLocationDealer: NSObject, CLLocationManagerDelegate {
         #if DEBUG
         print(">> [\(type(of: self))]." + #function)
         #endif
+
+        locationManager.stopUpdatingLocation()
     }
 }

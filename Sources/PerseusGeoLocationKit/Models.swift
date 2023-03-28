@@ -71,7 +71,7 @@ enum LocationAuthorization: CustomStringConvertible {
 }
 #endif
 
-enum ReasonNotAllowed: CustomStringConvertible {
+enum LocationDealerPermit: CustomStringConvertible {
     /// Location service is neither restricted nor the app denided
     case notDetermined
 
@@ -81,10 +81,13 @@ enum ReasonNotAllowed: CustomStringConvertible {
     case restricted  /// in case if location services turned on
 
     /// provide instructions for enabling the Location Services switch in Settings > Privacy
-    case deniedForAll /// in case if location services turned off but not restricted
+    case deniedForAllApps /// in case if location services turned off but not restricted
 
     /// provide instructions for enabling services for the app in Settings > The App
     case deniedForTheApp /// in case if location services turned on but not restricted
+
+    /// either authorizedAlways or authorizedWhenInUse
+    case allowed
 
     var description: String {
         switch self {
@@ -94,10 +97,29 @@ enum ReasonNotAllowed: CustomStringConvertible {
             return "deniedForAllAndRestricted"
         case .restricted:
             return "restricted"
-        case .deniedForAll:
-            return "deniedForAll"
+        case .deniedForAllApps:
+            return "deniedForAllApps"
         case .deniedForTheApp:
             return "deniedForTheApp"
+        case .allowed:
+            return "allowed"
         }
     }
+}
+
+func getPermit(serviceEnabled: Bool, status: CLAuthorizationStatus) -> LocationDealerPermit {
+
+    if status == .notDetermined {
+        return .notDetermined
+    }
+
+    if status == .denied {
+        return serviceEnabled ? .deniedForTheApp : .deniedForAllApps
+    }
+
+    if status == .restricted {
+        return serviceEnabled ? .restricted : .deniedForAllAndRestricted
+    }
+
+    return .allowed
 }
