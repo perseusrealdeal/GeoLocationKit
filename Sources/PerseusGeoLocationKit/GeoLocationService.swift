@@ -23,6 +23,13 @@ class PerseusLocationDealer: NSObject, CLLocationManagerDelegate {
     #if DEBUG
     var locationManager: LocationManagerProtocol!
     var notificationCenter: NotificationCenterProtocol!
+
+    internal func resetDefaults() {
+        currentLocationDealOnly = false
+        if let _ = locationManager {
+            locationManager.desiredAccuracy = APPROPRIATE_ACCURACY.rawValue
+        }
+    }
     #else
     private(set) var locationManager: CLLocationManager
     private(set) var notificationCenter: NotificationCenter
@@ -70,10 +77,7 @@ class PerseusLocationDealer: NSObject, CLLocationManagerDelegate {
 
         let permit = locationPermitHidden
 
-        guard permit == .allowed else {
-            actionIfNotAllowed?(permit)
-            return
-        }
+        guard permit == .allowed else { actionIfNotAllowed?(permit); return }
 
         locationManager.stopUpdatingLocation()
 
@@ -116,6 +120,7 @@ class PerseusLocationDealer: NSObject, CLLocationManagerDelegate {
         print(">> [\(type(of: self))]." + #function)
         #endif
 
+        currentLocationDealOnly = currentLocationDealOnly ? false : true
         locationManager.stopUpdatingLocation()
     }
 }

@@ -11,7 +11,14 @@
 //
 
 import XCTest
+import CoreLocation
 @testable import PerseusGeoLocationKit
+
+#if os(iOS)
+let authorized: CLAuthorizationStatus = .authorizedAlways
+#elseif os(macOS)
+let authorized: CLAuthorizationStatus = .authorized
+#endif
 
 final class PerseusLocationDealerTests: XCTestCase {
 
@@ -37,6 +44,7 @@ final class PerseusLocationDealerTests: XCTestCase {
 
         sut.locationManager = nil
         sut.notificationCenter = nil
+        sut.resetDefaults()
     }
 
     // func test_zero() { XCTFail("Tests not yet implemented in \(type(of: self)).") }
@@ -94,6 +102,8 @@ final class PerseusLocationDealerTests: XCTestCase {
     }
 }
 
+// MARK: - request authorization tests (only iOS)
+
 #if os(iOS)
 extension PerseusLocationDealerTests {
 
@@ -120,6 +130,8 @@ extension PerseusLocationDealerTests {
     }
 }
 #endif
+
+// MARK: - locationPermit tests
 
 extension PerseusLocationDealerTests {
 
@@ -206,7 +218,7 @@ extension PerseusLocationDealerTests {
 
         // arrange
 
-        MockLocationManager.status = .authorizedAlways
+        MockLocationManager.status = authorized
         MockLocationManager.isLocationServiceEnabled = false
 
         // act
@@ -216,5 +228,76 @@ extension PerseusLocationDealerTests {
         // assert
 
         XCTAssertEqual(permit, .allowed)
+    }
+}
+
+// MARK: - askForCurrentLocation tests
+
+extension PerseusLocationDealerTests {
+
+
+    func test_askForCurrentLocation_called() {
+
+        // arrange
+
+        var permit: LocationDealerPermit? = nil
+
+        MockLocationManager.status = authorized
+        MockLocationManager.isLocationServiceEnabled = true
+
+        // act
+
+        sut.askForCurrentLocation { locationPermit in permit = locationPermit }
+
+        // assert
+
+        XCTAssertNil(permit)
+
+        mockLM.verify_stopUpdatingLocation_CalledOnce()
+
+        XCTAssertTrue(sut.currentLocationDealOnly)
+        XCTAssertEqual(sut.desiredAccuracy, APPROPRIATE_ACCURACY.rawValue)
+        
+        mockLM.verify_startUpdatingLocation_CalledOnce()
+    }
+
+    func test_askForCurrentLocation_actionIfNotAllowed_called() {
+
+        // arrange
+
+        var permit: LocationDealerPermit? = nil
+
+        MockLocationManager.status = .denied
+        MockLocationManager.isLocationServiceEnabled = true
+
+        // act
+
+        sut.askForCurrentLocation { locationPermit in permit = locationPermit }
+
+        // assert
+
+        XCTAssertNotNil(permit)
+        XCTAssertEqual(permit, .deniedForTheApp)
+    }
+
+    func test_askForCurrentLocation_with_specific_accuracy() {
+
+        // arrange
+
+        var permit: LocationDealerPermit? = nil
+
+        MockLocationManager.status = authorized
+        MockLocationManager.isLocationServiceEnabled = true
+
+        // act
+
+        sut.askForCurrentLocation(accuracy: LocationAccuracy.kilometer) { locationPermit in
+            permit = locationPermit
+        }
+
+        // assert
+
+        XCTAssertNil(permit)
+        XCTAssertEqual(sut.desiredAccuracy, LocationAccuracy.kilometer.rawValue)
     }
 }
