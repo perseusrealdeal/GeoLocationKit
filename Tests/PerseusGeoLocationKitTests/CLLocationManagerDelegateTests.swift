@@ -38,8 +38,7 @@ extension PerseusLocationDealerTests {
         MockLocationManager.isLocationServiceEnabled = true
 
         let error = LocationDealerError.failedRequest("")
-        let result: Result<CLLocationCoordinate2D, LocationDealerError> =
-            .failure(.failedRequest(error.localizedDescription))
+        let result: LocationDealerError = .failedRequest(error.localizedDescription)
 
         // act
 
@@ -54,7 +53,7 @@ extension PerseusLocationDealerTests {
         mockLM.verify_stopUpdatingLocation_CalledTwice()
 
         mockNC.verify_post_locationDealerNotification_withError(
-            name: .locationDealerNotification, object: result)
+            name: .locationDealerErrorNotification, object: result)
     }
 
     func test_didUpdateLocations_currentLocationDealOnlyTrue_receivedEmptyLocationData() {
@@ -65,7 +64,7 @@ extension PerseusLocationDealerTests {
         MockLocationManager.isLocationServiceEnabled = true
 
         let error = LocationDealerError.receivedEmptyLocationData
-        let result: Result<[CLLocation], LocationDealerError> = .failure(error)
+        let result: Result<CLLocation, LocationDealerError> = .failure(error)
         let locations = [CLLocation]()
 
         // act
@@ -81,7 +80,7 @@ extension PerseusLocationDealerTests {
         mockLM.verify_stopUpdatingLocation_CalledTwice()
 
         mockNC.verify_post_locationDealerNotification_withError(
-            name: .locationDealerNotification, object: result)
+            name: .locationDealerCurrentNotification, object: result)
     }
 
     func test_didUpdateLocations_currentLocationDealOnlyTrue_receivedCurrentLocation() {
@@ -95,7 +94,7 @@ extension PerseusLocationDealerTests {
         let firstLocation = CLLocation(latitude: coord.latitude, longitude: coord.longitude)
 
         let locations = [firstLocation, CLLocation(latitude: 34.78, longitude: 34.83)]
-        let result: Result<[CLLocation], LocationDealerError> = .success([firstLocation])
+        let result: Result<CLLocation, LocationDealerError> = .success(firstLocation)
 
         // act
 
@@ -109,8 +108,8 @@ extension PerseusLocationDealerTests {
         mockLM.verify_stopUpdatingLocation_CalledTwice()
         mockLM.verify_startUpdatingLocation_CalledOnce()
 
-        mockNC.verify_post_locationDealerNotification_withReceivedLocations(
-            name: .locationDealerNotification, object: result)
+        mockNC.verify_post_locationDealerNotification_withReceivedLocation(
+            name: .locationDealerCurrentNotification, object: result)
     }
 
     func test_didUpdateLocations_currentLocationDealOnlyFalse_receivedLocations() {
@@ -139,7 +138,7 @@ extension PerseusLocationDealerTests {
         mockLM.verify_startUpdatingLocation_CalledOnce()
 
         mockNC.verify_post_locationDealerNotification_withReceivedLocations(
-            name: .locationDealerNotification, object: result)
+            name: .locationDealerUpdatesNotification, object: result)
     }
 
     func test_didUpdateLocations_currentLocationDealOnlyFalse_receivedEmptyLocationData() {
@@ -165,7 +164,7 @@ extension PerseusLocationDealerTests {
         mockLM.verify_stopUpdatingLocation_CalledOnce()
         mockLM.verify_startUpdatingLocation_CalledOnce()
 
-        mockNC.verify_post_locationDealerNotification_withError(
-            name: .locationDealerNotification, object: result)
+        mockNC.verify_post_locationDealerUpdatesNotification_withError(
+            name: .locationDealerUpdatesNotification, object: result)
     }
 }

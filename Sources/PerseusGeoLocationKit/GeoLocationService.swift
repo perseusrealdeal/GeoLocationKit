@@ -25,7 +25,12 @@ let APPROPRIATE_ACCURACY = LocationAccuracy.threeKilometers
 // MARK: - Notifications
 
 extension Notification.Name {
-    static let locationDealerNotification = Notification.Name("locationDealerNotification")
+    static let locationDealerCurrentNotification =
+        Notification.Name("locationDealerCurrentNotification")
+    static let locationDealerUpdatesNotification =
+        Notification.Name("locationDealerUpdatesNotification")
+    static let locationDealerErrorNotification =
+        Notification.Name("locationDealerErrorNotification")
     static let locationDealerStatusChangedNotification =
         Notification.Name("locationDealerStatusChangedNotification")
 }

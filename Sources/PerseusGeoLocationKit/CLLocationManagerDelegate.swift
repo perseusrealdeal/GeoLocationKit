@@ -32,10 +32,9 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
         currentLocationDealOnly = false
         locationManager.stopUpdatingLocation()
 
-        let result: Result<CLLocationCoordinate2D, LocationDealerError> =
-            .failure(.failedRequest(error.localizedDescription))
+        let result: LocationDealerError = .failedRequest(error.localizedDescription)
 
-        notificationCenter.post(name: .locationDealerNotification, object: result)
+        notificationCenter.post(name: .locationDealerErrorNotification, object: result)
     }
 
     func locationManager(_ manager: CLLocationManager,
@@ -49,18 +48,18 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
             currentLocationDealOnly = false
             locationManager.stopUpdatingLocation()
 
-            let result: Result<[CLLocation], LocationDealerError> =
+            let result: Result<CLLocation, LocationDealerError> =
                 locations.first != nil ?
-                    .success([locations.first!]) :
+                    .success(locations.first!) :
                     .failure(.receivedEmptyLocationData)
 
-            notificationCenter.post(name: .locationDealerNotification, object: result)
+            notificationCenter.post(name: .locationDealerCurrentNotification, object: result)
             return
         }
 
         let result: Result<[CLLocation], LocationDealerError> =
             !locations.isEmpty ? .success(locations) : .failure(.receivedEmptyLocationData)
 
-        notificationCenter.post(name: .locationDealerNotification, object: result)
+        notificationCenter.post(name: .locationDealerUpdatesNotification, object: result)
     }
 }
