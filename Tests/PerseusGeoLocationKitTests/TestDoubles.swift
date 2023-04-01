@@ -29,8 +29,21 @@ class MockLocationManager: LocationManagerProtocol {
     var startUpdatingLocationCallCount: Int = 0
     var stopUpdatingLocationCallCount: Int = 0
 
-    func startUpdatingLocation() { startUpdatingLocationCallCount += 1 }
-    func stopUpdatingLocation() { stopUpdatingLocationCallCount += 1 }
+    func startUpdatingLocation() {
+        #if DEBUG
+        //if printMessagesInConsole { print(">> [\(type(of: self))]." + #function) }
+        #endif
+
+        startUpdatingLocationCallCount += 1
+    }
+
+    func stopUpdatingLocation() {
+        #if DEBUG
+        if printMessagesInConsole { print(">> [\(type(of: self))]." + #function) }
+        #endif
+
+        stopUpdatingLocationCallCount += 1
+    }
 
     func verify_startUpdatingLocation_CalledOnce(file: StaticString = #file,
                                                  line: UInt = #line) {
@@ -53,6 +66,23 @@ class MockLocationManager: LocationManagerProtocol {
 
         if stopUpdatingLocationCallCount > 1 {
             XCTFail("Wanted 1 time but was called \(stopUpdatingLocationCallCount) times. " +
+                "stopUpdatingLocation()", file: file, line: line)
+        }
+    }
+
+    func verify_stopUpdatingLocation_CalledTwice(file: StaticString = #file,
+                                                 line: UInt = #line) {
+        if stopUpdatingLocationCallCount == 0 {
+            XCTFail("Wanted but not invoked: stopUpdatingLocation()", file: file, line: line)
+        }
+
+        if stopUpdatingLocationCallCount == 1 {
+            XCTFail("Wanted 2 times but was called \(stopUpdatingLocationCallCount) times. " +
+                "stopUpdatingLocation()", file: file, line: line)
+        }
+
+        if stopUpdatingLocationCallCount > 2 {
+            XCTFail("Wanted 2 times but was called \(stopUpdatingLocationCallCount) times. " +
                 "stopUpdatingLocation()", file: file, line: line)
         }
     }
@@ -97,5 +127,142 @@ class MockLocationManager: LocationManagerProtocol {
 }
 
 class MockNotificationCenter: NotificationCenterProtocol {
-    func post(name aName: NSNotification.Name, object anObject: Any?) { }
+
+    var postCallCount = 0
+
+    var postArgsName: [NSNotification.Name?] = []
+    var postArgsObject: [Any?] = []
+
+    func post(name aName: NSNotification.Name, object anObject: Any?) {
+        postCallCount += 1
+        postArgsName.append(aName)
+        postArgsObject.append(anObject)
+    }
+
+    func verify_post_didChangeAuthorization(
+        name aName: NSNotification.Name?,
+        object anObject: Any?,
+        file: StaticString = #file,
+        line: UInt = #line) {
+        guard postCalledOnce(file: file, line: line) else { return }
+
+        XCTAssertEqual(postArgsName.first, aName, "name", file: file, line: line)
+        XCTAssertNotNil(anObject, file: file, line: line)
+        XCTAssertEqual(postArgsObject.first as! CLAuthorizationStatus,
+                       anObject as! CLAuthorizationStatus, "object", file: file, line: line)
+
+
+    }
+
+    func verify_post_locationDealerNotification_withError(
+        name aName: NSNotification.Name?,
+        object anObject: Any?,
+        file: StaticString = #file,
+        line: UInt = #line) {
+        guard postCalledOnce(file: file, line: line) else { return }
+
+        XCTAssertEqual(postArgsName.first, aName, "name", file: file, line: line)
+        XCTAssertNotNil(anObject, file: file, line: line)
+
+        let result =
+            postArgsObject.first as? Result<[CLLocation], LocationDealerError>
+        let theObject = anObject as? Result<[CLLocation], LocationDealerError>
+
+        var errorArgs: LocationDealerError?
+        if let result = result {
+            switch result {
+            case .success(_):
+                break
+            case .failure(let error):
+                errorArgs = error
+            }
+        }
+
+        var object: LocationDealerError?
+        if let theObject = theObject {
+            switch theObject {
+            case .success(_):
+                break
+            case .failure(let error):
+                object = error
+            }
+        }
+
+        XCTAssertTrue(errorArgs == object, "object", file: file, line: line)
+    }
+
+    func verify_post_locationDealerNotification_withReceivedLocations(
+        name aName: NSNotification.Name?,
+        object anObject: Any?,
+        file: StaticString = #file,
+        line: UInt = #line) {
+        guard postCalledOnce(file: file, line: line) else { return }
+
+        XCTAssertEqual(postArgsName.first, aName, "name", file: file, line: line)
+        XCTAssertNotNil(anObject, file: file, line: line)
+
+        let result =
+            postArgsObject.first as? Result<[CLLocation], LocationDealerError>
+        let theObject = anObject as? Result<[CLLocation], LocationDealerError>
+
+        var locationArgs: [CLLocation]?
+        if let result = result {
+            switch result {
+            case .success(let locations):
+                locationArgs = locations
+            case .failure(_):
+                break
+            }
+        }
+
+        var object: [CLLocation]?
+        if let theObject = theObject {
+            switch theObject {
+            case .success(let locations):
+                object = locations
+            case .failure(_):
+                break
+            }
+        }
+
+        // XCTAssertTrue(locationArgs == object, "object", file: file, line: line)
+        XCTAssertEqual(locationArgs, object, "object", file: file, line: line)
+    }
+
+    private func postCalledOnce(file: StaticString = #file,
+                                line: UInt = #line) -> Bool {
+        return verifyMethodCalledOnce(
+            methodName: "post(name aName:, object anObject:)",
+            callCount: postCallCount,
+            describeArguments: "args: \(postArgsName)",
+            file: file,
+            line: line)
+    }
 }
+
+private func verifyMethodCalledOnce(methodName: String,
+                                    callCount: Int,
+                                    describeArguments: @autoclosure () -> String,
+                                    file: StaticString = #file,
+                                    line: UInt = #line) -> Bool {
+    if callCount == 0 {
+        XCTFail("Wanted but not invoked: \(methodName)", file: file, line: line)
+        return false
+    }
+
+    if callCount > 1 {
+        XCTFail("Wanted 1 time but was called \(callCount) times. " +
+            "\(methodName) with \(describeArguments())", file: file, line: line)
+        return false
+    }
+
+    return true
+}
+
+/*
+extension CLLocationCoordinate2D: Equatable { }
+
+public func == (lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
+    return lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude
+}
+*/

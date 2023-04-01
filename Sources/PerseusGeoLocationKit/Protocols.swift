@@ -12,6 +12,8 @@
 
 import CoreLocation
 
+// MARK: - Protocols serves isolation purpose for unit testing
+
 extension CLLocationManager: LocationManagerProtocol { }
 extension NotificationCenter: NotificationCenterProtocol { }
 
@@ -22,8 +24,8 @@ protocol LocationManagerProtocol {
     static func authorizationStatus() -> CLAuthorizationStatus
     static func locationServicesEnabled() -> Bool
 
-    func stopUpdatingLocation()
     func startUpdatingLocation()
+    func stopUpdatingLocation()
 
     #if os(iOS)
     func requestWhenInUseAuthorization()

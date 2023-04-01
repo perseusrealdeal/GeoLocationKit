@@ -12,28 +12,53 @@
 
 import CoreLocation
 
+// Debug servants
+
+#if DEBUG
+let printMessagesInConsole = false
+#endif
+
+// MARK: - Default values
+
 let APPROPRIATE_ACCURACY = LocationAccuracy.threeKilometers
+
+// MARK: - Notifications
 
 extension Notification.Name {
     static let locationDealerNotification = Notification.Name("locationDealerNotification")
+    static let locationDealerStatusChangedNotification =
+        Notification.Name("locationDealerStatusChangedNotification")
 }
 
-class PerseusLocationDealer: NSObject, CLLocationManagerDelegate {
+// MARK: - Errors
+
+enum LocationDealerError: Error, Equatable {
+    case receivedEmptyLocationData
+    case failedRequest(String)
+}
+
+// MARK: - Business class
+
+class PerseusLocationDealer: NSObject {
+
+    // MARK: - Difficult Dependencies
 
     #if DEBUG
     var locationManager: LocationManagerProtocol!
     var notificationCenter: NotificationCenterProtocol!
 
-    internal func resetDefaults() {
+    internal func resetDefaults() { // used for keeping test room cleaned only
         currentLocationDealOnly = false
         if let _ = locationManager {
             locationManager.desiredAccuracy = APPROPRIATE_ACCURACY.rawValue
         }
     }
     #else
-    private(set) var locationManager: CLLocationManager
-    private(set) var notificationCenter: NotificationCenter
+    private var locationManager: CLLocationManager
+    private var notificationCenter: NotificationCenter
     #endif
+
+    // MARK: - Calculated Properties
 
     var desiredAccuracy: CLLocationAccuracy { return locationManager.desiredAccuracy }
 
@@ -53,13 +78,18 @@ class PerseusLocationDealer: NSObject, CLLocationManagerDelegate {
                          status: authorizationStatusHidden)
     }
 
-    private(set) var currentLocationDealOnly: Bool = false
+    // Internal Flags
+
+    internal var currentLocationDealOnly: Bool = false
 
     // MARK: - Singleton constructor
 
     static let shared: PerseusLocationDealer = { return PerseusLocationDealer() }()
 
     private override init() {
+        #if DEBUG
+        if printMessagesInConsole { print(">> [\(type(of: self))]." + #function) }
+        #endif
 
         self.locationManager = CLLocationManager()
         self.notificationCenter = NotificationCenter.default
@@ -74,6 +104,9 @@ class PerseusLocationDealer: NSObject, CLLocationManagerDelegate {
 
     func askForCurrentLocation(accuracy: LocationAccuracy = APPROPRIATE_ACCURACY,
         _ actionIfNotAllowed: ((_ permit: LocationDealerPermit) -> Void)? = nil) {
+        #if DEBUG
+        if printMessagesInConsole { print(">> [\(type(of: self))]." + #function) }
+        #endif
 
         let permit = locationPermitHidden
 
@@ -89,6 +122,10 @@ class PerseusLocationDealer: NSObject, CLLocationManagerDelegate {
 
     #if os(iOS)
     func askForAuthorization(_ authorization: LocationAuthorization) {
+        #if DEBUG
+        if printMessagesInConsole { print(">> [\(type(of: self))]." + #function) }
+        #endif
+
         switch authorization {
         case .whenInUse:
             locationManager.requestWhenInUseAuthorization()
@@ -98,29 +135,22 @@ class PerseusLocationDealer: NSObject, CLLocationManagerDelegate {
     }
     #endif
 
-    // MARK: - CLLocationManagerDelegate contract
-
-    func locationManager(_ manager: CLLocationManager,
-                         didFailWithError error: Error) {
+    func askToStartUpdatingLocation() {
         #if DEBUG
-        print(">> [\(type(of: self))]." + #function)
+        if printMessagesInConsole { print(">> [\(type(of: self))]." + #function) }
         #endif
+
+        currentLocationDealOnly = false
+        locationManager.stopUpdatingLocation()
+        locationManager.startUpdatingLocation()
     }
 
-    func locationManager(_ manager: CLLocationManager,
-                         didChangeAuthorization status: CLAuthorizationStatus) {
+    func askToStopUpdatingLocation() {
         #if DEBUG
-        print(">> [\(type(of: self))]." + #function)
-        #endif
-    }
-
-    func locationManager(_ manager: CLLocationManager,
-                         didUpdateLocations locations: [CLLocation]) {
-        #if DEBUG
-        print(">> [\(type(of: self))]." + #function)
+        if printMessagesInConsole { print(">> [\(type(of: self))]." + #function) }
         #endif
 
-        currentLocationDealOnly = currentLocationDealOnly ? false : true
+        currentLocationDealOnly = false
         locationManager.stopUpdatingLocation()
     }
 }

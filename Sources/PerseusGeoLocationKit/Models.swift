@@ -12,6 +12,13 @@
 
 import CoreLocation
 
+// MARK: - Data structures and functions used in library
+
+enum Result<Value, Error: Swift.Error> {
+    case success(Value)
+    case failure(Error)
+}
+
 struct LocationAccuracy: RawRepresentable, Equatable {
     var rawValue: CLLocationAccuracy
 
