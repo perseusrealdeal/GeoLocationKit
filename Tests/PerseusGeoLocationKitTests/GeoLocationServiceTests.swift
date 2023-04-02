@@ -115,7 +115,7 @@ final class PerseusLocationDealerTests: XCTestCase {
 
         // arrange, act
 
-        sut.askToStartUpdatingLocation()
+        sut.askToStartUpdatingLocation(accuracy: .best)
 
         // assert
 
@@ -123,6 +123,7 @@ final class PerseusLocationDealerTests: XCTestCase {
         mockLM.verify_startUpdatingLocation_CalledOnce()
 
         XCTAssertFalse(sut.currentLocationDealOnly)
+        XCTAssertEqual(sut.desiredAccuracy, LocationAccuracy.best.rawValue)
     }
 
     func test_stopUpdatingLocation() {

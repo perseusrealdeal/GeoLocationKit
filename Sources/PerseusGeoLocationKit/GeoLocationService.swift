@@ -140,12 +140,14 @@ class PerseusLocationDealer: NSObject {
     }
     #endif
 
-    func askToStartUpdatingLocation() {
+    func askToStartUpdatingLocation(accuracy: LocationAccuracy = APPROPRIATE_ACCURACY) {
         #if DEBUG
         if printMessagesInConsole { print(">> [\(type(of: self))]." + #function) }
         #endif
 
         currentLocationDealOnly = false
+        locationManager.desiredAccuracy = accuracy.rawValue
+
         locationManager.stopUpdatingLocation()
         locationManager.startUpdatingLocation()
     }
