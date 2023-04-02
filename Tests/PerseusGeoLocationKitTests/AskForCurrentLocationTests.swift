@@ -19,7 +19,7 @@ extension PerseusLocationDealerTests {
 
         // arrange
 
-        var permit: LocationDealerPermit? = nil
+        var permit: LocationDealerPermit?
 
         MockLocationManager.status = authorized
         MockLocationManager.isLocationServiceEnabled = true
@@ -44,7 +44,7 @@ extension PerseusLocationDealerTests {
 
         // arrange
 
-        var permit: LocationDealerPermit? = nil
+        var permit: LocationDealerPermit?
 
         MockLocationManager.status = .denied
         MockLocationManager.isLocationServiceEnabled = true
@@ -63,7 +63,7 @@ extension PerseusLocationDealerTests {
 
         // arrange
 
-        var permit: LocationDealerPermit? = nil
+        var permit: LocationDealerPermit?
 
         MockLocationManager.status = authorized
         MockLocationManager.isLocationServiceEnabled = true

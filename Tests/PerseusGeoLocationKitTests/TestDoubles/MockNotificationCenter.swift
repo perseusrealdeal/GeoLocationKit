@@ -9,6 +9,8 @@
 //  Licensed under the MIT license. See LICENSE file.
 //  All rights reserved.
 //
+// swiftlint:disable empty_enum_arguments
+//
 
 import CoreLocation
 
@@ -37,10 +39,8 @@ class MockNotificationCenter: NotificationCenterProtocol {
 
         XCTAssertEqual(postArgsName.first, aName, "name", file: file, line: line)
         XCTAssertNotNil(anObject, file: file, line: line)
-        XCTAssertEqual(postArgsObject.first as! CLAuthorizationStatus,
-                       anObject as! CLAuthorizationStatus, "object", file: file, line: line)
-
-
+        XCTAssertEqual(postArgsObject.first as? CLAuthorizationStatus,
+                       anObject as? CLAuthorizationStatus, "object", file: file, line: line)
     }
 
     func verify_post_locationDealerNotification_withError(
@@ -128,7 +128,6 @@ class MockNotificationCenter: NotificationCenterProtocol {
             }
         }
 
-        // XCTAssertTrue(locationArgs == object, "object", file: file, line: line)
         XCTAssertEqual(locationArgs, object, "object", file: file, line: line)
     }
 
@@ -161,12 +160,11 @@ class MockNotificationCenter: NotificationCenterProtocol {
             switch theObject {
             case .success(let locations):
                 object = locations
-            case .failure(_):
+            case .failure( _):
                 break
             }
         }
 
-        // XCTAssertTrue(locationArgs == object, "object", file: file, line: line)
         XCTAssertEqual(locationArgs, object, "object", file: file, line: line)
     }
 

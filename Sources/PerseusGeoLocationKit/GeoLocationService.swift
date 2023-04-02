@@ -54,7 +54,7 @@ class PerseusLocationDealer: NSObject {
 
     internal func resetDefaults() { // used for keeping test room cleaned only
         currentLocationDealOnly = false
-        if let _ = locationManager {
+        if locationManager != nil {
             locationManager.desiredAccuracy = APPROPRIATE_ACCURACY.rawValue
         }
     }
@@ -92,6 +92,7 @@ class PerseusLocationDealer: NSObject {
     static let shared: PerseusLocationDealer = { return PerseusLocationDealer() }()
 
     private override init() {
+
         #if DEBUG
         if printMessagesInConsole { print(">> [\(type(of: self))]." + #function) }
         #endif
@@ -107,8 +108,10 @@ class PerseusLocationDealer: NSObject {
 
     // MARK: - Contract
 
-    func askForCurrentLocation(accuracy: LocationAccuracy = APPROPRIATE_ACCURACY,
+    func askForCurrentLocation(
+        accuracy: LocationAccuracy = APPROPRIATE_ACCURACY,
         _ actionIfNotAllowed: ((_ permit: LocationDealerPermit) -> Void)? = nil) {
+
         #if DEBUG
         if printMessagesInConsole { print(">> [\(type(of: self))]." + #function) }
         #endif
@@ -127,6 +130,7 @@ class PerseusLocationDealer: NSObject {
 
     #if os(iOS)
     func askForAuthorization(_ authorization: LocationAuthorization) {
+
         #if DEBUG
         if printMessagesInConsole { print(">> [\(type(of: self))]." + #function) }
         #endif
@@ -141,18 +145,20 @@ class PerseusLocationDealer: NSObject {
     #endif
 
     func askToStartUpdatingLocation(accuracy: LocationAccuracy = APPROPRIATE_ACCURACY) {
+
         #if DEBUG
         if printMessagesInConsole { print(">> [\(type(of: self))]." + #function) }
         #endif
 
         currentLocationDealOnly = false
-        locationManager.desiredAccuracy = accuracy.rawValue
-
         locationManager.stopUpdatingLocation()
+
+        locationManager.desiredAccuracy = accuracy.rawValue
         locationManager.startUpdatingLocation()
     }
 
     func askToStopUpdatingLocation() {
+
         #if DEBUG
         if printMessagesInConsole { print(">> [\(type(of: self))]." + #function) }
         #endif

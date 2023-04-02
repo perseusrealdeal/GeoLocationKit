@@ -30,14 +30,16 @@ class MockLocationManager: LocationManagerProtocol {
     var stopUpdatingLocationCallCount: Int = 0
 
     func startUpdatingLocation() {
+
         #if DEBUG
-        //if printMessagesInConsole { print(">> [\(type(of: self))]." + #function) }
+        if printMessagesInConsole { print(">> [\(type(of: self))]." + #function) }
         #endif
 
         startUpdatingLocationCallCount += 1
     }
 
     func stopUpdatingLocation() {
+
         #if DEBUG
         if printMessagesInConsole { print(">> [\(type(of: self))]." + #function) }
         #endif
