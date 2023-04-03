@@ -38,12 +38,6 @@
 
 import CoreLocation
 
-// Debug servants
-
-#if DEBUG
-let printMessagesInConsole = false
-#endif
-
 // MARK: - Default values
 
 let APPROPRIATE_ACCURACY = LocationAccuracy.threeKilometers
@@ -106,11 +100,6 @@ class PerseusLocationDealer: NSObject {
     static let shared: PerseusLocationDealer = { return PerseusLocationDealer() }()
 
     private override init() {
-
-        #if DEBUG
-        if printMessagesInConsole { print(">> [\(type(of: self))]." + #function) }
-        #endif
-
         self.locationManager = CLLocationManager()
         self.notificationCenter = NotificationCenter.default
 
@@ -126,10 +115,6 @@ class PerseusLocationDealer: NSObject {
         accuracy: LocationAccuracy = APPROPRIATE_ACCURACY,
         _ actionIfNotAllowed: ((_ permit: LocationDealerPermit) -> Void)? = nil) {
 
-        #if DEBUG
-        if printMessagesInConsole { print(">> [\(type(of: self))]." + #function) }
-        #endif
-
         let permit = locationPermitHidden
 
         guard permit == .allowed else { actionIfNotAllowed?(permit); return }
@@ -144,11 +129,6 @@ class PerseusLocationDealer: NSObject {
 
     #if os(iOS)
     func askForAuthorization(_ authorization: LocationAuthorization) {
-
-        #if DEBUG
-        if printMessagesInConsole { print(">> [\(type(of: self))]." + #function) }
-        #endif
-
         switch authorization {
         case .whenInUse:
             locationManager.requestWhenInUseAuthorization()
@@ -159,11 +139,6 @@ class PerseusLocationDealer: NSObject {
     #endif
 
     func askToStartUpdatingLocation(accuracy: LocationAccuracy = APPROPRIATE_ACCURACY) {
-
-        #if DEBUG
-        if printMessagesInConsole { print(">> [\(type(of: self))]." + #function) }
-        #endif
-
         currentLocationDealOnly = false
         locationManager.stopUpdatingLocation()
 
@@ -172,11 +147,6 @@ class PerseusLocationDealer: NSObject {
     }
 
     func askToStopUpdatingLocation() {
-
-        #if DEBUG
-        if printMessagesInConsole { print(">> [\(type(of: self))]." + #function) }
-        #endif
-
         currentLocationDealOnly = false
         locationManager.stopUpdatingLocation()
     }
@@ -188,19 +158,11 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager,
                          didChangeAuthorization status: CLAuthorizationStatus) {
-        #if DEBUG
-        if printMessagesInConsole { print(">> [\(type(of: self))]." + #function) }
-        #endif
-
         notificationCenter.post(name: .locationDealerStatusChangedNotification, object: status)
     }
 
     func locationManager(_ manager: CLLocationManager,
                          didFailWithError error: Error) {
-        #if DEBUG
-        if printMessagesInConsole { print(">> [\(type(of: self))]." + #function) }
-        #endif
-
         currentLocationDealOnly = false
         locationManager.stopUpdatingLocation()
 
@@ -211,10 +173,6 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager,
                          didUpdateLocations locations: [CLLocation]) {
-        #if DEBUG
-        if printMessagesInConsole { print(">> [\(type(of: self))]." + #function) }
-        #endif
-
         guard !currentLocationDealOnly else {
 
             currentLocationDealOnly = false
