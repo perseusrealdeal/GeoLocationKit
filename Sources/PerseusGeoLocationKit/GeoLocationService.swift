@@ -12,11 +12,7 @@
 
 import CoreLocation
 
-// Debug servants
-
-#if DEBUG
-let printMessagesInConsole = false
-#endif
+// Servants
 
 // MARK: - Default values
 
@@ -93,9 +89,7 @@ class PerseusLocationDealer: NSObject {
 
     private override init() {
 
-        #if DEBUG
-        if printMessagesInConsole { print(">> [\(type(of: self))]." + #function) }
-        #endif
+        PerseusLogger.message("[\(PerseusLocationDealer.self)]." + #function)
 
         self.locationManager = CLLocationManager()
         self.notificationCenter = NotificationCenter.default
@@ -112,9 +106,7 @@ class PerseusLocationDealer: NSObject {
         accuracy: LocationAccuracy = APPROPRIATE_ACCURACY,
         _ actionIfNotAllowed: ((_ permit: LocationDealerPermit) -> Void)? = nil) {
 
-        #if DEBUG
-        if printMessagesInConsole { print(">> [\(type(of: self))]." + #function) }
-        #endif
+        PerseusLogger.message("[\(type(of: self))]." + #function)
 
         let permit = locationPermitHidden
 
@@ -131,9 +123,7 @@ class PerseusLocationDealer: NSObject {
     #if os(iOS)
     func askForAuthorization(_ authorization: LocationAuthorization) {
 
-        #if DEBUG
-        if printMessagesInConsole { print(">> [\(type(of: self))]." + #function) }
-        #endif
+        PerseusLogger.message("[\(type(of: self))]." + #function)
 
         switch authorization {
         case .whenInUse:
@@ -146,9 +136,7 @@ class PerseusLocationDealer: NSObject {
 
     func askToStartUpdatingLocation(accuracy: LocationAccuracy = APPROPRIATE_ACCURACY) {
 
-        #if DEBUG
-        if printMessagesInConsole { print(">> [\(type(of: self))]." + #function) }
-        #endif
+        PerseusLogger.message("[\(type(of: self))]." + #function)
 
         currentLocationDealOnly = false
         locationManager.stopUpdatingLocation()
@@ -159,9 +147,7 @@ class PerseusLocationDealer: NSObject {
 
     func askToStopUpdatingLocation() {
 
-        #if DEBUG
-        if printMessagesInConsole { print(">> [\(type(of: self))]." + #function) }
-        #endif
+        PerseusLogger.message("[\(type(of: self))]." + #function)
 
         currentLocationDealOnly = false
         locationManager.stopUpdatingLocation()

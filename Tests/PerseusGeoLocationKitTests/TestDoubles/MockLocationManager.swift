@@ -30,19 +30,13 @@ class MockLocationManager: LocationManagerProtocol {
     var stopUpdatingLocationCallCount: Int = 0
 
     func startUpdatingLocation() {
-
-        #if DEBUG
-        if printMessagesInConsole { print(">> [\(type(of: self))]." + #function) }
-        #endif
+        PerseusLogger.message("[\(type(of: self))]." + #function)
 
         startUpdatingLocationCallCount += 1
     }
 
     func stopUpdatingLocation() {
-
-        #if DEBUG
-        if printMessagesInConsole { print(">> [\(type(of: self))]." + #function) }
-        #endif
+        PerseusLogger.message("[\(type(of: self))]." + #function)
 
         stopUpdatingLocationCallCount += 1
     }
