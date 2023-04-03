@@ -88,7 +88,7 @@ class PerseusLocationDealer: NSObject {
     static let shared: PerseusLocationDealer = { return PerseusLocationDealer() }()
 
     private override init() {
-
+        PerseusLogger.turned = .off
         PerseusLogger.message("[\(PerseusLocationDealer.self)]." + #function)
 
         self.locationManager = CLLocationManager()
