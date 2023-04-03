@@ -38,12 +38,16 @@
 
 # Usage
 
-`Step 1:` Create notification obsever
+`Step 1:` Make the app prepared for using location services
+
+- Short note on how to make the app prepared for location services placed [here](https://gist.github.com/perseusrealdeal/8cd833bb360a29e718ac0ce1f1d2d7d8).
+
+`Step 2:` Create notification observer
 
 ```swift
 ```
 
-`Step 2:` Ask for current location
+`Step 3:` Ask for current location
 
 ```swift
 ```
