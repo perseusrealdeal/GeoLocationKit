@@ -17,12 +17,36 @@
 [![CocoaPods manager](https://img.shields.io/badge/CocoaPods-compatible-4BC51D.svg)](https://cocoapods.org)
 [![Swift Package Manager compatible](https://img.shields.io/badge/Swift%20Package%20Manager-compatible-4BC51D.svg)](https://github.com/apple/swift-package-manager)
 
+# In Brief
+
+> .
+
 # Requirements
 
 - Xcode 10.1+
 - Swift 4.2+
 - iOS: 9.3+, UIKit SDK
 - macOS: 10.9+, AppKit SDK
+
+# First-party software
+
+- [PerseusLogger](https://gist.github.com/perseusrealdeal/df456a9825fcface44eca738056eb6d5)
+
+# Third-party software
+
+- [SwiftLint](https://github.com/realm/SwiftLint) / [0.31.0: Busy Laundromat](https://github.com/realm/SwiftLint/releases/tag/0.31.0) for macOS High Sierra
+
+# Usage
+
+`Step 1:` Create notification obsever
+
+```swift
+```
+
+`Step 2:` Ask for current location
+
+```swift
+```
 
 # Installation
 
@@ -68,15 +92,17 @@ dependencies: [
 
 Using "Exact" with the Version field is strongly recommended.
 
-# Third-party software
-
-- [SwiftLint](https://github.com/realm/SwiftLint) / [0.31.0: Busy Laundromat](https://github.com/realm/SwiftLint/releases/tag/0.31.0) for macOS High Sierra
-
 # License MIT
 
-- All files from this repository is under license based on MIT
-- Have a look at [LICENSE](/LICENSE) for details
+All files from this repository is under license based on MIT.
+
+Copyright © 7531 Mikhail Zhigulin of Novosibirsk.
+
+- The year starts from the creation of the world according to a Slavic calendar.
+- September, the 1st of Slavic year.
+
+Have a look at [LICENSE](/LICENSE) for details.
 
 # Author
 
-`PerseusGeoLocationKit` was written at Novosibirsk by Mikhail Zhigulin i.e. me, mzhigulin@gmail.com.
+> `PerseusGeoLocationKit` was written at Novosibirsk by Mikhail Zhigulin i.e. me, mzhigulin@gmail.com.
