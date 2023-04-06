@@ -16,14 +16,14 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager,
                          didChangeAuthorization status: CLAuthorizationStatus) {
-        PerseusLogger.message("[\(type(of: self))]." + #function)
+        PerseusLogger.message("[\(type(of: self))].\(#function)")
 
         notificationCenter.post(name: .locationDealerStatusChangedNotification, object: status)
     }
 
     func locationManager(_ manager: CLLocationManager,
                          didFailWithError error: Error) {
-        PerseusLogger.message("[\(type(of: self))]." + #function)
+        PerseusLogger.message("[\(type(of: self))].\(#function)")
 
         currentLocationDealOnly = false
         locationManager.stopUpdatingLocation()
@@ -35,7 +35,7 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager,
                          didUpdateLocations locations: [CLLocation]) {
-        PerseusLogger.message("[\(type(of: self))]." + #function)
+        PerseusLogger.message("[\(type(of: self))].\(#function)")
 
         guard !currentLocationDealOnly else {
 

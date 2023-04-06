@@ -88,8 +88,8 @@ class PerseusLocationDealer: NSObject {
     static let shared: PerseusLocationDealer = { return PerseusLocationDealer() }()
 
     private override init() {
-        PerseusLogger.turned = .off
-        PerseusLogger.message("[\(PerseusLocationDealer.self)]." + #function)
+        // PerseusLogger.turned = .off
+        PerseusLogger.message("[\(PerseusLocationDealer.self)].\(#function)")
 
         self.locationManager = CLLocationManager()
         self.notificationCenter = NotificationCenter.default
@@ -106,7 +106,7 @@ class PerseusLocationDealer: NSObject {
         accuracy: LocationAccuracy = APPROPRIATE_ACCURACY,
         _ actionIfNotAllowed: ((_ permit: LocationDealerPermit) -> Void)? = nil) {
 
-        PerseusLogger.message("[\(type(of: self))]." + #function)
+        PerseusLogger.message("[\(type(of: self))].\(#function)")
 
         let permit = locationPermitHidden
 
@@ -123,7 +123,7 @@ class PerseusLocationDealer: NSObject {
     #if os(iOS)
     func askForAuthorization(_ authorization: LocationAuthorization) {
 
-        PerseusLogger.message("[\(type(of: self))]." + #function)
+        PerseusLogger.message("[\(type(of: self))].\(#function)")
 
         switch authorization {
         case .whenInUse:
@@ -136,7 +136,7 @@ class PerseusLocationDealer: NSObject {
 
     func askToStartUpdatingLocation(accuracy: LocationAccuracy = APPROPRIATE_ACCURACY) {
 
-        PerseusLogger.message("[\(type(of: self))]." + #function)
+        PerseusLogger.message("[\(type(of: self))].\(#function)")
 
         currentLocationDealOnly = false
         locationManager.stopUpdatingLocation()
@@ -147,7 +147,7 @@ class PerseusLocationDealer: NSObject {
 
     func askToStopUpdatingLocation() {
 
-        PerseusLogger.message("[\(type(of: self))]." + #function)
+        PerseusLogger.message("[\(type(of: self))].\(#function)")
 
         currentLocationDealOnly = false
         locationManager.stopUpdatingLocation()
