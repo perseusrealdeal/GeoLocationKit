@@ -1,4 +1,4 @@
-# Perseus Geo Location Kit
+# PerseusGeoLocationKit — Component — Xcode 10.1+
 
 > Collection of tools for dealing with native geo location services.
 
@@ -23,7 +23,8 @@
 
 # Requirements
 
-- Xcode 10.1+
+- [macOS 10.13.6+](https://apps.apple.com/us/app/macos-high-sierra/id1246284741?ls=1)
+- [Xcode 10.1+](https://stackoverflow.com/questions/10335747/how-to-download-xcode-dmg-or-xip-file)
 - Swift 4.2+
 - iOS: 9.3+, UIKit SDK
 - macOS: 10.9+, AppKit SDK
@@ -41,7 +42,7 @@
 
 `Step 1:` Make the app prepared for using location services
 
-- Short note on how to make the app prepared for location services placed [here](https://gist.github.com/perseusrealdeal/8cd833bb360a29e718ac0ce1f1d2d7d8).
+> Short note on how to make the app prepared for location services placed [here](https://gist.github.com/perseusrealdeal/8cd833bb360a29e718ac0ce1f1d2d7d8).
 
 `Step 2:` Create notification observer
 
@@ -103,8 +104,8 @@ All files from this repository is under license based on MIT.
 
 Copyright © 7531 Mikhail Zhigulin of Novosibirsk.
 
-- The year starts from the creation of the world according to a Slavic calendar.
-- September, the 1st of Slavic year.
+- The year starts from the creation of the world according to a Slavic calendar
+- September, the 1st of Slavic year
 
 Have a look at [LICENSE](/LICENSE) for details.
 
