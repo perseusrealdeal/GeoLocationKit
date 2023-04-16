@@ -40,7 +40,7 @@
 
 # Usage
 
-`Step 1:` Make the app prepared for using location services
+`Step 1:` Make the app prepared for location services use cases
 
 > Short note on how to make the app prepared for location services placed [here](https://gist.github.com/perseusrealdeal/8cd833bb360a29e718ac0ce1f1d2d7d8).
 
