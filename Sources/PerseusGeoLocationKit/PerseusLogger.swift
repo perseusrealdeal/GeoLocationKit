@@ -36,18 +36,38 @@
 //  SOFTWARE.
 //
 
+// DESC: USE LOGGER LIKE A VARIABLE ANYAWHERE YOU WANT
+//
+// By default logger is turned on in DEBUG, but it's off in RELEASE.
+//
+// log.message("[\(type(of: self))].\(#function)")
+//
+
+/* To disable debug messaging of the module use the following statements in the start point.
+
+ import class OpenWeatherFreeClient.PerseusLogger
+ typealias FreeClientLogger = OpenWeatherFreeClient.PerseusLogger
+
+ FreeClientLogger.turned = .off
+
+ */
+
 import Foundation
 
-class PerseusLogger {
+// swiftlint:disable type_name
+typealias log = PerseusLogger
+// swiftlint:enable type_name
 
-    enum Status {
+public class PerseusLogger {
+
+    public enum Status {
         case on
         case off
     }
 
-    enum Level: Int, CustomStringConvertible {
+    public enum Level: Int, CustomStringConvertible {
 
-        var description: String {
+        public var description: String {
             switch self {
             case .info:
                 return "INFO"
@@ -58,30 +78,37 @@ class PerseusLogger {
             }
         }
 
-        case info = 3
+        case info  = 3
         case debug = 2 // Default.
         case error = 1
     }
 
     #if DEBUG
-    static var turned = Status.on
+    public static var turned = Status.on
     #else
-    static var turned = Status.off
+    public static var turned = Status.off
     #endif
 
-    static var level = Level.debug
-    static var short = true
+    public static var level = Level.debug
+    public static var short = true
 
-    static func message(_ text: @autoclosure () -> String,
-                        _ type: Level = .debug,
-                        _ file: StaticString = #file,
-                        _ line: UInt = #line) {
+    public static func message(_ text: @autoclosure () -> String,
+                               _ type: Level = .debug,
+                               _ file: StaticString = #file,
+                               _ line: UInt = #line) {
         guard turned == .on, type.rawValue <= level.rawValue else { return }
+
+        var message = ""
+
         if short {
-            print("\(type.description): \(text())")
+            message = "\(type.description): \(text())"
         } else {
             let fileName = (file.description as NSString).lastPathComponent
-            print("\(type.description): \(text()), file: \(fileName), line: \(line)")
+            message = "\(type.description): \(text()), file: \(fileName), line: \(line)"
         }
+
+        // DispatchQueue.main.async { print(message) }
+
+        print(message)
     }
 }

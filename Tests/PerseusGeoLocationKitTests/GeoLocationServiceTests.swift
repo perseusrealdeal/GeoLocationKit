@@ -28,7 +28,7 @@ final class PerseusLocationDealerTests: XCTestCase {
     internal var mockNC: MockNotificationCenter!
 
     override func setUp() {
-        PerseusLogger.message("[\(type(of: self))].\(#function)")
+        log.message("[\(type(of: self))].\(#function)")
 
         super.setUp()
 
@@ -41,7 +41,7 @@ final class PerseusLocationDealerTests: XCTestCase {
     }
 
     override func tearDown() {
-        PerseusLogger.message("[\(type(of: self))].\(#function)")
+        log.message("[\(type(of: self))].\(#function)")
 
         mockLM = nil
         mockNC = nil
