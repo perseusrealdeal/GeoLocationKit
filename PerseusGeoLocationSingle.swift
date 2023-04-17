@@ -157,13 +157,14 @@ public class PerseusLocationDealer: NSObject {
 
 extension PerseusLocationDealer: CLLocationManagerDelegate {
 
-    public func locationManager(_ manager: CLLocationManager,
-                         didChangeAuthorization status: CLAuthorizationStatus) {
+    public func locationManager(
+        _ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+
         notificationCenter.post(name: .locationDealerStatusChangedNotification, object: status)
     }
 
-    public func locationManager(_ manager: CLLocationManager,
-                         didFailWithError error: Error) {
+    public func locationManager(
+        _ manager: CLLocationManager, didFailWithError error: Error) {
 
         currentLocationDealOnly = false
         locationManager.stopUpdatingLocation()
@@ -173,8 +174,8 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
         notificationCenter.post(name: .locationDealerErrorNotification, object: result)
     }
 
-    public func locationManager(_ manager: CLLocationManager,
-                         didUpdateLocations locations: [CLLocation]) {
+    public func locationManager(
+        _ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
 
         guard !currentLocationDealOnly else {
 
