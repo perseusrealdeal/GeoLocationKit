@@ -45,10 +45,10 @@
 
 /* To disable debug messaging of the module use the following statements in the start point.
 
- import class OpenWeatherFreeClient.PerseusLogger
- typealias FreeClientLogger = OpenWeatherFreeClient.PerseusLogger
+ import class PerseusGeoLocationKit.PerseusLogger
+ typealias PerseusGeoLocationLogger = PerseusGeoLocationKit.PerseusLogger
 
- FreeClientLogger.turned = .off
+ PerseusGeoLocationLogger.turned = .off
 
  */
 
