@@ -40,31 +40,31 @@ import CoreLocation
 
 // MARK: - Default values
 
-let APPROPRIATE_ACCURACY = LocationAccuracy.threeKilometers
+public let APPROPRIATE_ACCURACY = LocationAccuracy.threeKilometers
 
 // MARK: - Notifications
 
 extension Notification.Name {
-    static let locationDealerCurrentNotification =
+    public static let locationDealerCurrentNotification =
         Notification.Name("locationDealerCurrentNotification")
-    static let locationDealerUpdatesNotification =
+    public static let locationDealerUpdatesNotification =
         Notification.Name("locationDealerUpdatesNotification")
-    static let locationDealerErrorNotification =
+    public static let locationDealerErrorNotification =
         Notification.Name("locationDealerErrorNotification")
-    static let locationDealerStatusChangedNotification =
+    public static let locationDealerStatusChangedNotification =
         Notification.Name("locationDealerStatusChangedNotification")
 }
 
 // MARK: - Errors
 
-enum LocationDealerError: Error, Equatable {
+public enum LocationDealerError: Error, Equatable {
     case receivedEmptyLocationData
     case failedRequest(String)
 }
 
 // MARK: - Business class
 
-class PerseusLocationDealer: NSObject {
+public class PerseusLocationDealer: NSObject {
 
     // MARK: - Difficult Dependencies
 
@@ -73,19 +73,19 @@ class PerseusLocationDealer: NSObject {
 
     // MARK: - Calculated Properties
 
-    var desiredAccuracy: CLLocationAccuracy { return locationManager.desiredAccuracy }
+    public var desiredAccuracy: CLLocationAccuracy { return locationManager.desiredAccuracy }
 
-    var authorizationStatus: CLAuthorizationStatus { return authorizationStatusHidden }
+    public var authorizationStatus: CLAuthorizationStatus { return authorizationStatusHidden }
     private var authorizationStatusHidden: CLAuthorizationStatus {
         return type(of: locationManager).authorizationStatus()
     }
 
-    var locationServicesEnabled: Bool { return locationServicesEnabledHidden }
+    public var locationServicesEnabled: Bool { return locationServicesEnabledHidden }
     private var locationServicesEnabledHidden: Bool {
         return type(of: locationManager).locationServicesEnabled()
     }
 
-    var locationPermit: LocationDealerPermit { return locationPermitHidden }
+    public var locationPermit: LocationDealerPermit { return locationPermitHidden }
     private var locationPermitHidden: LocationDealerPermit {
         return getPermit(serviceEnabled: locationServicesEnabledHidden,
                          status: authorizationStatusHidden)
@@ -97,9 +97,10 @@ class PerseusLocationDealer: NSObject {
 
     // MARK: - Singleton constructor
 
-    static let shared: PerseusLocationDealer = { return PerseusLocationDealer() }()
+    public static let shared: PerseusLocationDealer = { return PerseusLocationDealer() }()
 
     private override init() {
+
         self.locationManager = CLLocationManager()
         self.notificationCenter = NotificationCenter.default
 
@@ -111,7 +112,7 @@ class PerseusLocationDealer: NSObject {
 
     // MARK: - Contract
 
-    func askForCurrentLocation(
+    public func askForCurrentLocation(
         accuracy: LocationAccuracy = APPROPRIATE_ACCURACY,
         _ actionIfNotAllowed: ((_ permit: LocationDealerPermit) -> Void)? = nil) {
 
@@ -128,7 +129,7 @@ class PerseusLocationDealer: NSObject {
     }
 
     #if os(iOS)
-    func askForAuthorization(_ authorization: LocationAuthorization) {
+    public func askForAuthorization(_ authorization: LocationAuthorization) {
         switch authorization {
         case .whenInUse:
             locationManager.requestWhenInUseAuthorization()
@@ -138,7 +139,7 @@ class PerseusLocationDealer: NSObject {
     }
     #endif
 
-    func askToStartUpdatingLocation(accuracy: LocationAccuracy = APPROPRIATE_ACCURACY) {
+    public func askToStartUpdatingLocation(accuracy: LocationAccuracy = APPROPRIATE_ACCURACY) {
         currentLocationDealOnly = false
         locationManager.stopUpdatingLocation()
 
@@ -146,7 +147,7 @@ class PerseusLocationDealer: NSObject {
         locationManager.startUpdatingLocation()
     }
 
-    func askToStopUpdatingLocation() {
+    public func askToStopUpdatingLocation() {
         currentLocationDealOnly = false
         locationManager.stopUpdatingLocation()
     }
@@ -156,13 +157,14 @@ class PerseusLocationDealer: NSObject {
 
 extension PerseusLocationDealer: CLLocationManagerDelegate {
 
-    func locationManager(_ manager: CLLocationManager,
+    public func locationManager(_ manager: CLLocationManager,
                          didChangeAuthorization status: CLAuthorizationStatus) {
         notificationCenter.post(name: .locationDealerStatusChangedNotification, object: status)
     }
 
-    func locationManager(_ manager: CLLocationManager,
+    public func locationManager(_ manager: CLLocationManager,
                          didFailWithError error: Error) {
+
         currentLocationDealOnly = false
         locationManager.stopUpdatingLocation()
 
@@ -171,8 +173,9 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
         notificationCenter.post(name: .locationDealerErrorNotification, object: result)
     }
 
-    func locationManager(_ manager: CLLocationManager,
+    public func locationManager(_ manager: CLLocationManager,
                          didUpdateLocations locations: [CLLocation]) {
+
         guard !currentLocationDealOnly else {
 
             currentLocationDealOnly = false
@@ -196,34 +199,41 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
 
 // MARK: - Data structures and functions used in library
 
-enum Result<Value, Error: Swift.Error> {
+public enum Result<Value, Error: Swift.Error> {
     case success(Value)
     case failure(Error)
 }
 
-struct LocationAccuracy: RawRepresentable, Equatable {
-    var rawValue: CLLocationAccuracy
+public struct LocationAccuracy: RawRepresentable, Equatable {
+    public var rawValue: CLLocationAccuracy
 
     // The highest possible accuracy that uses additional sensor data.
-    static let bestForNavigation =
-        LocationAccuracy(rawValue: kCLLocationAccuracyBestForNavigation)
+    public static let bestForNavigation = LocationAccuracy(
+        rawValue: kCLLocationAccuracyBestForNavigation)
 
     // The best level of accuracy available.
-    static let best = LocationAccuracy(rawValue: kCLLocationAccuracyBest)
+    public static let best = LocationAccuracy(
+        rawValue: kCLLocationAccuracyBest)
 
     // Accurate to within ten meters of the desired target.
-    static let nearestTenMeters =
-        LocationAccuracy(rawValue: kCLLocationAccuracyNearestTenMeters)
+    public static let nearestTenMeters = LocationAccuracy(
+        rawValue: kCLLocationAccuracyNearestTenMeters)
 
     // Accurate to within one hundred meters.
-    static let hundredMeters = LocationAccuracy(rawValue: kCLLocationAccuracyHundredMeters)
+    public static let hundredMeters = LocationAccuracy(
+        rawValue: kCLLocationAccuracyHundredMeters)
 
     // Accurate to the nearest kilometer.
-    static let kilometer = LocationAccuracy(rawValue: kCLLocationAccuracyKilometer)
+    public static let kilometer = LocationAccuracy(
+        rawValue: kCLLocationAccuracyKilometer)
 
     // Accurate to the nearest three kilometers.
-    static let threeKilometers = LocationAccuracy(rawValue: kCLLocationAccuracyThreeKilometers)
+    public static let threeKilometers = LocationAccuracy(
+        rawValue: kCLLocationAccuracyThreeKilometers)
 
+    public init(rawValue: CLLocationAccuracy) {
+        self.rawValue = rawValue
+    }
 }
 
 extension CLAuthorizationStatus: CustomStringConvertible {
@@ -244,12 +254,12 @@ extension CLAuthorizationStatus: CustomStringConvertible {
 }
 
 #if os(iOS)
-enum LocationAuthorization: CustomStringConvertible {
+public enum LocationAuthorization: CustomStringConvertible {
 
     case whenInUse
     case always
 
-    var description: String {
+    public var description: String {
         switch self {
         case .whenInUse:
             return "When-in-use"
@@ -260,7 +270,7 @@ enum LocationAuthorization: CustomStringConvertible {
 }
 #endif
 
-enum LocationDealerPermit: CustomStringConvertible {
+public enum LocationDealerPermit: CustomStringConvertible {
     /// Location service is neither restricted nor the app denided
     case notDetermined
 
@@ -278,7 +288,7 @@ enum LocationDealerPermit: CustomStringConvertible {
     /// either authorizedAlways or authorizedWhenInUse
     case allowed
 
-    var description: String {
+    public var description: String {
         switch self {
         case .notDetermined:
             return "notDetermined"
@@ -296,7 +306,8 @@ enum LocationDealerPermit: CustomStringConvertible {
     }
 }
 
-func getPermit(serviceEnabled: Bool, status: CLAuthorizationStatus) -> LocationDealerPermit {
+public func getPermit(serviceEnabled: Bool,
+                      status: CLAuthorizationStatus) -> LocationDealerPermit {
 
     if status == .notDetermined {
         return .notDetermined
