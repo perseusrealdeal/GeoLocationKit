@@ -14,14 +14,14 @@ import CoreLocation
 
 extension PerseusLocationDealer: CLLocationManagerDelegate {
 
-    internal func locationManager(_ manager: CLLocationManager,
+    public func locationManager(_ manager: CLLocationManager,
                          didChangeAuthorization status: CLAuthorizationStatus) {
         log.message("[\(type(of: self))].\(#function)")
 
         notificationCenter.post(name: .locationDealerStatusChangedNotification, object: status)
     }
 
-    internal func locationManager(_ manager: CLLocationManager,
+    public func locationManager(_ manager: CLLocationManager,
                          didFailWithError error: Error) {
         log.message("[\(type(of: self))].\(#function)")
 
@@ -33,7 +33,7 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
         notificationCenter.post(name: .locationDealerErrorNotification, object: result)
     }
 
-    internal func locationManager(_ manager: CLLocationManager,
+    public func locationManager(_ manager: CLLocationManager,
                          didUpdateLocations locations: [CLLocation]) {
         log.message("[\(type(of: self))].\(#function)")
 
