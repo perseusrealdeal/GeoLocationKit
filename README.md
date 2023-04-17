@@ -1,6 +1,6 @@
-# PerseusGeoLocationKit — Component — Xcode 10.1+
+# PerseusGeoLocationKit — Xcode 10.1+
 
-> Collection of tools for dealing with native geo location services.
+> This is the component for macOS and iOS apps.
 
 [![Actions Status](https://github.com/perseusrealdeal/PerseusGeoLocationKit/actions/workflows/main.yml/badge.svg)](https://github.com/perseusrealdeal/PerseusGeoLocationKit/actions)
 ![Version](https://img.shields.io/badge/Version-0.1.0-green.svg)
@@ -19,7 +19,7 @@
 
 # In Brief
 
-> .
+> Collection of tools for easy dealing with native geo location services.
 
 # Requirements
 
