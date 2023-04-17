@@ -14,34 +14,41 @@ import CoreLocation
 
 // MARK: - Data structures and functions used in library
 
-enum Result<Value, Error: Swift.Error> {
+public enum Result<Value, Error: Swift.Error> {
     case success(Value)
     case failure(Error)
 }
 
-struct LocationAccuracy: RawRepresentable, Equatable {
-    var rawValue: CLLocationAccuracy
+public struct LocationAccuracy: RawRepresentable, Equatable {
+    public var rawValue: CLLocationAccuracy
 
     // The highest possible accuracy that uses additional sensor data.
-    static let bestForNavigation =
-        LocationAccuracy(rawValue: kCLLocationAccuracyBestForNavigation)
+    public static let bestForNavigation = LocationAccuracy(
+        rawValue: kCLLocationAccuracyBestForNavigation)
 
     // The best level of accuracy available.
-    static let best = LocationAccuracy(rawValue: kCLLocationAccuracyBest)
+    public static let best = LocationAccuracy(
+        rawValue: kCLLocationAccuracyBest)
 
     // Accurate to within ten meters of the desired target.
-    static let nearestTenMeters =
-        LocationAccuracy(rawValue: kCLLocationAccuracyNearestTenMeters)
+    public static let nearestTenMeters = LocationAccuracy(
+        rawValue: kCLLocationAccuracyNearestTenMeters)
 
     // Accurate to within one hundred meters.
-    static let hundredMeters = LocationAccuracy(rawValue: kCLLocationAccuracyHundredMeters)
+    public static let hundredMeters = LocationAccuracy(
+        rawValue: kCLLocationAccuracyHundredMeters)
 
     // Accurate to the nearest kilometer.
-    static let kilometer = LocationAccuracy(rawValue: kCLLocationAccuracyKilometer)
+    public static let kilometer = LocationAccuracy(
+        rawValue: kCLLocationAccuracyKilometer)
 
     // Accurate to the nearest three kilometers.
-    static let threeKilometers = LocationAccuracy(rawValue: kCLLocationAccuracyThreeKilometers)
+    public static let threeKilometers = LocationAccuracy(
+        rawValue: kCLLocationAccuracyThreeKilometers)
 
+    public init(rawValue: CLLocationAccuracy) {
+        self.rawValue = rawValue
+    }
 }
 
 extension CLAuthorizationStatus: CustomStringConvertible {
@@ -62,12 +69,12 @@ extension CLAuthorizationStatus: CustomStringConvertible {
 }
 
 #if os(iOS)
-enum LocationAuthorization: CustomStringConvertible {
+public enum LocationAuthorization: CustomStringConvertible {
 
     case whenInUse
     case always
 
-    var description: String {
+    public var description: String {
         switch self {
         case .whenInUse:
             return "When-in-use"
@@ -78,7 +85,7 @@ enum LocationAuthorization: CustomStringConvertible {
 }
 #endif
 
-enum LocationDealerPermit: CustomStringConvertible {
+public enum LocationDealerPermit: CustomStringConvertible {
     /// Location service is neither restricted nor the app denided
     case notDetermined
 
@@ -96,7 +103,7 @@ enum LocationDealerPermit: CustomStringConvertible {
     /// either authorizedAlways or authorizedWhenInUse
     case allowed
 
-    var description: String {
+    public var description: String {
         switch self {
         case .notDetermined:
             return "notDetermined"
@@ -114,7 +121,8 @@ enum LocationDealerPermit: CustomStringConvertible {
     }
 }
 
-func getPermit(serviceEnabled: Bool, status: CLAuthorizationStatus) -> LocationDealerPermit {
+public func getPermit(serviceEnabled: Bool,
+                      status: CLAuthorizationStatus) -> LocationDealerPermit {
 
     if status == .notDetermined {
         return .notDetermined

@@ -16,31 +16,31 @@ import CoreLocation
 
 // MARK: - Default values
 
-let APPROPRIATE_ACCURACY = LocationAccuracy.threeKilometers
+public let APPROPRIATE_ACCURACY = LocationAccuracy.threeKilometers
 
 // MARK: - Notifications
 
 extension Notification.Name {
-    static let locationDealerCurrentNotification =
+    public static let locationDealerCurrentNotification =
         Notification.Name("locationDealerCurrentNotification")
-    static let locationDealerUpdatesNotification =
+    public static let locationDealerUpdatesNotification =
         Notification.Name("locationDealerUpdatesNotification")
-    static let locationDealerErrorNotification =
+    public static let locationDealerErrorNotification =
         Notification.Name("locationDealerErrorNotification")
-    static let locationDealerStatusChangedNotification =
+    public static let locationDealerStatusChangedNotification =
         Notification.Name("locationDealerStatusChangedNotification")
 }
 
 // MARK: - Errors
 
-enum LocationDealerError: Error, Equatable {
+public enum LocationDealerError: Error, Equatable {
     case receivedEmptyLocationData
     case failedRequest(String)
 }
 
 // MARK: - Business class
 
-class PerseusLocationDealer: NSObject {
+public class PerseusLocationDealer: NSObject {
 
     // MARK: - Difficult Dependencies
 
@@ -61,19 +61,19 @@ class PerseusLocationDealer: NSObject {
 
     // MARK: - Calculated Properties
 
-    var desiredAccuracy: CLLocationAccuracy { return locationManager.desiredAccuracy }
+    public var desiredAccuracy: CLLocationAccuracy { return locationManager.desiredAccuracy }
 
-    var authorizationStatus: CLAuthorizationStatus { return authorizationStatusHidden }
+    public var authorizationStatus: CLAuthorizationStatus { return authorizationStatusHidden }
     private var authorizationStatusHidden: CLAuthorizationStatus {
         return type(of: locationManager).authorizationStatus()
     }
 
-    var locationServicesEnabled: Bool { return locationServicesEnabledHidden }
+    public var locationServicesEnabled: Bool { return locationServicesEnabledHidden }
     private var locationServicesEnabledHidden: Bool {
         return type(of: locationManager).locationServicesEnabled()
     }
 
-    var locationPermit: LocationDealerPermit { return locationPermitHidden }
+    public var locationPermit: LocationDealerPermit { return locationPermitHidden }
     private var locationPermitHidden: LocationDealerPermit {
         return getPermit(serviceEnabled: locationServicesEnabledHidden,
                          status: authorizationStatusHidden)
@@ -85,7 +85,7 @@ class PerseusLocationDealer: NSObject {
 
     // MARK: - Singleton constructor
 
-    static let shared: PerseusLocationDealer = { return PerseusLocationDealer() }()
+    public static let shared: PerseusLocationDealer = { return PerseusLocationDealer() }()
 
     private override init() {
         // PerseusLogger.turned = .off
@@ -102,7 +102,7 @@ class PerseusLocationDealer: NSObject {
 
     // MARK: - Contract
 
-    func askForCurrentLocation(
+    public func askForCurrentLocation(
         accuracy: LocationAccuracy = APPROPRIATE_ACCURACY,
         _ actionIfNotAllowed: ((_ permit: LocationDealerPermit) -> Void)? = nil) {
 
@@ -121,7 +121,7 @@ class PerseusLocationDealer: NSObject {
     }
 
     #if os(iOS)
-    func askForAuthorization(_ authorization: LocationAuthorization) {
+    public func askForAuthorization(_ authorization: LocationAuthorization) {
 
         log.message("[\(type(of: self))].\(#function)")
 
@@ -134,7 +134,7 @@ class PerseusLocationDealer: NSObject {
     }
     #endif
 
-    func askToStartUpdatingLocation(accuracy: LocationAccuracy = APPROPRIATE_ACCURACY) {
+    public func askToStartUpdatingLocation(accuracy: LocationAccuracy = APPROPRIATE_ACCURACY) {
 
         log.message("[\(type(of: self))].\(#function)")
 
@@ -145,7 +145,7 @@ class PerseusLocationDealer: NSObject {
         locationManager.startUpdatingLocation()
     }
 
-    func askToStopUpdatingLocation() {
+    public func askToStopUpdatingLocation() {
 
         log.message("[\(type(of: self))].\(#function)")
 
