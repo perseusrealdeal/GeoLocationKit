@@ -40,9 +40,13 @@
 
 # Usage
 
-`Step 1:` Make the app prepared for location services use cases
+`Step 1:` Get ready for location services
 
-> Short note on how to make the app prepared for location services placed [here](https://gist.github.com/perseusrealdeal/8cd833bb360a29e718ac0ce1f1d2d7d8).
+| Info.plist                          | iOS      | macOS    | method                          |
+| ----------------------------------- | -------- | -------- | ------------------------------- |
+| NSLocationUsageDescription          |          | optional | startUpdatingLocation()         |
+| NSLocationAlwaysUsageDescription    | required |          | requestAlwaysAuthorization()    | 
+| NSLocationWhenInUseUsageDescription | required |          | requestWhenInUseAuthorization() |
 
 `Step 2:` Create notification observer
 
