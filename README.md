@@ -42,11 +42,11 @@
 
 `Step 1:` Get ready for location services
 
-| Info.plist                          | iOS      | macOS    | method                          |
-| ----------------------------------- | -------- | -------- | ------------------------------- |
-| NSLocationUsageDescription          |          | optional | startUpdatingLocation()         |
-| NSLocationAlwaysUsageDescription    | required |          | requestAlwaysAuthorization()    | 
-| NSLocationWhenInUseUsageDescription | required |          | requestWhenInUseAuthorization() |
+| Info.plist                          | iOS      | macOS                  | Location manager's method       |
+| ----------------------------------- | -------- | ---------------------- | ------------------------------- |
+| NSLocationUsageDescription          |          | macOS 10.6+, optional  | startUpdatingLocation()         |
+| NSLocationAlwaysUsageDescription    | required | macOS 10.15+, optional | requestAlwaysAuthorization()    | 
+| NSLocationWhenInUseUsageDescription | required | macOS 10.15+, optional | requestWhenInUseAuthorization() |
 
 `Step 2:` Create notification observer
 
