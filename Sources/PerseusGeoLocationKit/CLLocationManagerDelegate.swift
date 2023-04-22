@@ -14,16 +14,16 @@ import CoreLocation
 
 extension PerseusLocationDealer: CLLocationManagerDelegate {
 
-    public func locationManager(
-        _ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+    public func locationManager(_ manager: CLLocationManager,
+                                didChangeAuthorization status: CLAuthorizationStatus) {
 
         log.message("[\(type(of: self))].\(#function)")
 
         notificationCenter.post(name: .locationDealerStatusChangedNotification, object: status)
     }
 
-    public func locationManager(
-        _ manager: CLLocationManager, didFailWithError error: Error) {
+    public func locationManager(_ manager: CLLocationManager,
+                                didFailWithError error: Error) {
 
         log.message("[\(type(of: self))].\(#function)")
 
@@ -35,12 +35,12 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
         notificationCenter.post(name: .locationDealerErrorNotification, object: result)
     }
 
-    public func locationManager(
-        _ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    public func locationManager(_ manager: CLLocationManager,
+                                didUpdateLocations locations: [CLLocation]) {
 
         log.message("[\(type(of: self))].\(#function)")
 
-        guard !currentLocationDealOnly else {
+        if currentLocationDealOnly {
 
             currentLocationDealOnly = false
             locationManager.stopUpdatingLocation()
@@ -51,12 +51,12 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
                     .failure(.receivedEmptyLocationData)
 
             notificationCenter.post(name: .locationDealerCurrentNotification, object: result)
-            return
-        }
+        } else {
 
-        let result: Result<[CLLocation], LocationDealerError> =
+            let result: Result<[CLLocation], LocationDealerError> =
             !locations.isEmpty ? .success(locations) : .failure(.receivedEmptyLocationData)
 
-        notificationCenter.post(name: .locationDealerUpdatesNotification, object: result)
+            notificationCenter.post(name: .locationDealerUpdatesNotification, object: result)
+        }
     }
 }

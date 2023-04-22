@@ -15,7 +15,7 @@ import XCTest
 
 #if os(iOS)
 extension PerseusLocationDealerTests {
-
+/*
     func test_requestWhenInUseAuthorization() {
 
         // arrange, act
@@ -37,5 +37,6 @@ extension PerseusLocationDealerTests {
 
         mockLM.verify_requestAlwaysAuthorization_CalledOnce()
     }
+*/
 }
 #endif

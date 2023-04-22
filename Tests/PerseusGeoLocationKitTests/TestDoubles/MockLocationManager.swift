@@ -28,17 +28,33 @@ class MockLocationManager: LocationManagerProtocol {
 
     var startUpdatingLocationCallCount: Int = 0
     var stopUpdatingLocationCallCount: Int = 0
+    var requestLocationCallCount: Int = 0
+    var requestWhenInUseAuthorizationCallCount: Int = 0
+    var requestAlwaysAuthorizationCallCount: Int = 0
 
     func startUpdatingLocation() {
         log.message("[\(type(of: self))].\(#function)")
-
         startUpdatingLocationCallCount += 1
     }
 
     func stopUpdatingLocation() {
         log.message("[\(type(of: self))].\(#function)")
-
         stopUpdatingLocationCallCount += 1
+    }
+
+    func requestLocation() {
+        log.message("[\(type(of: self))].\(#function)")
+        requestLocationCallCount += 1
+    }
+
+    func requestWhenInUseAuthorization() {
+        log.message("[\(type(of: self))].\(#function)")
+        requestWhenInUseAuthorizationCallCount += 1
+    }
+
+    func requestAlwaysAuthorization() {
+        log.message("[\(type(of: self))].\(#function)")
+        requestAlwaysAuthorizationCallCount += 1
     }
 
     func verify_startUpdatingLocation_CalledOnce(file: StaticString = #file,

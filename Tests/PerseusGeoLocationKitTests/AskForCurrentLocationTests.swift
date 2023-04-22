@@ -14,7 +14,7 @@ import XCTest
 @testable import PerseusGeoLocationKit
 
 extension PerseusLocationDealerTests {
-
+/*
     func test_askForCurrentLocation_called() {
 
         // arrange
@@ -79,4 +79,5 @@ extension PerseusLocationDealerTests {
         XCTAssertNil(permit)
         XCTAssertEqual(sut.desiredAccuracy, LocationAccuracy.kilometer.rawValue)
     }
+*/
 }

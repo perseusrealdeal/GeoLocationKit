@@ -27,10 +27,14 @@ protocol LocationManagerProtocol {
     func startUpdatingLocation()
     func stopUpdatingLocation()
 
-    #if os(iOS)
+    @available(iOS 9.3, macOS 10.14, *)
+    func requestLocation()
+
+    @available(iOS 9.3, macOS 10.15, *)
     func requestWhenInUseAuthorization()
+
+    @available(iOS 9.3, macOS 10.15, *)
     func requestAlwaysAuthorization()
-    #endif
 }
 
 protocol NotificationCenterProtocol {

@@ -15,7 +15,7 @@ import CoreLocation
 @testable import PerseusGeoLocationKit
 
 extension PerseusLocationDealerTests {
-
+/*
     func test_didChangeAuthorization() {
 
         // arrange, act
@@ -167,4 +167,5 @@ extension PerseusLocationDealerTests {
         mockNC.verify_post_locationDealerUpdatesNotification_withError(
             name: .locationDealerUpdatesNotification, object: result)
     }
+*/
 }

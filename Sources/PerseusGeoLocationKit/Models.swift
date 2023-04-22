@@ -68,7 +68,6 @@ extension CLAuthorizationStatus: CustomStringConvertible {
     }
 }
 
-#if os(iOS)
 public enum LocationAuthorization: CustomStringConvertible {
 
     case whenInUse
@@ -83,7 +82,6 @@ public enum LocationAuthorization: CustomStringConvertible {
         }
     }
 }
-#endif
 
 public enum LocationDealerPermit: CustomStringConvertible {
     /// Location service is neither restricted nor the app denided
