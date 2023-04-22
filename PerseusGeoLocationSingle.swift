@@ -58,6 +58,7 @@ extension Notification.Name {
 // MARK: - Errors
 
 public enum LocationDealerError: Error, Equatable {
+    case needsPermission(LocationDealerPermit)
     case receivedEmptyLocationData
     case failedRequest(String)
 }
@@ -91,7 +92,7 @@ public class PerseusLocationDealer: NSObject {
                          status: authorizationStatusHidden)
     }
 
-    // Internal Flags
+    // MARK: - Internal Flags
 
     internal var currentLocationDealOnly: Bool = false
 
@@ -113,31 +114,47 @@ public class PerseusLocationDealer: NSObject {
     // MARK: - Contract
 
     public func askForCurrentLocation(
-        accuracy: LocationAccuracy = APPROPRIATE_ACCURACY,
-        _ actionIfNotAllowed: ((_ permit: LocationDealerPermit) -> Void)? = nil) {
+        with accuracy: LocationAccuracy = APPROPRIATE_ACCURACY) throws {
 
         let permit = locationPermitHidden
-
-        guard permit == .allowed else { actionIfNotAllowed?(permit); return }
+        guard permit == .allowed else { throw LocationDealerError.needsPermission(permit) }
 
         locationManager.stopUpdatingLocation()
 
         currentLocationDealOnly = true
         locationManager.desiredAccuracy = accuracy.rawValue
 
+#if os(iOS)
+        locationManager.requestLocation()
+#elseif os(macOS)
         locationManager.startUpdatingLocation()
+#endif
     }
 
-    #if os(iOS)
-    public func askForAuthorization(_ authorization: LocationAuthorization) {
+    public func askForAuthorization(
+        _ authorization: LocationAuthorization = .always,
+        _ actionIfdetermined: ((_ permit: LocationDealerPermit) -> Void)? = nil) {
+
+        let permit = locationPermitHidden
+        guard permit == .notDetermined else { actionIfdetermined?(permit); return }
+
+#if os(iOS)
         switch authorization {
         case .whenInUse:
             locationManager.requestWhenInUseAuthorization()
         case .always:
             locationManager.requestAlwaysAuthorization()
         }
+#elseif os(macOS)
+        locationManager.stopUpdatingLocation()
+
+        currentLocationDealOnly = true
+        locationManager.startUpdatingLocation()
+
+        currentLocationDealOnly = false
+        locationManager.stopUpdatingLocation()
+#endif
     }
-    #endif
 
     public func askToStartUpdatingLocation(accuracy: LocationAccuracy = APPROPRIATE_ACCURACY) {
         currentLocationDealOnly = false
@@ -157,14 +174,14 @@ public class PerseusLocationDealer: NSObject {
 
 extension PerseusLocationDealer: CLLocationManagerDelegate {
 
-    public func locationManager(
-        _ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+    public func locationManager(_ manager: CLLocationManager,
+                                didChangeAuthorization status: CLAuthorizationStatus) {
 
         notificationCenter.post(name: .locationDealerStatusChangedNotification, object: status)
     }
 
-    public func locationManager(
-        _ manager: CLLocationManager, didFailWithError error: Error) {
+    public func locationManager(_ manager: CLLocationManager,
+                                didFailWithError error: Error) {
 
         currentLocationDealOnly = false
         locationManager.stopUpdatingLocation()
@@ -174,10 +191,10 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
         notificationCenter.post(name: .locationDealerErrorNotification, object: result)
     }
 
-    public func locationManager(
-        _ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    public func locationManager(_ manager: CLLocationManager,
+                                didUpdateLocations locations: [CLLocation]) {
 
-        guard !currentLocationDealOnly else {
+        if currentLocationDealOnly {
 
             currentLocationDealOnly = false
             locationManager.stopUpdatingLocation()
@@ -188,13 +205,13 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
                     .failure(.receivedEmptyLocationData)
 
             notificationCenter.post(name: .locationDealerCurrentNotification, object: result)
-            return
-        }
+        } else {
 
-        let result: Result<[CLLocation], LocationDealerError> =
+            let result: Result<[CLLocation], LocationDealerError> =
             !locations.isEmpty ? .success(locations) : .failure(.receivedEmptyLocationData)
 
-        notificationCenter.post(name: .locationDealerUpdatesNotification, object: result)
+            notificationCenter.post(name: .locationDealerUpdatesNotification, object: result)
+        }
     }
 }
 
@@ -254,7 +271,6 @@ extension CLAuthorizationStatus: CustomStringConvertible {
     }
 }
 
-#if os(iOS)
 public enum LocationAuthorization: CustomStringConvertible {
 
     case whenInUse
@@ -269,7 +285,6 @@ public enum LocationAuthorization: CustomStringConvertible {
         }
     }
 }
-#endif
 
 public enum LocationDealerPermit: CustomStringConvertible {
     /// Location service is neither restricted nor the app denided
