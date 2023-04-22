@@ -42,11 +42,11 @@
 
 `Step 1:` Get ready for location services
 
-| Info.plist                          | iOS      | macOS                  | PerseusLocationDealer's method |
-| ----------------------------------- | -------- | ---------------------- | ------------------------------ |
-| NSLocationUsageDescription          |          | macOS 10.6+, optional  | askForAuthorization(_:, _:)    |
-| NSLocationAlwaysUsageDescription    | required | macOS 10.15+, optional | askForAuthorization(_:, _:)    |
-| NSLocationWhenInUseUsageDescription | required | macOS 10.15+, optional | askForAuthorization(_:, _:)    |
+| Info.plist                          | iOS      | macOS    | PerseusLocationDealer's method  |
+| ----------------------------------- | -------- | -------- | ------------------------------- |
+| NSLocationUsageDescription          |          | optional | askForAuthorization()           |
+| NSLocationAlwaysUsageDescription    | required |          | askForAuthorization()           |
+| NSLocationWhenInUseUsageDescription | required |          | askForAuthorization(.whenInUse) |
 
 `Step 2:` Create notification observer
 
