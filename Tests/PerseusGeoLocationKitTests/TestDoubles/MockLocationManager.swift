@@ -28,9 +28,6 @@ class MockLocationManager: LocationManagerProtocol {
 
     var startUpdatingLocationCallCount: Int = 0
     var stopUpdatingLocationCallCount: Int = 0
-    var requestLocationCallCount: Int = 0
-    var requestWhenInUseAuthorizationCallCount: Int = 0
-    var requestAlwaysAuthorizationCallCount: Int = 0
 
     func startUpdatingLocation() {
         log.message("[\(type(of: self))].\(#function)")
@@ -40,21 +37,6 @@ class MockLocationManager: LocationManagerProtocol {
     func stopUpdatingLocation() {
         log.message("[\(type(of: self))].\(#function)")
         stopUpdatingLocationCallCount += 1
-    }
-
-    func requestLocation() {
-        log.message("[\(type(of: self))].\(#function)")
-        requestLocationCallCount += 1
-    }
-
-    func requestWhenInUseAuthorization() {
-        log.message("[\(type(of: self))].\(#function)")
-        requestWhenInUseAuthorizationCallCount += 1
-    }
-
-    func requestAlwaysAuthorization() {
-        log.message("[\(type(of: self))].\(#function)")
-        requestAlwaysAuthorizationCallCount += 1
     }
 
     func verify_startUpdatingLocation_CalledOnce(file: StaticString = #file,
@@ -103,9 +85,11 @@ class MockLocationManager: LocationManagerProtocol {
 
     var requestWhenInUseAuthorizationCallCount: Int = 0
     var requestAlwaysAuthorizationCallCount: Int = 0
+    var requestLocationCallCount: Int = 0
 
     func requestWhenInUseAuthorization() { requestWhenInUseAuthorizationCallCount += 1 }
     func requestAlwaysAuthorization() { requestAlwaysAuthorizationCallCount += 1 }
+    func requestLocation() { requestLocationCallCount += 1 }
 
     func verify_requestWhenInUseAuthorization_CalledOnce(file: StaticString = #file,
                                                          line: UInt = #line) {
@@ -132,6 +116,20 @@ class MockLocationManager: LocationManagerProtocol {
             XCTFail("Wanted 1 time but was called " +
                 "\(requestAlwaysAuthorizationCallCount) times. " +
                 "requestAlwaysAuthorization()", file: file, line: line)
+        }
+    }
+
+    func verify_requestLocation_CalledOnce(file: StaticString = #file,
+                                           line: UInt = #line) {
+        if requestLocationCallCount == 0 {
+            XCTFail("Wanted but not invoked: requestLocation()",
+                    file: file, line: line)
+        }
+
+        if requestLocationCallCount > 1 {
+            XCTFail("Wanted 1 time but was called " +
+                "\(requestLocationCallCount) times. " +
+                "requestLocation()", file: file, line: line)
         }
     }
 

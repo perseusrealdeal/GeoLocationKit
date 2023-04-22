@@ -105,26 +105,27 @@ public class PerseusLocationDealer: NSObject {
     // MARK: - Contract
 
     public func askForCurrentLocation(
-        accuracy: LocationAccuracy = APPROPRIATE_ACCURACY) throws {
+        with accuracy: LocationAccuracy = APPROPRIATE_ACCURACY) throws {
 
-            log.message("[\(type(of: self))].\(#function)")
+        log.message("[\(type(of: self))].\(#function)")
 
-            let permit = locationPermitHidden
-            guard permit == .allowed else { throw LocationDealerError.needsPermission(permit) }
+        let permit = locationPermitHidden
+        guard permit == .allowed else { throw LocationDealerError.needsPermission(permit) }
 
-            locationManager.stopUpdatingLocation()
+        locationManager.stopUpdatingLocation()
 
-            currentLocationDealOnly = true
-            locationManager.desiredAccuracy = accuracy.rawValue
+        currentLocationDealOnly = true
+        locationManager.desiredAccuracy = accuracy.rawValue
 
-            if #available(iOS 9.3, macOS 10.14, *) {
-                locationManager.requestLocation()
-            } else {
-                locationManager.startUpdatingLocation()
-            }
-        }
+#if os(iOS)
+        locationManager.requestLocation()
+#elseif os(macOS)
+        locationManager.startUpdatingLocation()
+#endif
+    }
 
-    public func askForAuthorization(_ authorization: LocationAuthorization = .whenInUse,
+    public func askForAuthorization(
+        _ authorization: LocationAuthorization = .always,
         _ actionIfdetermined: ((_ permit: LocationDealerPermit) -> Void)? = nil) {
 
         log.message("[\(type(of: self))].\(#function)")
@@ -132,22 +133,22 @@ public class PerseusLocationDealer: NSObject {
         let permit = locationPermitHidden
         guard permit == .notDetermined else { actionIfdetermined?(permit); return }
 
-        if #available(iOS 9.3, macOS 10.15, *) {
-            switch authorization {
-            case .whenInUse:
-                locationManager.requestWhenInUseAuthorization()
-            case .always:
-                locationManager.requestAlwaysAuthorization()
-            }
-        } else {
-            locationManager.stopUpdatingLocation()
-
-            currentLocationDealOnly = true
-            locationManager.startUpdatingLocation()
-
-            currentLocationDealOnly = false
-            locationManager.stopUpdatingLocation()
+#if os(iOS)
+        switch authorization {
+        case .whenInUse:
+            locationManager.requestWhenInUseAuthorization()
+        case .always:
+            locationManager.requestAlwaysAuthorization()
         }
+#elseif os(macOS)
+        locationManager.stopUpdatingLocation()
+
+        currentLocationDealOnly = true
+        locationManager.startUpdatingLocation()
+
+        currentLocationDealOnly = false
+        locationManager.stopUpdatingLocation()
+#endif
     }
 
     public func askToStartUpdatingLocation(accuracy: LocationAccuracy = APPROPRIATE_ACCURACY) {

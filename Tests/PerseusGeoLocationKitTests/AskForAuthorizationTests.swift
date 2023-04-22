@@ -13,12 +13,39 @@
 import XCTest
 @testable import PerseusGeoLocationKit
 
-#if os(iOS)
 extension PerseusLocationDealerTests {
-/*
-    func test_requestWhenInUseAuthorization() {
 
-        // arrange, act
+    func test_askForAuthorization_invokes_actionIfdetermined() {
+
+        // arrange
+
+        MockLocationManager.status = .denied
+        MockLocationManager.isLocationServiceEnabled = true
+
+        var actionIfdeterminedInvoked = false
+        var permitReturned: LocationDealerPermit?
+
+        // act
+
+        sut.askForAuthorization(.always) { permit in
+            actionIfdeterminedInvoked = true
+            permitReturned = permit
+        }
+
+        // assert
+
+        XCTAssertTrue(actionIfdeterminedInvoked)
+        XCTAssertTrue(permitReturned == .deniedForTheApp)
+    }
+#if os(iOS)
+    func test_askForAuthorization_invokes_requestWhenInUseAuthorization() {
+
+        // arrange
+
+        MockLocationManager.status = .notDetermined
+        MockLocationManager.isLocationServiceEnabled = true
+
+        // act
 
         sut.askForAuthorization(.whenInUse)
 
@@ -27,9 +54,14 @@ extension PerseusLocationDealerTests {
         mockLM.verify_requestWhenInUseAuthorization_CalledOnce()
     }
 
-    func test_requestAlwaysAuthorization() {
+    func test_askForAuthorization_invokes_requestAlwaysAuthorization() {
 
-        // arrange, act
+        // arrange
+
+        MockLocationManager.status = .notDetermined
+        MockLocationManager.isLocationServiceEnabled = true
+
+        // act
 
         sut.askForAuthorization(.always)
 
@@ -37,6 +69,24 @@ extension PerseusLocationDealerTests {
 
         mockLM.verify_requestAlwaysAuthorization_CalledOnce()
     }
-*/
-}
+#elseif os(macOS)
+    func test_askForAuthorization() {
+
+        // arrange
+
+        MockLocationManager.status = .notDetermined
+        MockLocationManager.isLocationServiceEnabled = true
+
+        // act
+
+        sut.askForAuthorization()
+
+        // assert
+
+        mockLM.verify_startUpdatingLocation_CalledOnce()
+        mockLM.verify_stopUpdatingLocation_CalledTwice()
+
+        XCTAssertFalse(sut.currentLocationDealOnly)
+    }
 #endif
+}

@@ -14,70 +14,71 @@ import XCTest
 @testable import PerseusGeoLocationKit
 
 extension PerseusLocationDealerTests {
-/*
-    func test_askForCurrentLocation_called() {
+
+    func test_askForCurrentLocation_should_throw_exception_with_actual_permit() {
 
         // arrange
 
-        var permit: LocationDealerPermit?
+        MockLocationManager.status = .denied
+        MockLocationManager.isLocationServiceEnabled = true
 
-        MockLocationManager.status = authorized
+        let exeption = LocationDealerError.needsPermission(.deniedForTheApp)
+
+        // act, assert
+
+        // simulate
+        XCTAssertThrowsError(try sut.askForCurrentLocation()) { (error) in
+            // catch exeption
+            XCTAssertEqual(error as? LocationDealerError, exeption)
+        }
+    }
+
+    func test_askForCurrentLocation_should_request_location() {
+
+        // arrange
+
+#if os(iOS)
+        MockLocationManager.status = .authorizedAlways
+#elseif os(macOS)
+        MockLocationManager.status = .authorized
+#endif
         MockLocationManager.isLocationServiceEnabled = true
 
         // act
 
-        sut.askForCurrentLocation { locationPermit in permit = locationPermit }
+        try? sut.askForCurrentLocation()
 
         // assert
-
-        XCTAssertNil(permit)
 
         mockLM.verify_stopUpdatingLocation_CalledOnce()
 
         XCTAssertTrue(sut.currentLocationDealOnly)
         XCTAssertEqual(sut.desiredAccuracy, APPROPRIATE_ACCURACY.rawValue)
 
+#if os(iOS)
+        mockLM.verify_requestLocation_CalledOnce()
+#elseif os(macOS)
         mockLM.verify_startUpdatingLocation_CalledOnce()
+#endif
     }
 
-    func test_askForCurrentLocation_actionIfNotAllowed_called() {
+    func test_askForCurrentLocation_should_set_the_accuracy() {
 
         // arrange
 
-        var permit: LocationDealerPermit?
-
-        MockLocationManager.status = .denied
+#if os(iOS)
+        MockLocationManager.status = .authorizedAlways
+#elseif os(macOS)
+        MockLocationManager.status = .authorized
+#endif
         MockLocationManager.isLocationServiceEnabled = true
 
         // act
 
-        sut.askForCurrentLocation { locationPermit in permit = locationPermit }
+        try? sut.askForCurrentLocation(with: LocationAccuracy.kilometer)
 
         // assert
 
-        XCTAssertNotNil(permit)
-        XCTAssertEqual(permit, .deniedForTheApp)
-    }
-
-    func test_askForCurrentLocation_with_specific_accuracy() {
-
-        // arrange
-
-        var permit: LocationDealerPermit?
-
-        MockLocationManager.status = authorized
-        MockLocationManager.isLocationServiceEnabled = true
-
-        // act
-
-        sut.askForCurrentLocation(accuracy: LocationAccuracy.kilometer) { locationPermit in
-            permit = locationPermit
-        }
-
-        // assert
-
-        XCTAssertNil(permit)
         XCTAssertEqual(sut.desiredAccuracy, LocationAccuracy.kilometer.rawValue)
     }
-*/
 }

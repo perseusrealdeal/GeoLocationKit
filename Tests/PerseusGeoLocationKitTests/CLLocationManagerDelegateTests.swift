@@ -15,7 +15,7 @@ import CoreLocation
 @testable import PerseusGeoLocationKit
 
 extension PerseusLocationDealerTests {
-/*
+
     func test_didChangeAuthorization() {
 
         // arrange, act
@@ -42,15 +42,19 @@ extension PerseusLocationDealerTests {
 
         // act
 
-        sut.askForCurrentLocation()
+        try? sut.askForCurrentLocation()
         mockLM.delegate?.locationManager?(CLLocationManager(), didFailWithError: error)
 
         // assert
 
         XCTAssertFalse(sut.currentLocationDealOnly)
 
-        mockLM.verify_startUpdatingLocation_CalledOnce()
         mockLM.verify_stopUpdatingLocation_CalledTwice()
+#if os(iOS)
+        mockLM.verify_requestLocation_CalledOnce()
+#elseif os(macOS)
+        mockLM.verify_startUpdatingLocation_CalledOnce()
+#endif
 
         mockNC.verify_post_locationDealerNotification_withError(
             name: .locationDealerErrorNotification, object: result)
@@ -69,15 +73,19 @@ extension PerseusLocationDealerTests {
 
         // act
 
-        sut.askForCurrentLocation()
+        try? sut.askForCurrentLocation()
         mockLM.delegate?.locationManager?(CLLocationManager(), didUpdateLocations: locations)
 
         // assert
 
         XCTAssertFalse(sut.currentLocationDealOnly)
 
-        mockLM.verify_startUpdatingLocation_CalledOnce()
         mockLM.verify_stopUpdatingLocation_CalledTwice()
+#if os(iOS)
+        mockLM.verify_requestLocation_CalledOnce()
+#elseif os(macOS)
+        mockLM.verify_startUpdatingLocation_CalledOnce()
+#endif
 
         mockNC.verify_post_locationDealerNotification_withError(
             name: .locationDealerCurrentNotification, object: result)
@@ -98,7 +106,7 @@ extension PerseusLocationDealerTests {
 
         // act
 
-        sut.askForCurrentLocation()
+        try? sut.askForCurrentLocation()
         mockLM.delegate?.locationManager?(CLLocationManager(), didUpdateLocations: locations)
 
         // assert
@@ -106,7 +114,11 @@ extension PerseusLocationDealerTests {
         XCTAssertFalse(sut.currentLocationDealOnly)
 
         mockLM.verify_stopUpdatingLocation_CalledTwice()
+#if os(iOS)
+        mockLM.verify_requestLocation_CalledOnce()
+#elseif os(macOS)
         mockLM.verify_startUpdatingLocation_CalledOnce()
+#endif
 
         mockNC.verify_post_locationDealerNotification_withReceivedLocation(
             name: .locationDealerCurrentNotification, object: result)
@@ -167,5 +179,4 @@ extension PerseusLocationDealerTests {
         mockNC.verify_post_locationDealerUpdatesNotification_withError(
             name: .locationDealerUpdatesNotification, object: result)
     }
-*/
 }
