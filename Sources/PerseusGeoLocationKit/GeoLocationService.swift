@@ -50,7 +50,7 @@ public class PerseusLocationDealer: NSObject {
     var notificationCenter: NotificationCenterProtocol!
 
     internal func resetDefaults() { // used for keeping test room cleaned only
-        currentLocationDealOnly = false
+        order = .none
         if locationManager != nil {
             locationManager.desiredAccuracy = APPROPRIATE_ACCURACY.rawValue
         }
@@ -82,7 +82,7 @@ public class PerseusLocationDealer: NSObject {
 
     // MARK: - Internal Flags
 
-    internal var currentLocationDealOnly: Bool = false
+    internal var order: LocationDealerOrder = .none
 
     // MARK: - Singleton constructor
 
@@ -91,7 +91,7 @@ public class PerseusLocationDealer: NSObject {
     private override init() {
 
         // log.turned = .off
-        log.message("[\(PerseusLocationDealer.self)].\(#function)")
+        log.message("[\(PerseusLocationDealer.self)].\(#function)", .info)
 
         self.locationManager = CLLocationManager()
         self.notificationCenter = NotificationCenter.default
@@ -107,14 +107,17 @@ public class PerseusLocationDealer: NSObject {
     public func askForCurrentLocation(
         with accuracy: LocationAccuracy = APPROPRIATE_ACCURACY) throws {
 
-        log.message("[\(type(of: self))].\(#function)")
-
         let permit = locationPermitHidden
-        guard permit == .allowed else { throw LocationDealerError.needsPermission(permit) }
+        log.message("[\(type(of: self))].\(#function)", .info)
+
+        guard permit == .allowed else {
+            log.message("[\(type(of: self))].\(#function) — permit .\(permit)", .error)
+            throw LocationDealerError.needsPermission(permit)
+        }
 
         locationManager.stopUpdatingLocation()
 
-        currentLocationDealOnly = true
+        order = .currentLocation
         locationManager.desiredAccuracy = accuracy.rawValue
 
 #if os(iOS)
@@ -128,10 +131,14 @@ public class PerseusLocationDealer: NSObject {
         _ authorization: LocationAuthorization = .always,
         _ actionIfdetermined: ((_ permit: LocationDealerPermit) -> Void)? = nil) {
 
-        log.message("[\(type(of: self))].\(#function)")
+        log.message("[\(type(of: self))].\(#function)", .info)
 
         let permit = locationPermitHidden
-        guard permit == .notDetermined else { actionIfdetermined?(permit); return }
+        guard permit == .notDetermined else {
+            log.message("[\(type(of: self))].\(#function) — permit .\(permit)", .error)
+            actionIfdetermined?(permit)
+            return
+        }
 
 #if os(iOS)
         switch authorization {
@@ -140,33 +147,27 @@ public class PerseusLocationDealer: NSObject {
         case .always:
             locationManager.requestAlwaysAuthorization()
         }
+
+        order = .none
 #elseif os(macOS)
-        locationManager.stopUpdatingLocation()
-
-        currentLocationDealOnly = true
+        order = .authorization
         locationManager.startUpdatingLocation()
-
-        currentLocationDealOnly = false
-        locationManager.stopUpdatingLocation()
 #endif
     }
 
     public func askToStartUpdatingLocation(accuracy: LocationAccuracy = APPROPRIATE_ACCURACY) {
 
-        log.message("[\(type(of: self))].\(#function)")
+        log.message("[\(type(of: self))].\(#function)", .info)
 
-        currentLocationDealOnly = false
-        locationManager.stopUpdatingLocation()
-
+        order = .locationUpdates
         locationManager.desiredAccuracy = accuracy.rawValue
         locationManager.startUpdatingLocation()
     }
 
     public func askToStopUpdatingLocation() {
 
-        log.message("[\(type(of: self))].\(#function)")
+        log.message("[\(type(of: self))].\(#function)", .info)
 
-        currentLocationDealOnly = false
-        locationManager.stopUpdatingLocation()
+        order = .none; locationManager.stopUpdatingLocation()
     }
 }

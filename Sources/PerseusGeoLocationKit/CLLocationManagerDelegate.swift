@@ -17,7 +17,7 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
     public func locationManager(_ manager: CLLocationManager,
                                 didChangeAuthorization status: CLAuthorizationStatus) {
 
-        log.message("[\(type(of: self))].\(#function)")
+        log.message("[\(type(of: self))].\(#function) status .\(status)", .info)
 
         notificationCenter.post(name: .locationDealerStatusChangedNotification, object: status)
     }
@@ -25,36 +25,46 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
     public func locationManager(_ manager: CLLocationManager,
                                 didFailWithError error: Error) {
 
-        log.message("[\(type(of: self))].\(#function)")
+        log.message("[\(type(of: self))].\(#function)", .info)
 
-        currentLocationDealOnly = false
-        locationManager.stopUpdatingLocation()
+        order = .none; locationManager.stopUpdatingLocation()
 
         let result: LocationDealerError = .failedRequest(error.localizedDescription)
-
         notificationCenter.post(name: .locationDealerErrorNotification, object: result)
     }
 
     public func locationManager(_ manager: CLLocationManager,
                                 didUpdateLocations locations: [CLLocation]) {
 
-        log.message("[\(type(of: self))].\(#function)")
+        log.message("[\(type(of: self))].\(#function)", .info)
 
-        if currentLocationDealOnly {
-
-            currentLocationDealOnly = false
+        if order == .none {
+            log.message("[\(type(of: self))].\(#function) — Locations for no order!", .error)
             locationManager.stopUpdatingLocation()
+            return
+        }
 
-            let result: Result<CLLocation, LocationDealerError> =
-                locations.first != nil ?
-                    .success(locations.first!) :
-                    .failure(.receivedEmptyLocationData)
+        if order == .authorization {
+            log.message("[\(type(of: self))].\(#function) — Authorization order!")
+            order = .none; locationManager.stopUpdatingLocation()
+            return
+        }
+
+        if order == .currentLocation {
+
+            order = .none; locationManager.stopUpdatingLocation()
+
+            let result: Result<CLLocation, LocationDealerError> = locations.first == nil ?
+                .failure(.receivedEmptyLocationData) : .success(locations.first!)
 
             notificationCenter.post(name: .locationDealerCurrentNotification, object: result)
-        } else {
 
-            let result: Result<[CLLocation], LocationDealerError> =
-            !locations.isEmpty ? .success(locations) : .failure(.receivedEmptyLocationData)
+        } else if order == .locationUpdates {
+
+            let result: Result<[CLLocation], LocationDealerError> = locations.isEmpty ?
+                .failure(.receivedEmptyLocationData) : .success(locations)
+
+            if locations.isEmpty { order = .none; locationManager.stopUpdatingLocation() }
 
             notificationCenter.post(name: .locationDealerUpdatesNotification, object: result)
         }

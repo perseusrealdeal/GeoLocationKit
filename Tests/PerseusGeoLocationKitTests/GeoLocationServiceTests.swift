@@ -62,7 +62,7 @@ final class PerseusLocationDealerTests: XCTestCase {
 
         XCTAssertNotNil(sut.locationManager)
         XCTAssertNotNil(sut.notificationCenter)
-        XCTAssertFalse(sut.currentLocationDealOnly)
+        XCTAssertTrue(sut.order == .none)
         XCTAssertEqual(sut.locationManager.desiredAccuracy, APPROPRIATE_ACCURACY.rawValue)
     }
 
@@ -115,10 +115,9 @@ final class PerseusLocationDealerTests: XCTestCase {
 
         // assert
 
-        mockLM.verify_stopUpdatingLocation_CalledOnce()
         mockLM.verify_startUpdatingLocation_CalledOnce()
 
-        XCTAssertFalse(sut.currentLocationDealOnly)
+        XCTAssertTrue(sut.order == .locationUpdates)
         XCTAssertEqual(sut.desiredAccuracy, LocationAccuracy.best.rawValue)
     }
 
@@ -131,6 +130,6 @@ final class PerseusLocationDealerTests: XCTestCase {
         // assert
 
         mockLM.verify_stopUpdatingLocation_CalledOnce()
-        XCTAssertFalse(sut.currentLocationDealOnly)
+        XCTAssertTrue(sut.order == .none)
     }
 }

@@ -119,6 +119,26 @@ public enum LocationDealerPermit: CustomStringConvertible {
     }
 }
 
+public enum LocationDealerOrder: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .none: // There should be no location notifing activity
+            return "None"
+        case .currentLocation:
+            return "Current Location"
+        case .locationUpdates:
+            return "Location Updates"
+        case .authorization: // Used only to invoke Current Location Diolog on macOS
+            return "Authorization"
+        }
+    }
+
+    case none
+    case currentLocation
+    case locationUpdates
+    case authorization
+}
+
 public func getPermit(serviceEnabled: Bool,
                       status: CLAuthorizationStatus) -> LocationDealerPermit {
 

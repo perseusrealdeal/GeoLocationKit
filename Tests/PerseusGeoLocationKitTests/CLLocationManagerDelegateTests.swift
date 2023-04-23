@@ -30,7 +30,7 @@ extension PerseusLocationDealerTests {
             object: CLAuthorizationStatus.restricted)
     }
 
-    func test_didFailWithError() {
+    func test_didFailWithError_currentLocation() {
 
         // arrange
 
@@ -40,14 +40,13 @@ extension PerseusLocationDealerTests {
         let error = LocationDealerError.failedRequest("")
         let result: LocationDealerError = .failedRequest(error.localizedDescription)
 
-        // act
+        // act, assert
 
         try? sut.askForCurrentLocation()
+        XCTAssertTrue(sut.order == .currentLocation)
+
         mockLM.delegate?.locationManager?(CLLocationManager(), didFailWithError: error)
-
-        // assert
-
-        XCTAssertFalse(sut.currentLocationDealOnly)
+        XCTAssertTrue(sut.order == .none)
 
         mockLM.verify_stopUpdatingLocation_CalledTwice()
 #if os(iOS)
@@ -60,7 +59,7 @@ extension PerseusLocationDealerTests {
             name: .locationDealerErrorNotification, object: result)
     }
 
-    func test_didUpdateLocations_currentLocationDealOnlyTrue_receivedEmptyLocationData() {
+    func test_didUpdateLocations_currentLocation_receivedEmptyLocationData() {
 
         // arrange
 
@@ -71,14 +70,15 @@ extension PerseusLocationDealerTests {
         let result: Result<CLLocation, LocationDealerError> = .failure(error)
         let locations = [CLLocation]()
 
-        // act
+        // act, assert
 
         try? sut.askForCurrentLocation()
+        XCTAssertTrue(sut.order == .currentLocation)
+
         mockLM.delegate?.locationManager?(CLLocationManager(), didUpdateLocations: locations)
+        XCTAssertTrue(sut.order == .none)
 
         // assert
-
-        XCTAssertFalse(sut.currentLocationDealOnly)
 
         mockLM.verify_stopUpdatingLocation_CalledTwice()
 #if os(iOS)
@@ -91,7 +91,7 @@ extension PerseusLocationDealerTests {
             name: .locationDealerCurrentNotification, object: result)
     }
 
-    func test_didUpdateLocations_currentLocationDealOnlyTrue_receivedCurrentLocation() {
+    func test_didUpdateLocations_currentLocation_receivedCurrentLocation() {
 
         // arrange
 
@@ -104,14 +104,15 @@ extension PerseusLocationDealerTests {
         let locations = [firstLocation, CLLocation(latitude: 34.78, longitude: 34.83)]
         let result: Result<CLLocation, LocationDealerError> = .success(firstLocation)
 
-        // act
+        // act, assert
 
         try? sut.askForCurrentLocation()
+        XCTAssertTrue(sut.order == .currentLocation)
+
         mockLM.delegate?.locationManager?(CLLocationManager(), didUpdateLocations: locations)
+        XCTAssertTrue(sut.order == .none)
 
         // assert
-
-        XCTAssertFalse(sut.currentLocationDealOnly)
 
         mockLM.verify_stopUpdatingLocation_CalledTwice()
 #if os(iOS)
@@ -124,7 +125,7 @@ extension PerseusLocationDealerTests {
             name: .locationDealerCurrentNotification, object: result)
     }
 
-    func test_didUpdateLocations_currentLocationDealOnlyFalse_receivedLocations() {
+    func test_didUpdateLocations_UpdatingLocation_receivedLocations() {
 
         // arrange
 
@@ -137,23 +138,23 @@ extension PerseusLocationDealerTests {
         let locations = [firstLocation, CLLocation(latitude: 34.78, longitude: 34.83)]
         let result: Result<[CLLocation], LocationDealerError> = .success(locations)
 
-        // act
+        // act, assert
 
         sut.askToStartUpdatingLocation()
+        XCTAssertTrue(sut.order == .locationUpdates)
+
         mockLM.delegate?.locationManager?(CLLocationManager(), didUpdateLocations: locations)
+        XCTAssertTrue(sut.order == .locationUpdates)
 
         // assert
 
-        XCTAssertFalse(sut.currentLocationDealOnly)
-
-        mockLM.verify_stopUpdatingLocation_CalledOnce()
         mockLM.verify_startUpdatingLocation_CalledOnce()
 
         mockNC.verify_post_locationDealerNotification_withReceivedLocations(
             name: .locationDealerUpdatesNotification, object: result)
     }
 
-    func test_didUpdateLocations_currentLocationDealOnlyFalse_receivedEmptyLocationData() {
+    func test_didUpdateLocations_UpdatingLocation_receivedEmptyLocationData() {
 
         // arrange
 
@@ -164,14 +165,15 @@ extension PerseusLocationDealerTests {
         let result: Result<[CLLocation], LocationDealerError> = .failure(error)
         let locations = [CLLocation]()
 
-        // act
+        // act, assert
 
         sut.askToStartUpdatingLocation()
+        XCTAssertTrue(sut.order == .locationUpdates)
+
         mockLM.delegate?.locationManager?(CLLocationManager(), didUpdateLocations: locations)
+        XCTAssertTrue(sut.order == .none)
 
         // assert
-
-        XCTAssertFalse(sut.currentLocationDealOnly)
 
         mockLM.verify_stopUpdatingLocation_CalledOnce()
         mockLM.verify_startUpdatingLocation_CalledOnce()

@@ -52,6 +52,8 @@ extension PerseusLocationDealerTests {
         // assert
 
         mockLM.verify_requestWhenInUseAuthorization_CalledOnce()
+
+        XCTAssertTrue(sut.order == .none)
     }
 
     func test_askForAuthorization_invokes_requestAlwaysAuthorization() {
@@ -68,6 +70,8 @@ extension PerseusLocationDealerTests {
         // assert
 
         mockLM.verify_requestAlwaysAuthorization_CalledOnce()
+
+        XCTAssertTrue(sut.order == .none)
     }
 #elseif os(macOS)
     func test_askForAuthorization() {
@@ -84,9 +88,8 @@ extension PerseusLocationDealerTests {
         // assert
 
         mockLM.verify_startUpdatingLocation_CalledOnce()
-        mockLM.verify_stopUpdatingLocation_CalledTwice()
 
-        XCTAssertFalse(sut.currentLocationDealOnly)
+        XCTAssertTrue(sut.order == .authorization)
     }
 #endif
 }

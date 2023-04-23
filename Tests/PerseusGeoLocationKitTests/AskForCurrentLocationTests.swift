@@ -52,7 +52,7 @@ extension PerseusLocationDealerTests {
 
         mockLM.verify_stopUpdatingLocation_CalledOnce()
 
-        XCTAssertTrue(sut.currentLocationDealOnly)
+        XCTAssertTrue(sut.order == .currentLocation)
         XCTAssertEqual(sut.desiredAccuracy, APPROPRIATE_ACCURACY.rawValue)
 
 #if os(iOS)
