@@ -139,6 +139,49 @@ public enum LocationDealerOrder: CustomStringConvertible {
     case authorization
 }
 
+public struct PerseusLocation: CustomStringConvertible, Equatable {
+
+    // MARK: - Data Preview
+
+    public var description: String {
+        let lat = (latitude * 10000.0).rounded(latitude > 0 ? .down : .up) / 10000.0
+        let lon = (longitude * 10000.0).rounded(longitude > 0 ? .down : .up) / 10000.0
+
+        return "[\(lat), \(lon)]: latitude = \(lat), longitude = \(lon)"
+    }
+
+    // MARK: - Location Data As Is
+
+    let location: CLLocation
+
+    var latitude: Double { return location.coordinate.latitude }
+    var longitude: Double { return location.coordinate.longitude }
+
+    // MARK: - Location Data Specifics
+
+    // Cutting off to hundredths (2 decimal places)
+    var latitudeHundredths: Double {
+        return (latitude * 100.0).rounded(latitude > 0 ? .down : .up) / 100.0
+    }
+
+    // Cutting off to hundredths (2 decimal places)
+    var longitudeHundredths: Double {
+        return (longitude * 100.0).rounded(longitude > 0 ? .down : .up) / 100.0
+    }
+
+    public init(_ location: CLLocation) {
+        self.location = location
+    }
+
+    public static func == (lhs: PerseusLocation, rhs: PerseusLocation) -> Bool {
+        return lhs.location == rhs.location
+    }
+}
+
+extension CLLocation {
+    public var perseus: PerseusLocation { return PerseusLocation(self) }
+}
+
 public func getPermit(serviceEnabled: Bool,
                       status: CLAuthorizationStatus) -> LocationDealerPermit {
 

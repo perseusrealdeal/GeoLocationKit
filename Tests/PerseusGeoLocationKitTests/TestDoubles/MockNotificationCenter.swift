@@ -69,8 +69,8 @@ class MockNotificationCenter: NotificationCenterProtocol {
         XCTAssertEqual(postArgsName.first, aName, "name", file: file, line: line)
         XCTAssertNotNil(anObject, file: file, line: line)
 
-        let result = postArgsObject.first as? Result<[CLLocation], LocationDealerError>
-        let theObject = anObject as? Result<[CLLocation], LocationDealerError>
+        let result = postArgsObject.first as? Result<[PerseusLocation], LocationDealerError>
+        let theObject = anObject as? Result<[PerseusLocation], LocationDealerError>
 
         var errorArgs: LocationDealerError?
         if let result = result {
@@ -92,6 +92,9 @@ class MockNotificationCenter: NotificationCenterProtocol {
             }
         }
 
+        XCTAssertNotNil(result, "result", file: file, line: line)
+        XCTAssertNotNil(theObject, "the object", file: file, line: line)
+
         XCTAssertTrue(errorArgs == object, "object", file: file, line: line)
     }
 
@@ -105,28 +108,33 @@ class MockNotificationCenter: NotificationCenterProtocol {
         XCTAssertEqual(postArgsName.first, aName, "name", file: file, line: line)
         XCTAssertNotNil(anObject, file: file, line: line)
 
-        let result = postArgsObject.first as? Result<CLLocation, LocationDealerError>
-        let theObject = anObject as? Result<CLLocation, LocationDealerError>
+        let result = postArgsObject.first as? Result<PerseusLocation, LocationDealerError>
+        let theObject = anObject as? Result<PerseusLocation, LocationDealerError>
 
-        var locationArgs: CLLocation?
+        var locationArgs: PerseusLocation?
         if let result = result {
             switch result {
             case .success(let location):
                 locationArgs = location
+                log.message("\(location)")
             case .failure(_):
                 break
             }
         }
 
-        var object: CLLocation?
+        var object: PerseusLocation?
         if let theObject = theObject {
             switch theObject {
             case .success(let location):
                 object = location
+                log.message("\(location)")
             case .failure(_):
                 break
             }
         }
+
+        XCTAssertNotNil(result, "result", file: file, line: line)
+        XCTAssertNotNil(theObject, "the object", file: file, line: line)
 
         XCTAssertEqual(locationArgs, object, "object", file: file, line: line)
     }
@@ -142,10 +150,10 @@ class MockNotificationCenter: NotificationCenterProtocol {
         XCTAssertNotNil(anObject, file: file, line: line)
 
         let result =
-            postArgsObject.first as? Result<[CLLocation], LocationDealerError>
-        let theObject = anObject as? Result<[CLLocation], LocationDealerError>
+            postArgsObject.first as? Result<[PerseusLocation], LocationDealerError>
+        let theObject = anObject as? Result<[PerseusLocation], LocationDealerError>
 
-        var locationArgs: [CLLocation]?
+        var locationArgs: [PerseusLocation]?
         if let result = result {
             switch result {
             case .success(let locations):
@@ -155,7 +163,7 @@ class MockNotificationCenter: NotificationCenterProtocol {
             }
         }
 
-        var object: [CLLocation]?
+        var object: [PerseusLocation]?
         if let theObject = theObject {
             switch theObject {
             case .success(let locations):
@@ -164,6 +172,9 @@ class MockNotificationCenter: NotificationCenterProtocol {
                 break
             }
         }
+
+        XCTAssertNotNil(result, "result", file: file, line: line)
+        XCTAssertNotNil(theObject, "the object", file: file, line: line)
 
         XCTAssertEqual(locationArgs, object, "object", file: file, line: line)
     }

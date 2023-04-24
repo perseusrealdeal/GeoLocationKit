@@ -102,7 +102,8 @@ extension PerseusLocationDealerTests {
         let firstLocation = CLLocation(latitude: coord.latitude, longitude: coord.longitude)
 
         let locations = [firstLocation, CLLocation(latitude: 34.78, longitude: 34.83)]
-        let result: Result<CLLocation, LocationDealerError> = .success(firstLocation)
+        let perseusLocation = PerseusLocation(firstLocation)
+        let result: Result<PerseusLocation, LocationDealerError> = .success(perseusLocation)
 
         // act, assert
 
@@ -136,7 +137,8 @@ extension PerseusLocationDealerTests {
         let firstLocation = CLLocation(latitude: coord.latitude, longitude: coord.longitude)
 
         let locations = [firstLocation, CLLocation(latitude: 34.78, longitude: 34.83)]
-        let result: Result<[CLLocation], LocationDealerError> = .success(locations)
+        let perseusLocations = locations.map { PerseusLocation($0) }
+        let result: Result<[PerseusLocation], LocationDealerError> = .success(perseusLocations)
 
         // act, assert
 
@@ -162,7 +164,7 @@ extension PerseusLocationDealerTests {
         MockLocationManager.isLocationServiceEnabled = true
 
         let error = LocationDealerError.receivedEmptyLocationData
-        let result: Result<[CLLocation], LocationDealerError> = .failure(error)
+        let result: Result<[PerseusLocation], LocationDealerError> = .failure(error)
         let locations = [CLLocation]()
 
         // act, assert

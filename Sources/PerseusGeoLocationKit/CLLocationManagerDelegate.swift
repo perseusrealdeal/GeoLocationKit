@@ -27,7 +27,11 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
 
         log.message("[\(type(of: self))].\(#function)", .info)
 
-        locationManager.stopUpdatingLocation(); order = .none
+        locationManager.stopUpdatingLocation()
+
+        guard order != .authorization else { order = .none; return }
+
+        order = .none
 
         let result: LocationDealerError = .failedRequest(error.localizedDescription)
         notificationCenter.post(name: .locationDealerErrorNotification, object: result)
@@ -54,15 +58,18 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
 
             locationManager.stopUpdatingLocation(); order = .none
 
-            let result: Result<CLLocation, LocationDealerError> = locations.first == nil ?
-                .failure(.receivedEmptyLocationData) : .success(locations.first!)
+            let result: Result<PerseusLocation, LocationDealerError> = locations.first == nil ?
+                .failure(.receivedEmptyLocationData) :
+                .success(locations.first!.perseus)
 
             notificationCenter.post(name: .locationDealerCurrentNotification, object: result)
 
         } else if order == .locationUpdates {
 
-            let result: Result<[CLLocation], LocationDealerError> = locations.isEmpty ?
-                .failure(.receivedEmptyLocationData) : .success(locations)
+            let perseusLocations = locations.map { PerseusLocation($0) }
+
+            let result: Result<[PerseusLocation], LocationDealerError> = locations.isEmpty ?
+                .failure(.receivedEmptyLocationData) : .success(perseusLocations)
 
             if locations.isEmpty {
                 log.message("[\(type(of: self))].\(#function) — No locations!", .error)
