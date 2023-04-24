@@ -147,7 +147,10 @@ public struct PerseusLocation: CustomStringConvertible, Equatable {
         let lat = (latitude * 10000.0).rounded(latitude > 0 ? .down : .up) / 10000.0
         let lon = (longitude * 10000.0).rounded(longitude > 0 ? .down : .up) / 10000.0
 
-        return "[\(lat), \(lon)]: latitude = \(lat), longitude = \(lon)"
+        let location100 = "[\(latitudeHundredths), \(longitudeHundredths)]"
+        let location10000 = "latitude = \(lat), longitude = \(lon)"
+
+        return location100 + ": " + location10000
     }
 
     // MARK: - Location Data As Is
