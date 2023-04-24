@@ -168,6 +168,6 @@ public class PerseusLocationDealer: NSObject {
 
         log.message("[\(type(of: self))].\(#function)", .info)
 
-        order = .none; locationManager.stopUpdatingLocation()
+        locationManager.stopUpdatingLocation(); order = .none
     }
 }

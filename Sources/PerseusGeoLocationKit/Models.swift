@@ -122,7 +122,7 @@ public enum LocationDealerPermit: CustomStringConvertible {
 public enum LocationDealerOrder: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .none: // There should be no location notifing activity
+        case .none: // There should be no location notifying activity
             return "None"
         case .currentLocation:
             return "Current Location"

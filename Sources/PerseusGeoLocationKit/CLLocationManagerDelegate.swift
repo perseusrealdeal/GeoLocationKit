@@ -46,13 +46,13 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
 
         if order == .authorization {
             log.message("[\(type(of: self))].\(#function) — Authorization order!")
-            order = .none; locationManager.stopUpdatingLocation()
+            locationManager.stopUpdatingLocation(); order = .none
             return
         }
 
         if order == .currentLocation {
 
-            order = .none; locationManager.stopUpdatingLocation()
+            locationManager.stopUpdatingLocation(); order = .none
 
             let result: Result<CLLocation, LocationDealerError> = locations.first == nil ?
                 .failure(.receivedEmptyLocationData) : .success(locations.first!)
