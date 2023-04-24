@@ -182,7 +182,7 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
     public func locationManager(_ manager: CLLocationManager,
                                 didFailWithError error: Error) {
 
-        order = .none; locationManager.stopUpdatingLocation()
+        locationManager.stopUpdatingLocation(); order = .none
 
         let result: LocationDealerError = .failedRequest(error.localizedDescription)
         notificationCenter.post(name: .locationDealerErrorNotification, object: result)

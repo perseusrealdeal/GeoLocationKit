@@ -27,7 +27,7 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
 
         log.message("[\(type(of: self))].\(#function)", .info)
 
-        order = .none; locationManager.stopUpdatingLocation()
+        locationManager.stopUpdatingLocation(); order = .none
 
         let result: LocationDealerError = .failedRequest(error.localizedDescription)
         notificationCenter.post(name: .locationDealerErrorNotification, object: result)
@@ -64,7 +64,10 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
             let result: Result<[CLLocation], LocationDealerError> = locations.isEmpty ?
                 .failure(.receivedEmptyLocationData) : .success(locations)
 
-            if locations.isEmpty { order = .none; locationManager.stopUpdatingLocation() }
+            if locations.isEmpty {
+                log.message("[\(type(of: self))].\(#function) — No locations!", .error)
+                order = .none; locationManager.stopUpdatingLocation()
+            }
 
             notificationCenter.post(name: .locationDealerUpdatesNotification, object: result)
         }
