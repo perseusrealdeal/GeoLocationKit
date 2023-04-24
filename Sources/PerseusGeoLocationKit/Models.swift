@@ -178,9 +178,7 @@ public struct PerseusLocation: CustomStringConvertible, Equatable {
     }
 }
 
-extension CLLocation {
-    public var perseus: PerseusLocation { return PerseusLocation(self) }
-}
+extension CLLocation { public var perseus: PerseusLocation { return PerseusLocation(self) } }
 
 public func getPermit(serviceEnabled: Bool,
                       status: CLAuthorizationStatus) -> LocationDealerPermit {

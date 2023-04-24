@@ -9,7 +9,7 @@
 //  Licensed under the MIT license. See LICENSE file.
 //  All rights reserved.
 //
-// swiftlint:disable empty_enum_arguments
+// swiftlint:disable file_length empty_enum_arguments
 //
 
 import CoreLocation
