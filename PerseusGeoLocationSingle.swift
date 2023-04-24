@@ -182,7 +182,11 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
     public func locationManager(_ manager: CLLocationManager,
                                 didFailWithError error: Error) {
 
-        locationManager.stopUpdatingLocation(); order = .none
+        locationManager.stopUpdatingLocation()
+
+        guard order != .authorization else { order = .none; return }
+
+        order = .none
 
         let result: LocationDealerError = .failedRequest(error.localizedDescription)
         notificationCenter.post(name: .locationDealerErrorNotification, object: result)
@@ -205,17 +209,23 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
 
             locationManager.stopUpdatingLocation(); order = .none
 
-            let result: Result<CLLocation, LocationDealerError> = locations.first == nil ?
-                .failure(.receivedEmptyLocationData) : .success(locations.first!)
+            let result: Result<PerseusLocation, LocationDealerError> = locations.first == nil ?
+                .failure(.receivedEmptyLocationData) :
+                .success(locations.first!.perseus)
 
             notificationCenter.post(name: .locationDealerCurrentNotification, object: result)
 
         } else if order == .locationUpdates {
 
-            let result: Result<[CLLocation], LocationDealerError> = locations.isEmpty ?
-                .failure(.receivedEmptyLocationData) : .success(locations)
+            let perseusLocations = locations.map { PerseusLocation($0) }
 
-            if locations.isEmpty { order = .none; locationManager.stopUpdatingLocation() }
+            let result: Result<[PerseusLocation], LocationDealerError> = locations.isEmpty ?
+                .failure(.receivedEmptyLocationData) : .success(perseusLocations)
+
+            if locations.isEmpty {
+                log.message("[\(type(of: self))].\(#function) — No locations!", .error)
+                order = .none; locationManager.stopUpdatingLocation()
+            }
 
             notificationCenter.post(name: .locationDealerUpdatesNotification, object: result)
         }
@@ -347,6 +357,49 @@ public enum LocationDealerOrder: CustomStringConvertible {
     case currentLocation
     case locationUpdates
     case authorization
+}
+
+public struct PerseusLocation: CustomStringConvertible, Equatable {
+
+    // MARK: - Data Preview
+
+    public var description: String {
+        let lat = (latitude * 10000.0).rounded(latitude > 0 ? .down : .up) / 10000.0
+        let lon = (longitude * 10000.0).rounded(longitude > 0 ? .down : .up) / 10000.0
+
+        return "[\(lat), \(lon)]: latitude = \(lat), longitude = \(lon)"
+    }
+
+    // MARK: - Location Data As Is
+
+    let location: CLLocation
+
+    var latitude: Double { return location.coordinate.latitude }
+    var longitude: Double { return location.coordinate.longitude }
+
+    // MARK: - Location Data Specifics
+
+    // Cutting off to hundredths (2 decimal places)
+    var latitudeHundredths: Double {
+        return (latitude * 100.0).rounded(latitude > 0 ? .down : .up) / 100.0
+    }
+
+    // Cutting off to hundredths (2 decimal places)
+    var longitudeHundredths: Double {
+        return (longitude * 100.0).rounded(longitude > 0 ? .down : .up) / 100.0
+    }
+
+    public init(_ location: CLLocation) {
+        self.location = location
+    }
+
+    public static func == (lhs: PerseusLocation, rhs: PerseusLocation) -> Bool {
+        return lhs.location == rhs.location
+    }
+}
+
+extension CLLocation {
+    public var perseus: PerseusLocation { return PerseusLocation(self) }
 }
 
 public func getPermit(serviceEnabled: Bool,
