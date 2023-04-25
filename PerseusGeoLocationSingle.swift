@@ -217,10 +217,8 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
 
         } else if order == .locationUpdates {
 
-            let perseusLocations = locations.map { PerseusLocation($0) }
-
             let result: Result<[PerseusLocation], LocationDealerError> = locations.isEmpty ?
-                .failure(.receivedEmptyLocationData) : .success(perseusLocations)
+                .failure(.receivedEmptyLocationData) : .success(locations.map { $0.perseus })
 
             if locations.isEmpty {
                 log.message("[\(type(of: self))].\(#function) — No locations!", .error)
@@ -408,6 +406,7 @@ extension CLLocation {
 public func getPermit(serviceEnabled: Bool,
                       status: CLAuthorizationStatus) -> LocationDealerPermit {
 
+    // There is no status .notDetermined with serviceEnabled false
     if status == .notDetermined {
         return .notDetermined
     }
