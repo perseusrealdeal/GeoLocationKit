@@ -17,9 +17,18 @@
 [![CocoaPods manager](https://img.shields.io/badge/CocoaPods-compatible-4BC51D.svg)](https://cocoapods.org)
 [![Swift Package Manager compatible](https://img.shields.io/badge/Swift%20Package%20Manager-compatible-4BC51D.svg)](https://github.com/apple/swift-package-manager)
 
+## In use
+
+[![Weather macOS](https://img.shields.io/badge/Weather-macOS-informational.svg)](https://github.com/perseusrealdeal/macOS.Weather)
+[![Weather iOS](https://img.shields.io/badge/Weather-iOS-informational.svg)](https://github.com/perseusrealdeal/iOS.Weather)
+
 # In Brief
 
 > Collection of tools for easy dealing with native geo location services.
+
+`Features:`
+- Feature 1
+- Feature 2
 
 # Requirements
 
@@ -48,12 +57,17 @@
 | NSLocationAlwaysUsageDescription    | required |          | askForAuthorization()           |
 | NSLocationWhenInUseUsageDescription | required |          | askForAuthorization(.whenInUse) |
 
+`Recomendation:`
+
+```swift
+```
+
 `Step 2:` Create notification observer
 
 ```swift
 ```
 
-`Step 3:` Ask for current location
+`Step 3:` Ask for value, current location
 
 ```swift
 ```
