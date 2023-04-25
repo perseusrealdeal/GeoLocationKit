@@ -102,7 +102,7 @@ extension PerseusLocationDealerTests {
         let firstLocation = CLLocation(latitude: coord.latitude, longitude: coord.longitude)
 
         let locations = [firstLocation, CLLocation(latitude: 34.78, longitude: 34.83)]
-        let perseusLocation = PerseusLocation(firstLocation)
+        let perseusLocation = firstLocation.perseus
         let result: Result<PerseusLocation, LocationDealerError> = .success(perseusLocation)
 
         // act, assert
@@ -137,7 +137,7 @@ extension PerseusLocationDealerTests {
         let firstLocation = CLLocation(latitude: coord.latitude, longitude: coord.longitude)
 
         let locations = [firstLocation, CLLocation(latitude: 34.78, longitude: 34.83)]
-        let perseusLocations = locations.map { PerseusLocation($0) }
+        let perseusLocations = locations.map { $0.perseus }
         let result: Result<[PerseusLocation], LocationDealerError> = .success(perseusLocations)
 
         // act, assert

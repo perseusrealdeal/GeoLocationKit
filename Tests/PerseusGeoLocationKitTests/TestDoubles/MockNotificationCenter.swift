@@ -43,6 +43,12 @@ class MockNotificationCenter: NotificationCenterProtocol {
                        anObject as? CLAuthorizationStatus, "object", file: file, line: line)
     }
 
+    func verify_no_post_locationDealerNotification_withError(
+        file: StaticString = #file,
+        line: UInt = #line) {
+        guard postCalledNone(file: file, line: line) else { return }
+    }
+
     func verify_post_locationDealerNotification_withError(
         name aName: NSNotification.Name?,
         object anObject: Any?,
@@ -179,6 +185,16 @@ class MockNotificationCenter: NotificationCenterProtocol {
         XCTAssertEqual(locationArgs, object, "object", file: file, line: line)
     }
 
+    private func postCalledNone(file: StaticString = #file,
+                                line: UInt = #line) -> Bool {
+        return verifyMethodCalledNone(
+            methodName: "post(name aName:, object anObject:)",
+            callCount: postCallCount,
+            describeArguments: "args: \(postArgsName)",
+            file: file,
+            line: line)
+    }
+
     private func postCalledOnce(file: StaticString = #file,
                                 line: UInt = #line) -> Bool {
         return verifyMethodCalledOnce(
@@ -188,6 +204,21 @@ class MockNotificationCenter: NotificationCenterProtocol {
             file: file,
             line: line)
     }
+}
+
+private func verifyMethodCalledNone(methodName: String,
+                                    callCount: Int,
+                                    describeArguments: @autoclosure () -> String,
+                                    file: StaticString = #file,
+                                    line: UInt = #line) -> Bool {
+
+    if callCount > 0 {
+        XCTFail("Wanted not invoked but was called \(callCount) times. " +
+            "\(methodName) with \(describeArguments())", file: file, line: line)
+        return false
+    }
+
+    return true
 }
 
 private func verifyMethodCalledOnce(methodName: String,

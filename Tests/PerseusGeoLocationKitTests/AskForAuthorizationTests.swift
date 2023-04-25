@@ -11,6 +11,7 @@
 //
 
 import XCTest
+import CoreLocation
 @testable import PerseusGeoLocationKit
 
 extension PerseusLocationDealerTests {
@@ -63,7 +64,7 @@ extension PerseusLocationDealerTests {
         MockLocationManager.status = .notDetermined
         MockLocationManager.isLocationServiceEnabled = true
 
-        // act
+        // act, assert
 
         sut.askForAuthorization(.always)
 
@@ -74,22 +75,48 @@ extension PerseusLocationDealerTests {
         XCTAssertTrue(sut.order == .none)
     }
 #elseif os(macOS)
-    func test_askForAuthorization() {
+    func test_askForAuthorization_called_startUpdatingLocation() {
 
         // arrange
 
         MockLocationManager.status = .notDetermined
         MockLocationManager.isLocationServiceEnabled = true
 
-        // act
+        // act, assert
 
         sut.askForAuthorization()
+        XCTAssertTrue(sut.order == .authorization)
 
         // assert
 
         mockLM.verify_startUpdatingLocation_CalledOnce()
 
         XCTAssertTrue(sut.order == .authorization)
+    }
+
+    func test_askForAuthorization_should_post_no_error_notification() {
+
+        // arrange
+
+        MockLocationManager.status = .notDetermined
+        MockLocationManager.isLocationServiceEnabled = true
+
+        let error = LocationDealerError.failedRequest("")
+
+        // act, assert
+
+        sut.askForAuthorization()
+
+        XCTAssertTrue(sut.order == .authorization)
+        mockLM.verify_startUpdatingLocation_CalledOnce()
+
+        // act, assert
+
+        mockLM.delegate?.locationManager?(CLLocationManager(), didFailWithError: error)
+
+        mockLM.verify_stopUpdatingLocation_CalledOnce()
+        mockNC.verify_no_post_locationDealerNotification_withError()
+        XCTAssertTrue(sut.order == .none)
     }
 #endif
 }

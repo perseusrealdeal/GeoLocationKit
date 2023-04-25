@@ -186,6 +186,7 @@ extension CLLocation { public var perseus: PerseusLocation { return PerseusLocat
 public func getPermit(serviceEnabled: Bool,
                       status: CLAuthorizationStatus) -> LocationDealerPermit {
 
+    // There is no status .notDetermined with serviceEnabled false
     if status == .notDetermined {
         return .notDetermined
     }
