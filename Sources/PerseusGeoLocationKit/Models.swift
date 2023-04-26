@@ -84,21 +84,25 @@ public enum LocationAuthorization: CustomStringConvertible {
 }
 
 public enum LocationDealerPermit: CustomStringConvertible {
-    /// Location service is neither restricted nor the app denided
+
+    // Location service is neither restricted nor the app denided.
     case notDetermined
 
-    /// provide instructions for changing restrictions options in
-    /// Settings > General > Restrictions
-    case deniedForAllAndRestricted /// in case if location services turned off
-    case restricted  /// in case if location services turned on
+    // Go to Settings > General > Restrictions.
+    // In case if location services turned off and the app restricted.
+    case deniedForAllAndRestricted
+    // In case if location services turned on and the app restricted.
+    case restricted
 
-    /// provide instructions for enabling the Location Services switch in Settings > Privacy
-    case deniedForAllApps /// in case if location services turned off but not restricted
+    // Go to Settings > Privacy.
+    // In case if location services turned off but the app not restricted.
+    case deniedForAllApps
 
-    /// provide instructions for enabling services for the app in Settings > The App
-    case deniedForTheApp /// in case if location services turned on but not restricted
+    // Go to Settings > The App.
+    // In case if location services turned on but the app not restricted.
+    case deniedForTheApp
 
-    /// either authorizedAlways or authorizedWhenInUse
+    // Either authorizedAlways or authorizedWhenInUse.
     case allowed
 
     public var description: String {
@@ -122,13 +126,13 @@ public enum LocationDealerPermit: CustomStringConvertible {
 public enum LocationDealerOrder: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .none: // There should be no location notifying activity
+        case .none: // There should be no location notifying activity.
             return "None"
         case .currentLocation:
             return "Current Location"
         case .locationUpdates:
             return "Location Updates"
-        case .authorization: // Used only to invoke Current Location Diolog on macOS
+        case .authorization: // Used only to invoke Current Location Diolog on macOS.
             return "Authorization"
         }
     }
@@ -153,21 +157,21 @@ public struct PerseusLocation: CustomStringConvertible, Equatable {
         return location100 + ": " + location10000
     }
 
-    // MARK: - Location Data As Is
+    // MARK: - Location Data, As Is
 
     let location: CLLocation
 
     var latitude: Double { return location.coordinate.latitude }
     var longitude: Double { return location.coordinate.longitude }
 
-    // MARK: - Location Data Specifics
+    // MARK: - Location Data, Specifics
 
-    // Cutting off to hundredths (2 decimal places)
+    // Cutting off to hundredths (2 decimal places).
     var latitudeHundredths: Double {
         return (latitude * 100.0).rounded(latitude > 0 ? .down : .up) / 100.0
     }
 
-    // Cutting off to hundredths (2 decimal places)
+    // Cutting off to hundredths (2 decimal places).
     var longitudeHundredths: Double {
         return (longitude * 100.0).rounded(longitude > 0 ? .down : .up) / 100.0
     }
@@ -186,8 +190,8 @@ extension CLLocation { public var perseus: PerseusLocation { return PerseusLocat
 public func getPermit(serviceEnabled: Bool,
                       status: CLAuthorizationStatus) -> LocationDealerPermit {
 
-    // There is no status .notDetermined with serviceEnabled false
-    if status == .notDetermined {
+    // There is no status .notDetermined with serviceEnabled false.
+    if status == .notDetermined { // So, serviceEnabled takes true.
         return .notDetermined
     }
 

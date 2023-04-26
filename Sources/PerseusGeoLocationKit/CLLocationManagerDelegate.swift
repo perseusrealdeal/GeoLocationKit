@@ -77,7 +77,7 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
 
             if locations.isEmpty {
                 log.message("[\(type(of: self))].\(#function) — No locations!", .error)
-                order = .none; locationManager.stopUpdatingLocation()
+                locationManager.stopUpdatingLocation(); order = .none
             }
 
             notificationCenter.post(name: .locationDealerUpdatesNotification, object: result)

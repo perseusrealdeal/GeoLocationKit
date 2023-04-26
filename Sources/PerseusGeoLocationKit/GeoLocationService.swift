@@ -12,8 +12,6 @@
 
 import CoreLocation
 
-// Servants
-
 // MARK: - Default values
 
 public let APPROPRIATE_ACCURACY = LocationAccuracy.threeKilometers
@@ -90,11 +88,12 @@ public class PerseusLocationDealer: NSObject {
 
     private override init() {
 
+        log.level = .info
         // log.turned = .off
         log.message("[\(PerseusLocationDealer.self)].\(#function)", .info)
 
-        self.locationManager = CLLocationManager()
-        self.notificationCenter = NotificationCenter.default
+        locationManager = CLLocationManager()
+        notificationCenter = NotificationCenter.default
 
         super.init()
 
