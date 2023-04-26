@@ -72,6 +72,9 @@ public class PerseusLocationDealer: NSObject {
     private var locationManager: CLLocationManager
     private var notificationCenter: NotificationCenter
 
+    public var locationManagerInUse: CLLocationManager { return locationManager }
+    public var notificationCenterInUser: NotificationCenter { return notificationCenter }
+
     // MARK: - Calculated Properties
 
     public var desiredAccuracy: CLLocationAccuracy { return locationManager.desiredAccuracy }
@@ -227,7 +230,6 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
                 .failure(.receivedEmptyLocationData) : .success(locations.map { $0.perseus })
 
             if locations.isEmpty {
-                log.message("[\(type(of: self))].\(#function) — No locations!", .error)
                 locationManager.stopUpdatingLocation(); order = .none
             }
 
