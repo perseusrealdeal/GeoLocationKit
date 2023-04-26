@@ -117,7 +117,7 @@ extension PerseusLocationDealerTests {
 
         mockLM.verify_stopUpdatingLocation_CalledOnce()
         mockNC.verify_no_post_locationDealerNotification_withError()
-        XCTAssertTrue(sut.order == .none)
+        XCTAssertTrue(sut.order == .authorization)
     }
 #endif
 }
