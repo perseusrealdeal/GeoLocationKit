@@ -108,6 +108,7 @@ extension PerseusLocationDealerTests {
         sut.askForAuthorization()
 
         XCTAssertTrue(sut.order == .authorization)
+        XCTAssertTrue(sut.locationPermit == .notDetermined)
         mockLM.verify_startUpdatingLocation_CalledOnce()
 
         // act, assert

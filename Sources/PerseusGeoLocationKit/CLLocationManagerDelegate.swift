@@ -29,7 +29,12 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
 
         locationManager.stopUpdatingLocation()
 
-        guard order != .authorization else { order = .none; return }
+        // ISSUE: macOS (new releases) generates an error on startUpdatingLocation()
+        // if a user makes not immediately decision, 2 or 3 sec, with Current Location Diolog.
+        // FIXED: Restrict error notifiying in case when a user tries to give a permission
+        // so that there is no difference in Current Location Diolog behavior in either early
+        // or new macOS releases.
+        if order == .authorization, locationPermit == .notDetermined { order = .none; return }
 
         order = .none
 
