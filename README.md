@@ -57,9 +57,19 @@
 | NSLocationAlwaysUsageDescription    | required |          | askForAuthorization()           |
 | NSLocationWhenInUseUsageDescription | required |          | askForAuthorization(.whenInUse) |
 
-`Recomendation:`
+`Recomendation for macOS only:` 
+
+> PerseusLocationDealer should be loaded in launch time on macOS. 
+
+To do so create a reference to PerseusLocationDealer instance as a property in class that is also alllocated in launch time such as AppDelegate.  Take a look at the following sample statements.
 
 ```swift
+class AppDelegate: NSObject, NSApplicationDelegate {
+
+    let locationDealer = PerseusLocationDealer.shared
+
+    func applicationDidFinishLaunching(_ aNotification: Notification) {
+    
 ```
 
 `Step 2:` Create notification observer
