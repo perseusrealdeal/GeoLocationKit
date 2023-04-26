@@ -61,7 +61,7 @@
 
 > PerseusLocationDealer should be loaded in launch time on macOS. 
 
-To do so create a reference to PerseusLocationDealer instance as a property in class that is also alllocated in launch time such as AppDelegate.  Take a look at the following sample statements.
+To do so create a reference to the PerseusLocationDealer instance as a property in a class that is also allocated in launch time such as AppDelegate. Take a look at the following sample statements.
 
 ```swift
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -72,9 +72,40 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
 ```
 
-`Step 2:` Create notification observer
+`Step 2:` Create a notification observer then ask for a value
+
+| Notification name                        | PerseusLocationDealer's method  | Value            |
+| ---------------------------------------- | ------------------------------- | ---------------- |
+| .locationDealerCurrentNotification       | askForCurrentLocation(_ :)      | current location |
+| .locationDealerUpdatesNotification       | askToStartUpdatingLocation(_ :) | location changes |
+| .locationDealerStatusChangedNotification | askForAuthorization(_ :, _ :)   | permission       |
+| .locationDealerErrorNotification         |                                 | error            |
 
 ```swift
+class AppDelegate: NSObject, NSApplicationDelegate {
+
+    func applicationDidFinishLaunching(_ aNotification: Notification) {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(locationDealerCurrentHandler(_:)),
+            name: .locationDealerCurrentNotification,
+            object: nil
+        )
+    }
+    
+    @objc private func locationDealerCurrentHandler(_ notification: Notification) {
+        
+        guard
+            let result = notification.object as? Result<PerseusLocation, LocationDealerError>
+            else { return }
+
+        switch result {
+        case .success(let data):
+            log.message("\(data)")
+        case .failure(let error):
+            log.message("\(error)", .error)
+        }
+    }
 ```
 
 `Step 3:` Ask for value, current location
