@@ -108,9 +108,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 ```
 
-`Step 3:` Ask for value, current location
+`Step 3:` Ask for value, authorization and current location
 
 ```swift
+@IBAction func buttonLocationPermissionTapped(_ sender: NSButton) {
+    PerseusLocationDealer.shared.askForAuthorization { permit in
+        let text = "[\(type(of: self))].\(#function) — It's already determined .\(permit)"
+        log.message(text, .error)
+    }
+}
+
+@IBAction func buttonCurrentLocationTapped(_ sender: NSButton) {
+    try? PerseusLocationDealer.shared.askForCurrentLocation()
+}
 ```
 
 # Installation
