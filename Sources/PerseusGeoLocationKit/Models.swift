@@ -62,16 +62,13 @@ extension CLAuthorizationStatus: CustomStringConvertible {
             return "denied"
         case .authorizedAlways:
             return "authorizedAlways"
-        case .authorizedWhenInUse: // iOS
+        case .authorizedWhenInUse: // iOS only.
             return "authorizedWhenInUse"
         }
     }
 }
 
 public enum LocationAuthorization: CustomStringConvertible {
-
-    case whenInUse
-    case always
 
     public var description: String {
         switch self {
@@ -81,9 +78,29 @@ public enum LocationAuthorization: CustomStringConvertible {
             return "Always"
         }
     }
+
+    case whenInUse
+    case always
 }
 
 public enum LocationDealerPermit: CustomStringConvertible {
+
+    public var description: String {
+        switch self {
+        case .notDetermined:
+            return "notDetermined"
+        case .deniedForAllAndRestricted:
+            return "deniedForAllAndRestricted"
+        case .restricted:
+            return "restricted"
+        case .deniedForAllApps:
+            return "deniedForAllApps"
+        case .deniedForTheApp:
+            return "deniedForTheApp"
+        case .allowed:
+            return "allowed"
+        }
+    }
 
     // Location service is neither restricted nor the app denided.
     case notDetermined
@@ -104,26 +121,10 @@ public enum LocationDealerPermit: CustomStringConvertible {
 
     // Either authorizedAlways or authorizedWhenInUse.
     case allowed
-
-    public var description: String {
-        switch self {
-        case .notDetermined:
-            return "notDetermined"
-        case .deniedForAllAndRestricted:
-            return "deniedForAllAndRestricted"
-        case .restricted:
-            return "restricted"
-        case .deniedForAllApps:
-            return "deniedForAllApps"
-        case .deniedForTheApp:
-            return "deniedForTheApp"
-        case .allowed:
-            return "allowed"
-        }
-    }
 }
 
 public enum LocationDealerOrder: CustomStringConvertible {
+
     public var description: String {
         switch self {
         case .none: // There should be no location notifying activity.
