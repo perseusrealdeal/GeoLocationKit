@@ -12,7 +12,7 @@
 
 import CoreLocation
 
-// MARK: - Protocols serves isolation purpose for unit testing
+// MARK: - These protocols serve only isolation purpose for unit testing
 
 extension CLLocationManager: LocationManagerProtocol { }
 extension NotificationCenter: NotificationCenterProtocol { }
