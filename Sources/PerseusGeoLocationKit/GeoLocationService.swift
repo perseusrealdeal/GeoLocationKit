@@ -58,7 +58,7 @@ public class PerseusLocationDealer: NSObject {
     private var notificationCenter: NotificationCenter
 
     public var locationManagerInUse: CLLocationManager { return locationManager }
-    public var notificationCenterInUser: NotificationCenter { return notificationCenter }
+    public var notificationCenterInUse: NotificationCenter { return notificationCenter }
 #endif
 
     // MARK: - Calculated Properties
@@ -91,9 +91,9 @@ public class PerseusLocationDealer: NSObject {
 
     private override init() {
 
-        log.level = .info
+        // log.level = .info
         // log.turned = .off
-        log.message("[\(PerseusLocationDealer.self)].\(#function)", .info)
+        log.message("[\(PerseusLocationDealer.self)].\(#function)")
 
         locationManager = CLLocationManager()
         notificationCenter = NotificationCenter.default
