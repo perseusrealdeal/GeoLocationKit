@@ -53,7 +53,7 @@ extension PerseusLocationDealerTests {
         mockLM.verify_stopUpdatingLocation_CalledOnce()
 
         XCTAssertTrue(sut.order == .currentLocation)
-        XCTAssertEqual(sut.desiredAccuracy, APPROPRIATE_ACCURACY.rawValue)
+        XCTAssertEqual(sut.locationManager.desiredAccuracy, APPROPRIATE_ACCURACY.rawValue)
 
 #if os(iOS)
         mockLM.verify_requestLocation_CalledOnce()
@@ -75,10 +75,10 @@ extension PerseusLocationDealerTests {
 
         // act
 
-        try? sut.askForCurrentLocation(with: LocationAccuracy.kilometer)
+        try? sut.askForCurrentLocation(with: LocationAccuracy.best)
 
         // assert
 
-        XCTAssertEqual(sut.desiredAccuracy, LocationAccuracy.kilometer.rawValue)
+        XCTAssertEqual(sut.locationManager.desiredAccuracy, LocationAccuracy.best.rawValue)
     }
 }

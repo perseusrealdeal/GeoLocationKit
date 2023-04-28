@@ -65,7 +65,7 @@ final class PerseusLocationDealerTests: XCTestCase {
         XCTAssertNotNil(sut.notificationCenter)
         XCTAssertTrue(sut.order == .none)
 
-        // TODO: Those two statements in the end of the initializer should be covered.
+        // TASK: Those two statements in the end of the initializer should be covered.
         // In fact the following assertions test mocks, not the business matter statements.
         // XCTAssertEqual(sut.locationManager.desiredAccuracy, APPROPRIATE_ACCURACY.rawValue)
         // XCTAssertTrue(sut === sut.locationManager.delegate)
@@ -79,7 +79,7 @@ final class PerseusLocationDealerTests: XCTestCase {
 
         // act
 
-        let result = sut.authorizationStatus
+        let result = type(of: sut.locationManager).authorizationStatus()
 
         // assert
 
@@ -94,7 +94,7 @@ final class PerseusLocationDealerTests: XCTestCase {
 
         // act
 
-        let result = sut.locationServicesEnabled
+        let result = type(of: sut.locationManager).locationServicesEnabled()
 
         // assert
 
@@ -105,11 +105,11 @@ final class PerseusLocationDealerTests: XCTestCase {
 
         // arrange, act
 
-        mockLM.desiredAccuracy = LocationAccuracy.kilometer.rawValue
+        mockLM.desiredAccuracy = LocationAccuracy.best.rawValue
 
         // arrange
 
-        XCTAssertEqual(sut.desiredAccuracy, LocationAccuracy.kilometer.rawValue)
+        XCTAssertEqual(sut.locationManager.desiredAccuracy, LocationAccuracy.best.rawValue)
     }
 
     func test_startUpdatingLocation() {
@@ -123,7 +123,7 @@ final class PerseusLocationDealerTests: XCTestCase {
         mockLM.verify_startUpdatingLocation_CalledOnce()
 
         XCTAssertTrue(sut.order == .locationUpdates)
-        XCTAssertEqual(sut.desiredAccuracy, LocationAccuracy.best.rawValue)
+        XCTAssertEqual(sut.locationManager.desiredAccuracy, LocationAccuracy.best.rawValue)
     }
 
     func test_stopUpdatingLocation() {

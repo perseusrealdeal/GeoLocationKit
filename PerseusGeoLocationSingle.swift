@@ -83,22 +83,13 @@ public class PerseusLocationDealer: NSObject {
 
     // MARK: - Calculated Properties
 
-    public var desiredAccuracy: CLLocationAccuracy { return locationManager.desiredAccuracy }
-
-    public var authorizationStatus: CLAuthorizationStatus { return authorizationStatusHidden }
-    private var authorizationStatusHidden: CLAuthorizationStatus {
-        return type(of: locationManager).authorizationStatus()
-    }
-
-    public var locationServicesEnabled: Bool { return locationServicesEnabledHidden }
-    private var locationServicesEnabledHidden: Bool {
-        return type(of: locationManager).locationServicesEnabled()
-    }
-
     public var locationPermit: LocationDealerPermit { return locationPermitHidden }
+
     private var locationPermitHidden: LocationDealerPermit {
-        return getPermit(serviceEnabled: locationServicesEnabledHidden,
-                         status: authorizationStatusHidden)
+        let enabled = type(of: locationManager).locationServicesEnabled()
+        let status = type(of: locationManager).authorizationStatus()
+
+        return getPermit(serviceEnabled: enabled, status: status)
     }
 
     // MARK: - Internal Flags
