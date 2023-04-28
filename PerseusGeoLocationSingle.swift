@@ -345,14 +345,15 @@ public enum LocationDealerOrder: CustomStringConvertible {
 
 public struct PerseusLocation: CustomStringConvertible, Equatable {
 
+    private let two = 100.0
+    private let four = 10000.0
+
     public var description: String {
-        let lat = (latitude * 10000.0).rounded(latitude > 0 ? .down : .up) / 10000.0
-        let lon = (longitude * 10000.0).rounded(longitude > 0 ? .down : .up) / 10000.0
 
-        let location100 = "[\(latitudeHundredths), \(longitudeHundredths)]"
-        let location10000 = "latitude = \(lat), longitude = \(lon)"
+        let locationTwo = "[\(latitudeTwo), \(longitudeTwo)]"
+        let locationFour = "latitude = \(latitudeFour), longitude = \(longitudeFour)"
 
-        return location100 + ": " + location10000
+        return locationTwo + ": " + locationFour
     }
 
     // MARK: - Location Data, As Is
@@ -365,13 +366,23 @@ public struct PerseusLocation: CustomStringConvertible, Equatable {
     // MARK: - Location Data, Specifics
 
     // Cutting off to hundredths (2 decimal places).
-    var latitudeHundredths: Double {
-        return (latitude * 100.0).rounded(latitude > 0 ? .down : .up) / 100.0
+    var latitudeTwo: Double {
+        return (latitude * two).rounded(latitude > 0 ? .down : .up) / two
     }
 
     // Cutting off to hundredths (2 decimal places).
-    var longitudeHundredths: Double {
-        return (longitude * 100.0).rounded(longitude > 0 ? .down : .up) / 100.0
+    var longitudeTwo: Double {
+        return (longitude * two).rounded(longitude > 0 ? .down : .up) / two
+    }
+
+    // Cutting off to hundredths (4 decimal places).
+    var latitudeFour: Double {
+        return (latitude * four).rounded(latitude > 0 ? .down : .up) / four
+    }
+
+    // Cutting off to hundredths (4 decimal places).
+    var longitudeFour: Double {
+        return (longitude * four).rounded(longitude > 0 ? .down : .up) / four
     }
 
     // MARK: - Initializer
