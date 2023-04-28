@@ -20,7 +20,7 @@ public class PerseusLocationDealer: NSObject {
     var locationManager: LocationManagerProtocol!
     var notificationCenter: NotificationCenterProtocol!
 
-    internal func resetDefaults() { // used for keeping test room cleaned only
+    internal func resetDefaults() { // Used for keeping test room cleaned only.
         order = .none
         if locationManager != nil {
             locationManager.desiredAccuracy = APPROPRIATE_ACCURACY.rawValue
@@ -70,6 +70,7 @@ public class PerseusLocationDealer: NSObject {
 
         super.init()
 
+        // These two statements out of unit tests actually... maybe later.
         locationManager.desiredAccuracy = APPROPRIATE_ACCURACY.rawValue
         locationManager.delegate = self
     }

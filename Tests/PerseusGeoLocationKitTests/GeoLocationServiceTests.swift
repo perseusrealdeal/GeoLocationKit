@@ -38,6 +38,7 @@ final class PerseusLocationDealerTests: XCTestCase {
         mockLM.delegate = sut
         sut.locationManager = mockLM
         sut.notificationCenter = mockNC
+        sut.locationManager.delegate = sut
     }
 
     override func tearDown() {
@@ -63,7 +64,11 @@ final class PerseusLocationDealerTests: XCTestCase {
         XCTAssertNotNil(sut.locationManager)
         XCTAssertNotNil(sut.notificationCenter)
         XCTAssertTrue(sut.order == .none)
-        XCTAssertEqual(sut.locationManager.desiredAccuracy, APPROPRIATE_ACCURACY.rawValue)
+
+        // TODO: Those two statements in initializer should be covered with unit tests
+        // In fact the following assertions test mocks, not the business matter statements.
+        // XCTAssertEqual(sut.locationManager.desiredAccuracy, APPROPRIATE_ACCURACY.rawValue)
+        // XCTAssertTrue(sut === sut.locationManager.delegate)
     }
 
     func test_authorizationStatus() {
