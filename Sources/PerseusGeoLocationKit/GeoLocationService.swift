@@ -70,7 +70,7 @@ public class PerseusLocationDealer: NSObject {
 
         super.init()
 
-        // These two statements out of unit tests actually... maybe later.
+        // These two statements out of unit tests actually... refactoring maybe later.
         locationManager.desiredAccuracy = APPROPRIATE_ACCURACY.rawValue
         locationManager.delegate = self
     }

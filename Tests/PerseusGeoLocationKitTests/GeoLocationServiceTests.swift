@@ -65,7 +65,7 @@ final class PerseusLocationDealerTests: XCTestCase {
         XCTAssertNotNil(sut.notificationCenter)
         XCTAssertTrue(sut.order == .none)
 
-        // TODO: Those two statements in initializer should be covered with unit tests
+        // TODO: Those two statements in the end of the initializer should be covered.
         // In fact the following assertions test mocks, not the business matter statements.
         // XCTAssertEqual(sut.locationManager.desiredAccuracy, APPROPRIATE_ACCURACY.rawValue)
         // XCTAssertTrue(sut === sut.locationManager.delegate)
