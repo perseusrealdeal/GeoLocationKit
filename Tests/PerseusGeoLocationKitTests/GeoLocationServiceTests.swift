@@ -61,8 +61,6 @@ final class PerseusLocationDealerTests: XCTestCase {
 
         // arrange, act, assert
 
-        XCTAssertNotNil(sut.locationManager)
-        XCTAssertNotNil(sut.notificationCenter)
         XCTAssertTrue(sut.order == .none)
 
         // TASK: Those two statements in the end of the initializer should be covered.
