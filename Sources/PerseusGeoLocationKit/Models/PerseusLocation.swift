@@ -17,8 +17,6 @@ extension CLLocation { public var perseus: PerseusLocation { return PerseusLocat
 
 public struct PerseusLocation: CustomStringConvertible, Equatable {
 
-    // MARK: - Data Preview
-
     public var description: String {
         let lat = (latitude * 10000.0).rounded(latitude > 0 ? .down : .up) / 10000.0
         let lon = (longitude * 10000.0).rounded(longitude > 0 ? .down : .up) / 10000.0

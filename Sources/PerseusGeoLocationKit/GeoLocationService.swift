@@ -12,33 +12,6 @@
 
 import CoreLocation
 
-// MARK: - Default values
-
-public let APPROPRIATE_ACCURACY = LocationAccuracy.threeKilometers
-
-// MARK: - Notifications
-
-extension Notification.Name {
-    public static let locationDealerCurrentNotification =
-    Notification.Name("locationDealerCurrentNotification")
-    public static let locationDealerUpdatesNotification =
-    Notification.Name("locationDealerUpdatesNotification")
-    public static let locationDealerErrorNotification =
-    Notification.Name("locationDealerErrorNotification")
-    public static let locationDealerStatusChangedNotification =
-    Notification.Name("locationDealerStatusChangedNotification")
-}
-
-// MARK: - Errors
-
-public enum LocationDealerError: Error, Equatable {
-    case needsPermission(LocationDealerPermit)
-    case receivedEmptyLocationData
-    case failedRequest(String)
-}
-
-// MARK: - Business class
-
 public class PerseusLocationDealer: NSObject {
 
     // MARK: - Difficult Dependencies
@@ -56,9 +29,6 @@ public class PerseusLocationDealer: NSObject {
 #else
     private var locationManager: CLLocationManager
     private var notificationCenter: NotificationCenter
-
-    public var locationManagerInUse: CLLocationManager { return locationManager }
-    public var notificationCenterInUse: NotificationCenter { return notificationCenter }
 #endif
 
     // MARK: - Calculated Properties
@@ -91,7 +61,7 @@ public class PerseusLocationDealer: NSObject {
 
     private override init() {
 
-        // log.level = .info
+        log.level = .info
         // log.turned = .off
         log.message("[\(PerseusLocationDealer.self)].\(#function)")
 
@@ -159,11 +129,14 @@ public class PerseusLocationDealer: NSObject {
 
     public func askToStartUpdatingLocation(accuracy: LocationAccuracy = APPROPRIATE_ACCURACY) {
 
-        log.message("[\(type(of: self))].\(#function)", .info)
+        log.message("[\(type(of: self))].\(#function) with accuracy:\(accuracy)", .info)
 
         order = .locationUpdates
         locationManager.desiredAccuracy = accuracy.rawValue
         locationManager.startUpdatingLocation()
+
+        let ac = locationManager.desiredAccuracy
+        log.message("[\(type(of: self))].\(#function) with accuracy:\(ac)", .info)
     }
 
     public func askToStopUpdatingLocation() {

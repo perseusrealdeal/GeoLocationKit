@@ -22,7 +22,7 @@ let authorized: CLAuthorizationStatus = .authorized
 
 final class PerseusLocationDealerTests: XCTestCase {
 
-    internal var sut = PerseusLocationDealer.shared
+    internal let sut = PerseusLocationDealer.shared
 
     internal var mockLM: MockLocationManager!
     internal var mockNC: MockNotificationCenter!

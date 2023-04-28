@@ -72,13 +72,13 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
 
         } else if order == .locationUpdates {
 
-            let result: Result<[PerseusLocation], LocationDealerError> = locations.isEmpty ?
-                .failure(.receivedEmptyLocationData) : .success(locations.map { $0.perseus })
-
             if locations.isEmpty {
                 log.message("[\(type(of: self))].\(#function) — No locations!", .error)
                 locationManager.stopUpdatingLocation(); order = .none
             }
+
+            let result: Result<[PerseusLocation], LocationDealerError> = locations.isEmpty ?
+                .failure(.receivedEmptyLocationData) : .success(locations.map { $0.perseus })
 
             notificationCenter.post(name: .locationDealerUpdatesNotification, object: result)
         }

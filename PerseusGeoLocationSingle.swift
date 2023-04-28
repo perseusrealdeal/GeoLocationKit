@@ -38,26 +38,35 @@
 
 import CoreLocation
 
-// MARK: - Default values
+// MARK: - Constants
 
 public let APPROPRIATE_ACCURACY = LocationAccuracy.threeKilometers
 
 // MARK: - Notifications
 
 extension Notification.Name {
+
+    // Current Location
     public static let locationDealerCurrentNotification =
-        Notification.Name("locationDealerCurrentNotification")
+    Notification.Name("locationDealerCurrentNotification")
+
+    // Location Changing Updates
     public static let locationDealerUpdatesNotification =
-        Notification.Name("locationDealerUpdatesNotification")
+    Notification.Name("locationDealerUpdatesNotification")
+
+    // Error
     public static let locationDealerErrorNotification =
-        Notification.Name("locationDealerErrorNotification")
+    Notification.Name("locationDealerErrorNotification")
+
+    // Location Service Status
     public static let locationDealerStatusChangedNotification =
-        Notification.Name("locationDealerStatusChangedNotification")
+    Notification.Name("locationDealerStatusChangedNotification")
 }
 
 // MARK: - Errors
 
 public enum LocationDealerError: Error, Equatable {
+
     case needsPermission(LocationDealerPermit)
     case receivedEmptyLocationData
     case failedRequest(String)
@@ -71,9 +80,6 @@ public class PerseusLocationDealer: NSObject {
 
     private var locationManager: CLLocationManager
     private var notificationCenter: NotificationCenter
-
-    public var locationManagerInUse: CLLocationManager { return locationManager }
-    public var notificationCenterInUse: NotificationCenter { return notificationCenter }
 
     // MARK: - Calculated Properties
 
@@ -226,27 +232,31 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
 
         } else if order == .locationUpdates {
 
+            if locations.isEmpty { locationManager.stopUpdatingLocation(); order = .none }
+
             let result: Result<[PerseusLocation], LocationDealerError> = locations.isEmpty ?
                 .failure(.receivedEmptyLocationData) : .success(locations.map { $0.perseus })
-
-            if locations.isEmpty {
-                locationManager.stopUpdatingLocation(); order = .none
-            }
 
             notificationCenter.post(name: .locationDealerUpdatesNotification, object: result)
         }
     }
 }
 
-// MARK: - Data structures and functions used in library
+// MARK: - Data structures and functions used within business class
 
 public enum Result<Value, Error: Swift.Error> {
+
     case success(Value)
     case failure(Error)
 }
 
 public struct LocationAccuracy: RawRepresentable, Equatable {
+
+    // MARK: - RawRepresentable
+
     public var rawValue: CLLocationAccuracy
+
+    // MARK: - Values
 
     // The highest possible accuracy that uses additional sensor data.
     public static let bestForNavigation = LocationAccuracy(
@@ -272,12 +282,15 @@ public struct LocationAccuracy: RawRepresentable, Equatable {
     public static let threeKilometers = LocationAccuracy(
         rawValue: kCLLocationAccuracyThreeKilometers)
 
+    // MARK: - Initializer
+
     public init(rawValue: CLLocationAccuracy) {
         self.rawValue = rawValue
     }
 }
 
 extension CLAuthorizationStatus: CustomStringConvertible {
+
     public var description: String {
         switch self {
         case .notDetermined:
@@ -308,6 +321,73 @@ public enum LocationAuthorization: CustomStringConvertible {
     case whenInUse
     case always
 }
+
+public enum LocationDealerOrder: CustomStringConvertible {
+
+    public var description: String {
+        switch self {
+        case .none: // There should be no location notifying activity.
+            return "None"
+        case .currentLocation:
+            return "Current Location"
+        case .locationUpdates:
+            return "Location Updates"
+        case .authorization: // Used only to invoke Current Location Diolog on macOS.
+            return "Authorization"
+        }
+    }
+
+    case none
+    case currentLocation
+    case locationUpdates
+    case authorization
+}
+
+public struct PerseusLocation: CustomStringConvertible, Equatable {
+
+    public var description: String {
+        let lat = (latitude * 10000.0).rounded(latitude > 0 ? .down : .up) / 10000.0
+        let lon = (longitude * 10000.0).rounded(longitude > 0 ? .down : .up) / 10000.0
+
+        let location100 = "[\(latitudeHundredths), \(longitudeHundredths)]"
+        let location10000 = "latitude = \(lat), longitude = \(lon)"
+
+        return location100 + ": " + location10000
+    }
+
+    // MARK: - Location Data, As Is
+
+    let location: CLLocation
+
+    var latitude: Double { return location.coordinate.latitude }
+    var longitude: Double { return location.coordinate.longitude }
+
+    // MARK: - Location Data, Specifics
+
+    // Cutting off to hundredths (2 decimal places).
+    var latitudeHundredths: Double {
+        return (latitude * 100.0).rounded(latitude > 0 ? .down : .up) / 100.0
+    }
+
+    // Cutting off to hundredths (2 decimal places).
+    var longitudeHundredths: Double {
+        return (longitude * 100.0).rounded(longitude > 0 ? .down : .up) / 100.0
+    }
+
+    // MARK: - Initializer
+
+    public init(_ location: CLLocation) {
+        self.location = location
+    }
+
+    // MARK: - Equatable
+
+    public static func == (lhs: PerseusLocation, rhs: PerseusLocation) -> Bool {
+        return lhs.location == rhs.location
+    }
+}
+
+extension CLLocation { public var perseus: PerseusLocation { return PerseusLocation(self) } }
 
 public enum LocationDealerPermit: CustomStringConvertible {
 
@@ -348,71 +428,6 @@ public enum LocationDealerPermit: CustomStringConvertible {
     // Either authorizedAlways or authorizedWhenInUse.
     case allowed
 }
-
-public enum LocationDealerOrder: CustomStringConvertible {
-
-    public var description: String {
-        switch self {
-        case .none: // There should be no location notifying activity.
-            return "None"
-        case .currentLocation:
-            return "Current Location"
-        case .locationUpdates:
-            return "Location Updates"
-        case .authorization: // Used only to invoke Current Location Diolog on macOS.
-            return "Authorization"
-        }
-    }
-
-    case none
-    case currentLocation
-    case locationUpdates
-    case authorization
-}
-
-public struct PerseusLocation: CustomStringConvertible, Equatable {
-
-    // MARK: - Data Preview
-
-    public var description: String {
-        let lat = (latitude * 10000.0).rounded(latitude > 0 ? .down : .up) / 10000.0
-        let lon = (longitude * 10000.0).rounded(longitude > 0 ? .down : .up) / 10000.0
-
-        let location100 = "[\(latitudeHundredths), \(longitudeHundredths)]"
-        let location10000 = "latitude = \(lat), longitude = \(lon)"
-
-        return location100 + ": " + location10000
-    }
-
-    // MARK: - Location Data, As Is
-
-    let location: CLLocation
-
-    var latitude: Double { return location.coordinate.latitude }
-    var longitude: Double { return location.coordinate.longitude }
-
-    // MARK: - Location Data, Specifics
-
-    // Cutting off to hundredths (2 decimal places).
-    var latitudeHundredths: Double {
-        return (latitude * 100.0).rounded(latitude > 0 ? .down : .up) / 100.0
-    }
-
-    // Cutting off to hundredths (2 decimal places).
-    var longitudeHundredths: Double {
-        return (longitude * 100.0).rounded(longitude > 0 ? .down : .up) / 100.0
-    }
-
-    public init(_ location: CLLocation) {
-        self.location = location
-    }
-
-    public static func == (lhs: PerseusLocation, rhs: PerseusLocation) -> Bool {
-        return lhs.location == rhs.location
-    }
-}
-
-extension CLLocation { public var perseus: PerseusLocation { return PerseusLocation(self) } }
 
 public func getPermit(serviceEnabled: Bool,
                       status: CLAuthorizationStatus) -> LocationDealerPermit {

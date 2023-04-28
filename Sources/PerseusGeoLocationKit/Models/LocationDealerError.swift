@@ -1,5 +1,5 @@
 //
-//  Result.swift
+//  LocationDealerError.swift
 //  PerseusGeoLocationKit
 //
 //  Created by Mikhail Zhigulin in 7531.
@@ -12,7 +12,9 @@
 
 import Foundation
 
-public enum Result<Value, Error: Swift.Error> {
-    case success(Value)
-    case failure(Error)
+public enum LocationDealerError: Error, Equatable {
+
+    case needsPermission(LocationDealerPermit)
+    case receivedEmptyLocationData
+    case failedRequest(String)
 }
