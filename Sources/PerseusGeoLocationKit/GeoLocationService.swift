@@ -27,8 +27,8 @@ public class PerseusLocationDealer: NSObject {
         }
     }
 #else
-    private var locationManager: CLLocationManager
-    private var notificationCenter: NotificationCenter
+    public let locationManager: CLLocationManager
+    public let notificationCenter: NotificationCenter
 #endif
 
     // MARK: - Calculated Properties

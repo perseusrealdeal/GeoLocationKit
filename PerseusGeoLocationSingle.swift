@@ -78,8 +78,8 @@ public class PerseusLocationDealer: NSObject {
 
     // MARK: - Difficult Dependencies
 
-    private var locationManager: CLLocationManager
-    private var notificationCenter: NotificationCenter
+    public let locationManager: CLLocationManager
+    public let notificationCenter: NotificationCenter
 
     // MARK: - Calculated Properties
 
