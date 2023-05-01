@@ -49,11 +49,11 @@ extension PerseusLocationDealerTests {
         XCTAssertTrue(sut.order == .none)
 
         mockLM.verify_stopUpdatingLocation_CalledTwice()
-#if os(iOS)
+        #if os(iOS)
         mockLM.verify_requestLocation_CalledOnce()
-#elseif os(macOS)
+        #elseif os(macOS)
         mockLM.verify_startUpdatingLocation_CalledOnce()
-#endif
+        #endif
 
         mockNC.verify_post_locationDealerNotification_withError(
             name: .locationDealerErrorNotification, object: result)
@@ -81,11 +81,11 @@ extension PerseusLocationDealerTests {
         // assert
 
         mockLM.verify_stopUpdatingLocation_CalledTwice()
-#if os(iOS)
+        #if os(iOS)
         mockLM.verify_requestLocation_CalledOnce()
-#elseif os(macOS)
+        #elseif os(macOS)
         mockLM.verify_startUpdatingLocation_CalledOnce()
-#endif
+        #endif
 
         mockNC.verify_post_locationDealerNotification_withError(
             name: .locationDealerCurrentNotification, object: result)
@@ -116,11 +116,11 @@ extension PerseusLocationDealerTests {
         // assert
 
         mockLM.verify_stopUpdatingLocation_CalledTwice()
-#if os(iOS)
+        #if os(iOS)
         mockLM.verify_requestLocation_CalledOnce()
-#elseif os(macOS)
+        #elseif os(macOS)
         mockLM.verify_startUpdatingLocation_CalledOnce()
-#endif
+        #endif
 
         mockNC.verify_post_locationDealerNotification_withReceivedLocation(
             name: .locationDealerCurrentNotification, object: result)

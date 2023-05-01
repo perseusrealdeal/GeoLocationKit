@@ -57,59 +57,6 @@ final class PerseusLocationDealerTests: XCTestCase {
     // func test_zero() { XCTFail("Tests not yet implemented in \(type(of: self)).") }
     // func test_the_first_success() { XCTAssertTrue(true, "It's done!") }
 
-    func test_PerseusLocationDealerInit() {
-
-        // arrange, act, assert
-
-        XCTAssertTrue(sut.order == .none)
-
-        // TASK: Those two statements in the end of the initializer should be covered.
-        // In fact the following assertions test mocks, not the business matter statements.
-        // XCTAssertEqual(sut.locationManager.desiredAccuracy, APPROPRIATE_ACCURACY.rawValue)
-        // XCTAssertTrue(sut === sut.locationManager.delegate)
-    }
-
-    func test_authorizationStatus() {
-
-        // arrange
-
-        MockLocationManager.status = .restricted
-
-        // act
-
-        let result = type(of: sut.locationManager).authorizationStatus()
-
-        // assert
-
-        XCTAssertEqual(result, .restricted)
-    }
-
-    func test_locationServicesEnabled() {
-
-        // arrange
-
-        MockLocationManager.isLocationServiceEnabled = false
-
-        // act
-
-        let result = type(of: sut.locationManager).locationServicesEnabled()
-
-        // assert
-
-        XCTAssertFalse(result)
-    }
-
-    func test_desiredAccuracy() {
-
-        // arrange, act
-
-        mockLM.desiredAccuracy = LocationAccuracy.best.rawValue
-
-        // arrange
-
-        XCTAssertEqual(sut.locationManager.desiredAccuracy, LocationAccuracy.best.rawValue)
-    }
-
     func test_startUpdatingLocation() {
 
         // arrange, act

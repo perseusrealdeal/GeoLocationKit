@@ -83,7 +83,7 @@ class MockLocationManager: LocationManagerProtocol {
 
     // MARK: - iOS only part
 
-#if os(iOS)
+    #if os(iOS)
 
     var requestWhenInUseAuthorizationCallCount: Int = 0
     var requestAlwaysAuthorizationCallCount: Int = 0
@@ -135,5 +135,5 @@ class MockLocationManager: LocationManagerProtocol {
         }
     }
 
-#endif
+    #endif
 }

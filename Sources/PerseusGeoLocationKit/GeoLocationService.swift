@@ -16,7 +16,7 @@ public class PerseusLocationDealer: NSObject {
 
     // MARK: - Difficult Dependencies
 
-#if DEBUG
+    #if DEBUG
     var locationManager: LocationManagerProtocol!
     var notificationCenter: NotificationCenterProtocol!
 
@@ -26,10 +26,10 @@ public class PerseusLocationDealer: NSObject {
             locationManager.desiredAccuracy = APPROPRIATE_ACCURACY.rawValue
         }
     }
-#else
+    #else
     public let locationManager: CLLocationManager
     public let notificationCenter: NotificationCenter
-#endif
+    #endif
 
     // MARK: - Calculated Properties
 
@@ -54,14 +54,16 @@ public class PerseusLocationDealer: NSObject {
 
         log.level = .info
         // log.turned = .off
+
         log.message("[\(PerseusLocationDealer.self)].\(#function)")
+
+        // These statements are out of unit tests actually... refactoring maybe later.
 
         locationManager = CLLocationManager()
         notificationCenter = NotificationCenter.default
 
         super.init()
 
-        // These two statements are out of unit tests actually... refactoring maybe later.
         locationManager.desiredAccuracy = APPROPRIATE_ACCURACY.rawValue
         locationManager.delegate = self
     }
@@ -84,11 +86,11 @@ public class PerseusLocationDealer: NSObject {
         order = .currentLocation
         locationManager.desiredAccuracy = accuracy.rawValue
 
-#if os(iOS)
+        #if os(iOS)
         locationManager.requestLocation()
-#elseif os(macOS)
+        #elseif os(macOS)
         locationManager.startUpdatingLocation()
-#endif
+        #endif
     }
 
     public func askForAuthorization(
@@ -104,19 +106,18 @@ public class PerseusLocationDealer: NSObject {
             return
         }
 
-#if os(iOS)
+        #if os(iOS)
         switch authorization {
         case .whenInUse:
             locationManager.requestWhenInUseAuthorization()
         case .always:
             locationManager.requestAlwaysAuthorization()
         }
-
         order = .none
-#elseif os(macOS)
+        #elseif os(macOS)
         order = .authorization
         locationManager.startUpdatingLocation()
-#endif
+        #endif
     }
 
     public func askToStartUpdatingLocation(accuracy: LocationAccuracy = APPROPRIATE_ACCURACY) {

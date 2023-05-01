@@ -38,7 +38,9 @@ extension PerseusLocationDealerTests {
         XCTAssertTrue(actionIfdeterminedInvoked)
         XCTAssertTrue(permitReturned == .deniedForTheApp)
     }
-#if os(iOS)
+
+    #if os(iOS)
+
     func test_askForAuthorization_invokes_requestWhenInUseAuthorization() {
 
         // arrange
@@ -74,7 +76,9 @@ extension PerseusLocationDealerTests {
 
         XCTAssertTrue(sut.order == .none)
     }
-#elseif os(macOS)
+
+    #elseif os(macOS)
+
     func test_askForAuthorization_called_startUpdatingLocation() {
 
         // arrange
@@ -119,5 +123,6 @@ extension PerseusLocationDealerTests {
         mockNC.verify_no_post_locationDealerNotification_withError()
         XCTAssertTrue(sut.order == .authorization)
     }
-#endif
+
+    #endif
 }

@@ -34,12 +34,15 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
         // FIXED: Restrict error notifiying in case when a user tries to give a permission
         // so that there is no difference in Current Location Diolog behavior in either early
         // or new macOS releases.
-#if os(macOS)
+
+        #if os(macOS)
         if order == .authorization, locationPermit == .notDetermined { return }
-#endif
+        #endif
+
         order = .none
 
         let result: LocationDealerError = .failedRequest(error.localizedDescription)
+
         notificationCenter.post(name: .locationDealerErrorNotification, object: result)
     }
 
