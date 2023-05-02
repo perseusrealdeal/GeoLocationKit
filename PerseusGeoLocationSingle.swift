@@ -334,47 +334,38 @@ public enum LocationDealerOrder: CustomStringConvertible {
     case authorization
 }
 
-public struct PerseusLocation: CustomStringConvertible, Equatable {
+extension CLLocation { public var perseus: PerseusLocation { return PerseusLocation(self) } }
 
-    private let two = 100.0
-    private let four = 10000.0
+extension Double {
+
+    public enum DecimalPlaces: Double {
+        case two  = 100.0
+        case four = 10000.0
+    }
+
+    public func cut(_ off: DecimalPlaces) -> Double {
+        return (self * off.rawValue).rounded(self > 0 ? .down : .up) / off.rawValue
+    }
+}
+
+public struct PerseusLocation: CustomStringConvertible, Equatable {
 
     public var description: String {
 
-        let locationTwo = "[\(latitudeTwo), \(longitudeTwo)]"
-        let locationFour = "latitude = \(latitudeFour), longitude = \(longitudeFour)"
+        let locationTwo = "[\(latitude.cut(.two)), \(longitude.cut(.two))]"
 
-        return locationTwo + ": " + locationFour
+        let latitudeFour = "latitude = \(latitude.cut(.four))"
+        let longitudeFour = "longitude = \(longitude.cut(.four))"
+
+        return locationTwo + ": " + latitudeFour + ", " + longitudeFour
     }
 
     // MARK: - Location Data, As Is
 
-    let location: CLLocation
+    public let location: CLLocation
 
-    var latitude: Double { return location.coordinate.latitude }
-    var longitude: Double { return location.coordinate.longitude }
-
-    // MARK: - Location Data, Specifics
-
-    // Cutting off to hundredths (2 decimal places).
-    var latitudeTwo: Double {
-        return (latitude * two).rounded(latitude > 0 ? .down : .up) / two
-    }
-
-    // Cutting off to hundredths (2 decimal places).
-    var longitudeTwo: Double {
-        return (longitude * two).rounded(longitude > 0 ? .down : .up) / two
-    }
-
-    // Cutting off to hundredths (4 decimal places).
-    var latitudeFour: Double {
-        return (latitude * four).rounded(latitude > 0 ? .down : .up) / four
-    }
-
-    // Cutting off to hundredths (4 decimal places).
-    var longitudeFour: Double {
-        return (longitude * four).rounded(longitude > 0 ? .down : .up) / four
-    }
+    public var latitude: Double { return location.coordinate.latitude }
+    public var longitude: Double { return location.coordinate.longitude }
 
     // MARK: - Initializer
 
@@ -388,8 +379,6 @@ public struct PerseusLocation: CustomStringConvertible, Equatable {
         return lhs.location == rhs.location
     }
 }
-
-extension CLLocation { public var perseus: PerseusLocation { return PerseusLocation(self) } }
 
 public enum LocationDealerPermit: CustomStringConvertible {
 
