@@ -22,7 +22,7 @@
 [![Weather macOS](https://img.shields.io/badge/Weather-macOS-informational.svg)](https://github.com/perseusrealdeal/macOS.Weather)
 [![Weather iOS](https://img.shields.io/badge/Weather-iOS-informational.svg)](https://github.com/perseusrealdeal/iOS.Weather)
 
-# In Brief
+## In Brief
 
 > Collection of tools for easy dealing with native geo location services.
 
