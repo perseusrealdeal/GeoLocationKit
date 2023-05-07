@@ -27,9 +27,10 @@
 > Collection of tools for easy dealing with native geo location services.
 
 `Features:`
-- Location data delivery via Notification center by subscription.
-- Separate location data delivery for current location and location updates as well.
-- Location services permit calculation.
+- Location data delivery via Notification center by [subscription](/Sources/PerseusGeoLocationKit/Models/Commons.swift).
+- Separate location data delivery for current location once requested and location updates as well.
+- Location services [permit calculation](/Sources/PerseusGeoLocationKit/Models/LocationDealerPermit.swift).
+- Singleton class [PerseusLocationDealer](/Sources/PerseusGeoLocationKit/GeoLocationService.swift) for making location services API requests.
 
 # Requirements
 
