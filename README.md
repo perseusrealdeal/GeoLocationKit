@@ -27,8 +27,9 @@
 > Collection of tools for easy dealing with native geo location services.
 
 `Features:`
-- Feature 1
-- Feature 2
+- Location data delivery via Notification center by subscription.
+- Separate location data delivery for current location and location updates as well.
+- Location services permit calculation.
 
 # Requirements
 
