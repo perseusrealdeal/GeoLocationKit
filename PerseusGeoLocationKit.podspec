@@ -2,8 +2,8 @@ Pod::Spec.new do |p|
 
 p.name           = "PerseusGeoLocationKit"
 p.version        = "0.1.0"
-p.summary        = "Summary."
-p.description    = "Description."
+p.summary        = "Geo location services client component for macOS/iOS."
+p.description    = "Collection of macOS/iOS tools for dealing with native geo location services."
 p.homepage       = "https://github.com/perseusrealdeal/PerseusGeoLocationKit"
 
 p.license        = { :type => "MIT", :file => "LICENSE" }
