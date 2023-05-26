@@ -22,9 +22,7 @@ public class PerseusLocationDealer: NSObject {
 
     internal func resetDefaults() { // Used for keeping test room cleaned only.
         order = .none
-        if locationManager != nil {
-            locationManager.desiredAccuracy = APPROPRIATE_ACCURACY.rawValue
-        }
+        locationManager?.desiredAccuracy = APPROPRIATE_ACCURACY.rawValue
     }
     #else
     public let locationManager: CLLocationManager
