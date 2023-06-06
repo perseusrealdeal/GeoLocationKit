@@ -1,6 +1,6 @@
 # PerseusGeoLocationKit — Xcode 10.1+
 
-> This is the component for macOS and iOS apps.
+> PerseusGeoLocationKit released as the component for both macOS and iOS apps as well.
 
 [![Actions Status](https://github.com/perseusrealdeal/PerseusGeoLocationKit/actions/workflows/main.yml/badge.svg)](https://github.com/perseusrealdeal/PerseusGeoLocationKit/actions)
 ![Version](https://img.shields.io/badge/Version-0.1.0-green.svg)
@@ -17,20 +17,15 @@
 [![CocoaPods manager](https://img.shields.io/badge/CocoaPods-compatible-4BC51D.svg)](https://cocoapods.org)
 [![Swift Package Manager compatible](https://img.shields.io/badge/Swift%20Package%20Manager-compatible-4BC51D.svg)](https://github.com/apple/swift-package-manager)
 
-## In use
-
-[![Weather macOS](https://img.shields.io/badge/Weather-macOS-informational.svg)](https://github.com/perseusrealdeal/macOS.Weather)
-[![Weather iOS](https://img.shields.io/badge/Weather-iOS-informational.svg)](https://github.com/perseusrealdeal/iOS.Weather)
-
 ## In Brief
 
 > Collection of tools for easy dealing with native geo location services.
 
 `Features:`
 - Location data delivery via Notification center by [subscription](/Sources/PerseusGeoLocationKit/Models/Commons.swift).
-- Separate location data delivery for current location once requested and location updates as well.
-- Location services [permit calculation](/Sources/PerseusGeoLocationKit/Models/LocationDealerPermit.swift).
-- Singleton class [PerseusLocationDealer](/Sources/PerseusGeoLocationKit/GeoLocationService.swift) for making location services API requests.
+- Particular location data delivery for current location and location updates as well.
+- [Custom permit calculation](/Sources/PerseusGeoLocationKit/Models/LocationDealerPermit.swift) to take control of Location services access.
+- [PerseusLocationDealer](/Sources/PerseusGeoLocationKit/GeoLocationService.swift) as Singleton.
 
 # Requirements
 
@@ -68,10 +63,11 @@ To do so create a reference to the PerseusLocationDealer instance as a property 
 ```swift
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-    let locationDealer = PerseusLocationDealer.shared
+    let locationDealer = PerseusLocationDealer.shared // Once only is enough.
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-    
+
+    ...
 ```
 
 `Step 2:` Create a notification observer then ask for a value
@@ -110,7 +106,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 ```
 
-`Step 3:` Ask for value, authorization and current location
+`Step 3:` Ask for value, authorization and then current location
 
 ```swift
 @IBAction func buttonLocationPermissionTapped(_ sender: NSButton) {
@@ -178,7 +174,7 @@ Copyright © 7531 Mikhail Zhigulin of Novosibirsk.
 - The year starts from the creation of the world according to a Slavic calendar
 - September, the 1st of Slavic year
 
-Have a look at [LICENSE](/LICENSE) for details.
+[LICENSE](/LICENSE) for details.
 
 # Author
 
