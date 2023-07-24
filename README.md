@@ -23,7 +23,6 @@
 
 `Features:`
 - Location data delivery via Notification center by [subscription](/Sources/PerseusGeoLocationKit/Models/Commons.swift).
-- Particular location data delivery for current location and location updates as well.
 - [Custom permit calculation](/Sources/PerseusGeoLocationKit/Models/LocationDealerPermit.swift) to take control of Location services access.
 - [PerseusLocationDealer](/Sources/PerseusGeoLocationKit/GeoLocationService.swift) as Singleton.
 
