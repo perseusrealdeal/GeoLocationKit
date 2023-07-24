@@ -44,6 +44,52 @@
 - [SwiftLint Shell Script Runner](/SucceedsPostAction.sh)
 - [SwiftLint](https://github.com/realm/SwiftLint) / [0.31.0: Busy Laundromat](https://github.com/realm/SwiftLint/releases/tag/0.31.0) for macOS High Sierra
 
+# Installation
+
+> Using "Exact" with the Version field is strongly recommended.
+
+## Standalone 
+
+Make a copy of the file [`PerseusGeoLocationSingle.swift`](/PerseusGeoLocationSingle.swift) then put it into a place required of a host project.
+
+## Carthage
+
+Cartfile should contain:
+
+```carthage
+github "perseusrealdeal/PerseusGeoLocationKit" == 0.1.0
+```
+
+Some Carthage usage tips placed [here](https://gist.github.com/perseusrealdeal/8951b10f4330325df6347aaaa79d3cf2).
+
+## CocoaPods
+
+Podfile should contain:
+
+```ruby
+target "ProjectTarget" do
+  use_frameworks!
+  pod 'PerseusGeoLocationKit', '0.1.0'
+end
+```
+
+## Swift Package Manager
+
+- As a package dependency so Package.swift should contain the following statements:
+
+```swift
+dependencies: [
+        .package(url: "https://github.com/perseusrealdeal/PerseusGeoLocationKit.git",
+            .exact("0.1.0"))
+    ],
+```
+
+- As an Xcode project dependency: 
+
+`Project in the Navigator > Package Dependencies > Add Package Dependency`
+
+> Using "Exact" with the Version field is strongly recommended.
+
 # Usage
 
 `Step 1:` Get ready for location services
@@ -120,50 +166,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     try? PerseusLocationDealer.shared.askForCurrentLocation()
 }
 ```
-
-# Installation
-
-## Standalone 
-
-Make a copy of the file [`PerseusGeoLocationSingle.swift`](/PerseusGeoLocationSingle.swift) then put it into a place required of a host project.
-
-## Carthage
-
-Cartfile should contain:
-
-```carthage
-github "perseusrealdeal/PerseusGeoLocationKit" == 0.1.0
-```
-
-Some Carthage usage tips placed [here](https://gist.github.com/perseusrealdeal/8951b10f4330325df6347aaaa79d3cf2).
-
-## CocoaPods
-
-Podfile should contain:
-
-```ruby
-target "ProjectTarget" do
-  use_frameworks!
-  pod 'PerseusGeoLocationKit', '0.1.0'
-end
-```
-
-## Swift Package Manager
-
-- As a package dependency so Package.swift should contain the following statements:
-
-```swift
-dependencies: [
-        .package(url: "https://github.com/perseusrealdeal/PerseusGeoLocationKit.git",
-            .exact("0.1.0"))
-    ],
-```
-
-- As an Xcode project dependency: 
-
-`Project in the Navigator > Package Dependencies > Add Package Dependency`
-
-Using "Exact" with the Version field is strongly recommended.
 
 # License MIT
 
