@@ -50,11 +50,10 @@ public class PerseusLocationDealer: NSObject {
     public static let shared: PerseusLocationDealer = { return PerseusLocationDealer() }()
 
     private override init() {
-
-        log.level = .info
+        // log.level = .info
         // log.turned = .off
 
-        log.message("[\(PerseusLocationDealer.self)].\(#function)")
+        log.message("[\(PerseusLocationDealer.self)].\(#function)", .info)
 
         // These statements are out of unit tests actually... refactoring maybe later.
 
@@ -69,11 +68,10 @@ public class PerseusLocationDealer: NSObject {
 
     // MARK: - Contract
 
-    public func askForCurrentLocation(
-        with accuracy: LocationAccuracy = APPROPRIATE_ACCURACY) throws {
-
+    public func askForCurrentLocation(with accuracy: LocationAccuracy = APPROPRIATE_ACCURACY)
+    throws {
         let permit = locationPermitHidden
-        log.message("[\(type(of: self))].\(#function)", .info)
+        log.message("[\(type(of: self))].\(#function)")
 
         guard permit == .allowed else {
             log.message("[\(type(of: self))].\(#function) — permit .\(permit)", .error)
@@ -95,8 +93,7 @@ public class PerseusLocationDealer: NSObject {
     public func askForAuthorization(
         _ authorization: LocationAuthorization = .always,
         _ actionIfdetermined: ((_ permit: LocationDealerPermit) -> Void)? = nil) {
-
-        log.message("[\(type(of: self))].\(#function)", .info)
+        log.message("[\(type(of: self))].\(#function)")
 
         let permit = locationPermitHidden
         guard permit == .notDetermined else {
@@ -120,21 +117,17 @@ public class PerseusLocationDealer: NSObject {
     }
 
     public func askToStartUpdatingLocation(accuracy: LocationAccuracy = APPROPRIATE_ACCURACY) {
-
-        log.message("[\(type(of: self))].\(#function) with accuracy:\(accuracy)", .info)
-
+        log.message("[\(type(of: self))].\(#function)")
         order = .locationUpdates
+
         locationManager.desiredAccuracy = accuracy.rawValue
         locationManager.startUpdatingLocation()
-
-        let ac = locationManager.desiredAccuracy
-        log.message("[\(type(of: self))].\(#function) with accuracy:\(ac)", .info)
     }
 
     public func askToStopUpdatingLocation() {
+        log.message("[\(type(of: self))].\(#function)")
 
-        log.message("[\(type(of: self))].\(#function)", .info)
-
-        locationManager.stopUpdatingLocation(); order = .none
+        locationManager.stopUpdatingLocation()
+        order = .none
     }
 }

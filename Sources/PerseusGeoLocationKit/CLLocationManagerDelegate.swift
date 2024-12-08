@@ -17,16 +17,14 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
 
     public func locationManager(_ manager: CLLocationManager,
                                 didChangeAuthorization status: CLAuthorizationStatus) {
-
-        log.message("[\(type(of: self))].\(#function) status .\(status)", .info)
+        log.message("[\(type(of: self))].\(#function) status .\(status)")
 
         notificationCenter.post(name: .locationDealerStatusChangedNotification, object: status)
     }
 
     public func locationManager(_ manager: CLLocationManager,
                                 didFailWithError error: Error) {
-
-        log.message("[\(type(of: self))].\(#function)", .info)
+        log.message("[\(type(of: self))].\(#function) \(error.localizedDescription)", .error)
 
         locationManager.stopUpdatingLocation()
 
@@ -49,24 +47,25 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
 
     public func locationManager(_ manager: CLLocationManager,
                                 didUpdateLocations locations: [CLLocation]) {
-
-        log.message("[\(type(of: self))].\(#function)", .info)
+        log.message("[\(type(of: self))].\(#function)")
 
         if order == .none {
-            log.message("[\(type(of: self))].\(#function) — Locations for no order!", .error)
+            log.message("[\(type(of: self))].\(#function) — Locations for no order!", .notice)
             locationManager.stopUpdatingLocation()
             return
         }
 
         if order == .authorization {
-            log.message("[\(type(of: self))].\(#function) — Authorization order!")
-            locationManager.stopUpdatingLocation(); order = .none
+            log.message("[\(type(of: self))].\(#function) — Authorization order!", .notice)
+            locationManager.stopUpdatingLocation()
+            order = .none
             return
         }
 
         if order == .currentLocation {
 
-            locationManager.stopUpdatingLocation(); order = .none
+            locationManager.stopUpdatingLocation()
+            order = .none
 
             let result: Result<PerseusLocation, LocationDealerError> = locations.first == nil ?
                 .failure(.receivedEmptyLocationData) :
@@ -77,8 +76,9 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
         } else if order == .locationUpdates {
 
             if locations.isEmpty {
-                log.message("[\(type(of: self))].\(#function) — No locations!", .error)
-                locationManager.stopUpdatingLocation(); order = .none
+                log.message("[\(type(of: self))].\(#function) — No locations!", .notice)
+                locationManager.stopUpdatingLocation()
+                order = .none
             }
 
             let result: Result<[PerseusLocation], LocationDealerError> = locations.isEmpty ?
