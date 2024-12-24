@@ -18,15 +18,15 @@ public enum LocationDealerPermit: CustomStringConvertible {
     public var description: String {
         switch self {
         case .notDetermined:
-            return "notDetermined"
+            return "not determined"
         case .deniedForAllAndRestricted:
-            return "deniedForAllAndRestricted"
+            return "denied for all and restricted"
         case .restricted:
             return "restricted"
         case .deniedForAllApps:
-            return "deniedForAllApps"
+            return "denied for all apps"
         case .deniedForTheApp:
-            return "deniedForTheApp"
+            return "denied for the app"
         case .allowed:
             return "allowed"
         }
