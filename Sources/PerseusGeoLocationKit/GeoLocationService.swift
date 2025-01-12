@@ -68,28 +68,6 @@ public class PerseusLocationDealer: NSObject {
 
     // MARK: - Contract
 
-    public func askForCurrentLocation(with accuracy: LocationAccuracy = APPROPRIATE_ACCURACY)
-    throws {
-        let permit = locationPermitHidden
-        log.message("[\(type(of: self))].\(#function)")
-
-        guard permit == .allowed else {
-            log.message("[\(type(of: self))].\(#function) — permit .\(permit)", .error)
-            throw LocationDealerError.needsPermission(permit)
-        }
-
-        locationManager.stopUpdatingLocation()
-
-        order = .currentLocation
-        locationManager.desiredAccuracy = accuracy.rawValue
-
-        #if os(iOS)
-        locationManager.requestLocation()
-        #elseif os(macOS)
-        locationManager.startUpdatingLocation()
-        #endif
-    }
-
     public func askForAuthorization(
         _ authorization: LocationAuthorization = .always,
         _ actionIfdetermined: ((_ permit: LocationDealerPermit) -> Void)? = nil) {
@@ -112,6 +90,28 @@ public class PerseusLocationDealer: NSObject {
         order = .none
         #elseif os(macOS)
         order = .authorization
+        locationManager.startUpdatingLocation()
+        #endif
+    }
+
+    public func askForCurrentLocation(with accuracy: LocationAccuracy = APPROPRIATE_ACCURACY)
+    throws {
+        let permit = locationPermitHidden
+        log.message("[\(type(of: self))].\(#function)")
+
+        guard permit == .allowed else {
+            log.message("[\(type(of: self))].\(#function) — permit .\(permit)", .error)
+            throw LocationDealerError.needsPermission(permit)
+        }
+
+        locationManager.stopUpdatingLocation()
+
+        order = .currentLocation
+        locationManager.desiredAccuracy = accuracy.rawValue
+
+        #if os(iOS)
+        locationManager.requestLocation()
+        #elseif os(macOS)
         locationManager.startUpdatingLocation()
         #endif
     }
