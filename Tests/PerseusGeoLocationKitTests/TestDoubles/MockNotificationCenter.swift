@@ -60,8 +60,8 @@ class MockNotificationCenter: NotificationCenterProtocol {
         XCTAssertEqual(postArgsName.first, aName, "name", file: file, line: line)
         XCTAssertNotNil(anObject, file: file, line: line)
 
-        let result = postArgsObject.first as? LocationDealerError
-        let theObject = anObject as? LocationDealerError
+        let result = postArgsObject.first as? LocationError
+        let theObject = anObject as? LocationError
 
         XCTAssertTrue(result == theObject, "object", file: file, line: line)
     }
@@ -76,10 +76,10 @@ class MockNotificationCenter: NotificationCenterProtocol {
         XCTAssertEqual(postArgsName.first, aName, "name", file: file, line: line)
         XCTAssertNotNil(anObject, file: file, line: line)
 
-        let result = postArgsObject.first as? Result<[PerseusLocation], LocationDealerError>
-        let theObject = anObject as? Result<[PerseusLocation], LocationDealerError>
+        let result = postArgsObject.first as? Result<[PerseusLocation], LocationError>
+        let theObject = anObject as? Result<[PerseusLocation], LocationError>
 
-        var errorArgs: LocationDealerError?
+        var errorArgs: LocationError?
         if let result = result {
             switch result {
             case .success(_):
@@ -89,7 +89,7 @@ class MockNotificationCenter: NotificationCenterProtocol {
             }
         }
 
-        var object: LocationDealerError?
+        var object: LocationError?
         if let theObject = theObject {
             switch theObject {
             case .success(_):
@@ -115,8 +115,8 @@ class MockNotificationCenter: NotificationCenterProtocol {
         XCTAssertEqual(postArgsName.first, aName, "name", file: file, line: line)
         XCTAssertNotNil(anObject, file: file, line: line)
 
-        let result = postArgsObject.first as? Result<PerseusLocation, LocationDealerError>
-        let theObject = anObject as? Result<PerseusLocation, LocationDealerError>
+        let result = postArgsObject.first as? Result<PerseusLocation, LocationError>
+        let theObject = anObject as? Result<PerseusLocation, LocationError>
 
         var locationArgs: PerseusLocation?
         if let result = result {
@@ -157,8 +157,8 @@ class MockNotificationCenter: NotificationCenterProtocol {
         XCTAssertNotNil(anObject, file: file, line: line)
 
         let result =
-            postArgsObject.first as? Result<[PerseusLocation], LocationDealerError>
-        let theObject = anObject as? Result<[PerseusLocation], LocationDealerError>
+            postArgsObject.first as? Result<[PerseusLocation], LocationError>
+        let theObject = anObject as? Result<[PerseusLocation], LocationError>
 
         var locationArgs: [PerseusLocation]?
         if let result = result {
@@ -240,3 +240,5 @@ private func verifyMethodCalledOnce(methodName: String,
 
     return true
 }
+
+// swiftlint:enable file_length empty_enum_arguments

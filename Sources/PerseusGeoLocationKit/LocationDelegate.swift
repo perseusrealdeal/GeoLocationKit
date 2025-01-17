@@ -1,5 +1,5 @@
 //
-//  CLLocationManagerDelegate.swift
+//  LocationDelegate.swift
 //  PerseusGeoLocationKit
 //
 //  Created by Mikhail Zhigulin in 7531.
@@ -13,7 +13,7 @@
 
 import CoreLocation
 
-extension PerseusLocationDealer: CLLocationManagerDelegate {
+extension LocationAgent: CLLocationManagerDelegate {
 
     public func locationManager(_ manager: CLLocationManager,
                                 didChangeAuthorization status: CLAuthorizationStatus) {
@@ -35,12 +35,12 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
         // or new macOS releases.
 
         #if os(macOS)
-        if order == .authorization, locationPermit == .notDetermined { return }
+        if order == .permission, locationPermit == .notDetermined { return }
         #endif
 
         order = .none
 
-        let result: LocationDealerError = .failedRequest(error.localizedDescription)
+        let result: LocationError = .failedRequest(error.localizedDescription)
 
         notificationCenter.post(name: .locationDealerErrorNotification, object: result)
     }
@@ -55,7 +55,7 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
             return
         }
 
-        if order == .authorization {
+        if order == .permission {
             log.message("[\(type(of: self))].\(#function) — Authorization order!", .notice)
             locationManager.stopUpdatingLocation()
             order = .none
@@ -67,7 +67,7 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
             locationManager.stopUpdatingLocation()
             order = .none
 
-            let result: Result<PerseusLocation, LocationDealerError> = locations.first == nil ?
+            let result: Result<PerseusLocation, LocationError> = locations.first == nil ?
                 .failure(.receivedEmptyLocationData) :
                 .success(locations.first!.perseus)
 
@@ -81,7 +81,7 @@ extension PerseusLocationDealer: CLLocationManagerDelegate {
                 order = .none
             }
 
-            let result: Result<[PerseusLocation], LocationDealerError> = locations.isEmpty ?
+            let result: Result<[PerseusLocation], LocationError> = locations.isEmpty ?
                 .failure(.receivedEmptyLocationData) : .success(locations.map { $0.perseus })
 
             notificationCenter.post(name: .locationDealerUpdatesNotification, object: result)

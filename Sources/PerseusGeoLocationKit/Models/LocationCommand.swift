@@ -1,5 +1,5 @@
 //
-//  LocationDealerOrder.swift
+//  LocationCommand.swift
 //  PerseusGeoLocationKit
 //
 //  Created by Mikhail Zhigulin in 7531.
@@ -12,7 +12,7 @@
 
 import Foundation
 
-public enum LocationDealerOrder: CustomStringConvertible {
+public enum LocationCommand: CustomStringConvertible {
 
     public var description: String {
         switch self {
@@ -22,13 +22,13 @@ public enum LocationDealerOrder: CustomStringConvertible {
             return "Current Location"
         case .locationUpdates:
             return "Location Updates"
-        case .authorization: // Used only to invoke Current Location Diolog on macOS.
-            return "Authorization"
+        case .permission: // Used only to invoke Current Location Diolog on macOS.
+            return "Permission"
         }
     }
 
     case none
     case currentLocation
     case locationUpdates
-    case authorization
+    case permission
 }

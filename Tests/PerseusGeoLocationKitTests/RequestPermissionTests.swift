@@ -1,5 +1,5 @@
 //
-//  AskForAuthorizationTests.swift
+//  RequestPermissionTests.swift
 //  PerseusGeoLocationKitTests
 //
 //  Created by Mikhail Zhigulin in 7531.
@@ -15,9 +15,9 @@ import XCTest
 import CoreLocation
 @testable import PerseusGeoLocationKit
 
-extension PerseusLocationDealerTests {
+extension LocationAgentTests {
 
-    func test_askForAuthorization_invokes_actionIfdetermined() {
+    func test_requestPermission_invokes_actionIfdetermined() {
 
         // arrange
 
@@ -25,11 +25,11 @@ extension PerseusLocationDealerTests {
         MockLocationManager.isLocationServiceEnabled = true
 
         var actionIfdeterminedInvoked = false
-        var permitReturned: LocationDealerPermit?
+        var permitReturned: LocationPermit?
 
         // act
 
-        sut.askForAuthorization(.always) { permit in
+        sut.requestPermission(.always) { permit in
             actionIfdeterminedInvoked = true
             permitReturned = permit
         }
@@ -42,7 +42,7 @@ extension PerseusLocationDealerTests {
 
     #if os(iOS)
 
-    func test_askForAuthorization_invokes_requestWhenInUseAuthorization() {
+    func test_requestPermission_invokes_requestWhenInUseAuthorization() {
 
         // arrange
 
@@ -51,7 +51,7 @@ extension PerseusLocationDealerTests {
 
         // act
 
-        sut.askForAuthorization(.whenInUse)
+        sut.requestPermission(.whenInUse)
 
         // assert
 
@@ -60,7 +60,7 @@ extension PerseusLocationDealerTests {
         XCTAssertTrue(sut.order == .none)
     }
 
-    func test_askForAuthorization_invokes_requestAlwaysAuthorization() {
+    func test_requestPermission_invokes_requestAlwaysAuthorization() {
 
         // arrange
 
@@ -69,7 +69,7 @@ extension PerseusLocationDealerTests {
 
         // act, assert
 
-        sut.askForAuthorization(.always)
+        sut.requestPermission(.always)
 
         // assert
 
@@ -80,7 +80,7 @@ extension PerseusLocationDealerTests {
 
     #elseif os(macOS)
 
-    func test_askForAuthorization_called_startUpdatingLocation() {
+    func test_requestPermission_called_startUpdatingLocation() {
 
         // arrange
 
@@ -89,30 +89,30 @@ extension PerseusLocationDealerTests {
 
         // act, assert
 
-        sut.askForAuthorization()
-        XCTAssertTrue(sut.order == .authorization)
+        sut.requestPermission()
+        XCTAssertTrue(sut.order == .permission)
 
         // assert
 
         mockLM.verify_startUpdatingLocation_CalledOnce()
 
-        XCTAssertTrue(sut.order == .authorization)
+        XCTAssertTrue(sut.order == .permission)
     }
 
-    func test_askForAuthorization_should_post_no_error_notification() {
+    func test_requestPermission_should_post_no_error_notification() {
 
         // arrange
 
         MockLocationManager.status = .notDetermined
         MockLocationManager.isLocationServiceEnabled = true
 
-        let error = LocationDealerError.failedRequest("")
+        let error = LocationError.failedRequest("")
 
         // act, assert
 
-        sut.askForAuthorization()
+        sut.requestPermission()
 
-        XCTAssertTrue(sut.order == .authorization)
+        XCTAssertTrue(sut.order == .permission)
         XCTAssertTrue(sut.locationPermit == .notDetermined)
         mockLM.verify_startUpdatingLocation_CalledOnce()
 
@@ -122,7 +122,7 @@ extension PerseusLocationDealerTests {
 
         mockLM.verify_stopUpdatingLocation_CalledOnce()
         mockNC.verify_no_post_locationDealerNotification_withError()
-        XCTAssertTrue(sut.order == .authorization)
+        XCTAssertTrue(sut.order == .permission)
     }
 
     #endif

@@ -14,7 +14,7 @@
 import XCTest
 @testable import PerseusGeoLocationKit
 
-extension PerseusLocationDealerTests {
+extension LocationAgentTests {
 
     func test_locationPermit_should_return_notDetermined() {
 

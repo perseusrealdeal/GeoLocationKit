@@ -1,5 +1,5 @@
 //
-//  AskForCurrentLocationTests.swift
+//  RequestCurrentLocationTests.swift
 //  PerseusGeoLocationKitTests
 //
 //  Created by Mikhail Zhigulin in 7531.
@@ -14,27 +14,27 @@
 import XCTest
 @testable import PerseusGeoLocationKit
 
-extension PerseusLocationDealerTests {
+extension LocationAgentTests {
 
-    func test_askForCurrentLocation_should_throw_exception_with_actual_permit() {
+    func test_requestCurrentLocation_should_throw_exception_with_actual_permit() {
 
         // arrange
 
         MockLocationManager.status = .denied
         MockLocationManager.isLocationServiceEnabled = true
 
-        let exeption = LocationDealerError.needsPermission(.deniedForTheApp)
+        let exeption = LocationError.needsPermission(.deniedForTheApp)
 
         // act, assert
 
         // simulate
-        XCTAssertThrowsError(try sut.askForCurrentLocation()) { (error) in
+        XCTAssertThrowsError(try sut.requestCurrentLocation()) { (error) in
             // catch exeption
-            XCTAssertEqual(error as? LocationDealerError, exeption)
+            XCTAssertEqual(error as? LocationError, exeption)
         }
     }
 
-    func test_askForCurrentLocation_should_request_location() {
+    func test_requestCurrentLocation_should_request_location() {
 
         // arrange
 
@@ -47,7 +47,7 @@ extension PerseusLocationDealerTests {
 
         // act
 
-        try? sut.askForCurrentLocation()
+        try? sut.requestCurrentLocation()
 
         // assert
 
@@ -63,7 +63,7 @@ extension PerseusLocationDealerTests {
         #endif
     }
 
-    func test_askForCurrentLocation_should_set_the_accuracy() {
+    func test_requestCurrentLocation_should_set_the_accuracy() {
 
         // arrange
 
@@ -76,7 +76,7 @@ extension PerseusLocationDealerTests {
 
         // act
 
-        try? sut.askForCurrentLocation(with: LocationAccuracy.best)
+        try? sut.requestCurrentLocation(with: LocationAccuracy.best)
 
         // assert
 

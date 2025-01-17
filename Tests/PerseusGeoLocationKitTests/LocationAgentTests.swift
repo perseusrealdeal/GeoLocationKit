@@ -1,5 +1,5 @@
 //
-//  GeoLocationServiceTests.swift
+//  LocationAgentTests.swift
 //  PerseusGeoLocationKitTests
 //
 //  Created by Mikhail Zhigulin in 7531.
@@ -21,9 +21,9 @@ let authorized: CLAuthorizationStatus = .authorizedAlways
 let authorized: CLAuthorizationStatus = .authorized
 #endif
 
-final class PerseusLocationDealerTests: XCTestCase {
+final class LocationAgentTests: XCTestCase {
 
-    internal let sut = PerseusLocationDealer.shared
+    internal let sut = LocationAgent.shared
 
     internal var mockLM: MockLocationManager!
     internal var mockNC: MockNotificationCenter!
@@ -62,7 +62,7 @@ final class PerseusLocationDealerTests: XCTestCase {
 
         // arrange, act
 
-        sut.askToStartUpdatingLocation(accuracy: .best)
+        sut.startUpdatingLocation(accuracy: .best)
 
         // assert
 
@@ -76,7 +76,7 @@ final class PerseusLocationDealerTests: XCTestCase {
 
         // arrange, act
 
-        sut.askToStopUpdatingLocation()
+        sut.stopUpdatingLocation()
 
         // assert
 

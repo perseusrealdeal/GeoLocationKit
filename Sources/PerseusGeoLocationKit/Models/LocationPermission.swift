@@ -1,5 +1,5 @@
 //
-//  LocationAuthorization.swift
+//  LocationPermission.swift
 //  PerseusGeoLocationKit
 //
 //  Created by Mikhail Zhigulin in 7531.
@@ -12,7 +12,7 @@
 
 import Foundation
 
-public enum LocationAuthorization: CustomStringConvertible {
+public enum LocationPermission: CustomStringConvertible {
 
     public var description: String {
         switch self {

@@ -1,5 +1,5 @@
 //
-//  CLLocationManagerDelegateTests.swift
+//  LocationDelegateTests.swift
 //  PerseusGeoLocationKitTests
 //
 //  Created by Mikhail Zhigulin in 7531.
@@ -15,7 +15,7 @@ import XCTest
 import CoreLocation
 @testable import PerseusGeoLocationKit
 
-extension PerseusLocationDealerTests {
+extension LocationAgentTests {
 
     func test_didChangeAuthorization() {
 
@@ -38,12 +38,12 @@ extension PerseusLocationDealerTests {
         MockLocationManager.status = authorized
         MockLocationManager.isLocationServiceEnabled = true
 
-        let error = LocationDealerError.failedRequest("")
-        let result: LocationDealerError = .failedRequest(error.localizedDescription)
+        let error = LocationError.failedRequest("")
+        let result: LocationError = .failedRequest(error.localizedDescription)
 
         // act, assert
 
-        try? sut.askForCurrentLocation()
+        try? sut.requestCurrentLocation()
         XCTAssertTrue(sut.order == .currentLocation)
 
         mockLM.delegate?.locationManager?(CLLocationManager(), didFailWithError: error)
@@ -67,13 +67,13 @@ extension PerseusLocationDealerTests {
         MockLocationManager.status = authorized
         MockLocationManager.isLocationServiceEnabled = true
 
-        let error = LocationDealerError.receivedEmptyLocationData
-        let result: Result<CLLocation, LocationDealerError> = .failure(error)
+        let error = LocationError.receivedEmptyLocationData
+        let result: Result<CLLocation, LocationError> = .failure(error)
         let locations = [CLLocation]()
 
         // act, assert
 
-        try? sut.askForCurrentLocation()
+        try? sut.requestCurrentLocation()
         XCTAssertTrue(sut.order == .currentLocation)
 
         mockLM.delegate?.locationManager?(CLLocationManager(), didUpdateLocations: locations)
@@ -104,11 +104,11 @@ extension PerseusLocationDealerTests {
 
         let locations = [firstLocation, CLLocation(latitude: 34.78, longitude: 34.83)]
         let perseusLocation = firstLocation.perseus
-        let result: Result<PerseusLocation, LocationDealerError> = .success(perseusLocation)
+        let result: Result<PerseusLocation, LocationError> = .success(perseusLocation)
 
         // act, assert
 
-        try? sut.askForCurrentLocation()
+        try? sut.requestCurrentLocation()
         XCTAssertTrue(sut.order == .currentLocation)
 
         mockLM.delegate?.locationManager?(CLLocationManager(), didUpdateLocations: locations)
@@ -139,11 +139,11 @@ extension PerseusLocationDealerTests {
 
         let locations = [firstLocation, CLLocation(latitude: 34.78, longitude: 34.83)]
         let perseusLocations = locations.map { $0.perseus }
-        let result: Result<[PerseusLocation], LocationDealerError> = .success(perseusLocations)
+        let result: Result<[PerseusLocation], LocationError> = .success(perseusLocations)
 
         // act, assert
 
-        sut.askToStartUpdatingLocation()
+        sut.startUpdatingLocation()
         XCTAssertTrue(sut.order == .locationUpdates)
 
         mockLM.delegate?.locationManager?(CLLocationManager(), didUpdateLocations: locations)
@@ -164,13 +164,13 @@ extension PerseusLocationDealerTests {
         MockLocationManager.status = authorized
         MockLocationManager.isLocationServiceEnabled = true
 
-        let error = LocationDealerError.receivedEmptyLocationData
-        let result: Result<[PerseusLocation], LocationDealerError> = .failure(error)
+        let error = LocationError.receivedEmptyLocationData
+        let result: Result<[PerseusLocation], LocationError> = .failure(error)
         let locations = [CLLocation]()
 
         // act, assert
 
-        sut.askToStartUpdatingLocation()
+        sut.startUpdatingLocation()
         XCTAssertTrue(sut.order == .locationUpdates)
 
         mockLM.delegate?.locationManager?(CLLocationManager(), didUpdateLocations: locations)

@@ -61,8 +61,9 @@ extension CLAuthorizationStatus: CustomStringConvertible {
         case .authorizedWhenInUse: // iOS only.
             return "authorizedWhenInUse"
         @unknown default:
-            log.message("Unknown CLAuthorizationStatus \(self)", .fault)
-            fatalError("Unknown CLAuthorizationStatus \(self)")
+            log.message("Unknown CLAuthorizationStatus \(self)", .error)
+            // fatalError("Unknown CLAuthorizationStatus \(self)")
+            return "unknown"
         }
     }
 }

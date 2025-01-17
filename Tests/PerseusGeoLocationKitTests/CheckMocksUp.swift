@@ -15,7 +15,7 @@ import XCTest
 import CoreLocation
 @testable import PerseusGeoLocationKit
 
-extension PerseusLocationDealerTests {
+extension LocationAgentTests {
 
     func test_PerseusLocationDealerInit() {
 
