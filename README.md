@@ -1,6 +1,8 @@
 # PerseusGeoLocationKit — Xcode 14.2+
 
-> PerseusGeoLocationKit is dedicated for dealing with Apple geo services.<br/>
+[`iOS approbation app`](https://github.com/perseusrealdeal/iOS.DarkMode.Discovery) [`macOS approbation app`](https://github.com/perseusrealdeal/macOS.DarkMode.Discovery)
+
+`PerseusGeoLocationKit` is a single author and personale solution developed in `person-to-person` relationship paradigm.
 
 [![Actions Status](https://github.com/perseusrealdeal/PerseusGeoLocationKit/actions/workflows/main.yml/badge.svg)](https://github.com/perseusrealdeal/PerseusGeoLocationKit/actions/workflows/main.yml)
 [![Style](https://github.com/perseusrealdeal/PerseusGeoLocationKit/actions/workflows/swiftlint.yml/badge.svg)](https://github.com/perseusrealdeal/PerseusGeoLocationKit/actions/workflows/swiftlint.yml)
@@ -21,19 +23,59 @@
 
 ## In brief > Idea to use, the Why
 
-> TODO: Short description.
+Package in Swift designed as a wrapper for Location Services API both for iOS and macOS apps.
 
 ## Build system requirements
 
 - [macOS Monterey 12.7.6+](https://apps.apple.com/by/app/macos-monterey/id1576738294) / [Xcode 14.2+](https://developer.apple.com/services-account/download?path=/Developer_Tools/Xcode_14.2/Xcode_14.2.xip)
 
-# Manual
-
-> TODO: Lib usage description.
-
 # First-party software
 
 - [ConsolePerseusLogger](https://github.com/perseusrealdeal/ConsolePerseusLogger) / [1.0.3](https://github.com/perseusrealdeal/ConsolePerseusLogger/releases/tag/1.0.3)
+
+# Installation
+
+## Standalone
+
+Use the single source code file [PerseusGeoStar.swift](https://github.com/perseusrealdeal/PerseusGeoLocationKit/blob/b7f41e09869f264a501807bb1b7a25c2b5b9e08b/PerseusGeoStar.swift) directly in your project.
+
+## Swift Package Manager
+
+`Project in the Navigator > Package Dependencies > Add Package Dependency`
+
+> Put the following line in the package search field:
+
+`https://github.com/perseusrealdeal/PerseusGeoLocationKit`
+
+> Dependency rule: 
+
+`Up to Next Major Version`
+
+# Usage
+
+`Step 1:` Put Location Services Declaration messages to Info.plist
+
+| Info.plist                                   | iOS 16.2 .always | macOS 12.7.6 |
+| -------------------------------------------- | ---------------- | ------------ |
+| NSLocationUsageDescription                   |                  | required     |
+| NSLocationAlwaysUsageDescription             |                  |              |
+| NSLocationWhenInUseUsageDescription          | required         |              |
+| NSLocationAlwaysAndWhenInUseUsageDescription | required         |              |
+
+`Step 2:` Install the package dependency in the prefered way either Standalone or SPM
+
+`Step 3:` Locate Location Services Agent globally (recommended) kinda custom service object in your app
+
+`Setp 4:` Configure Accuracy and GoTo Settings Alert 
+
+`Step 5:` Deal with Location Services permission 
+
+`Step 6:` Process Location Services events
+
+`Step 7 A:` Request current location
+
+`Step 7 B:` Request start/stop location updates
+
 
 # Third-party software
 
